@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+# warmup should be added into everyone's root level repository. warmup will:
+# * download and set up a virtualenv
+# * install uranium
+# * run uranium
+URANIUM_STANDALONE_URL = "https://raw.githubusercontent.com/toumorokoshi/uranium/master/uranium/scripts/uranium_standalone"
+
+try:
+    from urllib2 import urlopen as urlopen
+except:
+    from urllib.request import urlopen as urlopen
+
+print("loading uranium bootstrapper...")
+body = urlopen(URANIUM_STANDALONE_URL).read()
+exec(body)
