@@ -4,6 +4,7 @@ from .interface import ContentTypeSerializer
 
 class YamlSerializer(ContentTypeSerializer):
 
+    @staticmethod
     def to_type(data):
         """
         should return back a bytes (or string in python 2),
@@ -12,6 +13,7 @@ class YamlSerializer(ContentTypeSerializer):
         """
         return yaml.dump(data, default_flow_style=False).encode("UTF-8")
 
+    @staticmethod
     def from_type(raw_bytes):
         """
         given a bytes object, should return a base python data
@@ -19,6 +21,7 @@ class YamlSerializer(ContentTypeSerializer):
         """
         return yaml.load(raw_bytes)
 
+    @staticmethod
     def can_handle(content_type_name):
         """
         given a content type, returns true if this serializer
