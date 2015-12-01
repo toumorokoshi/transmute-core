@@ -8,6 +8,7 @@ README_PATH = os.path.join(base, "README.rst")
 
 install_requires = [
     'pyyaml',
+    'marshmallow',
 ]
 
 tests_require = []
