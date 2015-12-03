@@ -1,5 +1,6 @@
 import inspect
 from .compat import getfullargspec
+from .signature import get_signature
 
 
 TRANSMUTE_HTTP_METHOD_ATTRIBUTE = "transmute_http_methods"
@@ -35,6 +36,7 @@ class TransmuteFunction(object):
         # transmute will still json serialize whatever object you pass it.
         # however, the return type is valuable for autodocumentation systems.
         self.argspec = getfullargspec(func)
+        self.signature = get_signature(self.argspec)
         self.return_type = self.argspec.annotations.get("return")
         # description should be a description of the api
         # endpoint, for use in autodocumentation
