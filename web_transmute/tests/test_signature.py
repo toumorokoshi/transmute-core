@@ -11,11 +11,24 @@ def test_signature():
 
     argspec = getfullargspec(make_square)
     signature = get_signature(argspec)
-    assert len(signature.arguments) == 2
-    assert signature.arguments[0].name == "x"
-    assert signature.arguments[0].default == NoDefault
-    assert signature.arguments[0].type == int
-    assert len(signature.keywords) == 2
-    assert signature.keywords["width"].name == "width"
-    assert signature.keywords["width"].default is None
-    assert signature.keywords["width"].type == int
+    assert len(signature.args) == 2
+    assert signature.args[0].name == "x"
+    assert signature.args[0].default == NoDefault
+    assert signature.args[0].type == int
+    assert len(signature.kwargs) == 2
+    assert signature.kwargs["width"].name == "width"
+    assert signature.kwargs["width"].default is None
+    assert signature.kwargs["width"].type == int
+
+
+def test_self_signature():
+
+    def square(self, resource, multiplier=None):
+        pass
+
+    argspec = getfullargspec(square)
+    signature = get_signature(argspec)
+
+    assert len(signature.args) == 1
+    assert len(signature.kwargs) == 1
+    assert signature.kwargs["multiplier"].name == "multiplier"
