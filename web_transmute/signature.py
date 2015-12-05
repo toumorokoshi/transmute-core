@@ -18,8 +18,7 @@ def get_signature(argspec):
         typ = argspec.annotations.get(name)
         arguments.append(Argument(name, NoDefault, typ))
 
-    start_index = len(defaults) + 1 or
-    for name, default in zip(attributes[len(defaults):], defaults):
+    for name, default in zip(attributes[-len(defaults):], defaults):
         typ = argspec.annotations.get(name)
         keywords[name] = Argument(name, default, typ)
 
