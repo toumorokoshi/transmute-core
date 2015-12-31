@@ -7,7 +7,7 @@ def get_default_serializers():
         int: fields.Integer(),
         bool: fields.Boolean(),
         float: fields.Float(),
-        string_type: fields.String()
+        string_type: fields.String(),
     }
 
 

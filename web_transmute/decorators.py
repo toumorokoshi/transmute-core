@@ -1,5 +1,6 @@
 from .function import TRANSMUTE_HTTP_METHOD_ATTRIBUTE
 
+
 def PUT(f):
     """
     this labels a function as one that updates data.

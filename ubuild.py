@@ -18,3 +18,12 @@ def test(build):
         "web_transmute/tests",
         "--cov-report", "term-missing"
     ])
+
+
+def distribute(build):
+    """ distribute the uranium package """
+    build.packages.install("wheel")
+    build.executables.run([
+        "python", "setup.py",
+        "sdist", "bdist_wheel", "--universal", "upload"
+    ])
