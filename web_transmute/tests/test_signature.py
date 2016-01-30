@@ -21,6 +21,24 @@ def test_signature():
     assert signature.kwargs["width"].type == int
 
 
+def test_signature_no_kwargs():
+
+    @annotate({"x": int, "y": int, "return": int})
+    def make_square(x, y):
+        return x * y
+
+    argspec = getfullargspec(make_square)
+    signature = get_signature(argspec)
+    assert len(signature.args) == 2
+    assert signature.args[0].name == "x"
+    assert signature.args[0].default == NoDefault
+    assert signature.args[0].type == int
+    assert signature.args[1].name == "y"
+    assert signature.args[1].default == NoDefault
+    assert signature.args[1].type == int
+    assert len(signature.kwargs) == 0
+
+
 def test_self_signature():
 
     def square(self, resource, multiplier=None):

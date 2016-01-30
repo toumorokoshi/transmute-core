@@ -12,15 +12,17 @@ def get_signature(argspec):
 
     arguments, keywords = [], {}
 
-    for name in attributes[:-len(defaults)]:
+    attribute_list = attributes[:-len(defaults)] if len(defaults) != 0 else attributes[:]
+    for name in attribute_list:
         if name == "self":
             continue
         typ = argspec.annotations.get(name)
         arguments.append(Argument(name, NoDefault, typ))
 
-    for name, default in zip(attributes[-len(defaults):], defaults):
-        typ = argspec.annotations.get(name)
-        keywords[name] = Argument(name, default, typ)
+    if len(defaults) != 0:
+        for name, default in zip(attributes[-len(defaults):], defaults):
+            typ = argspec.annotations.get(name)
+            keywords[name] = Argument(name, default, typ)
 
     return FunctionSignature(arguments, keywords)
 
@@ -40,6 +42,8 @@ Argument = namedtuple("Argument", ["name", "default", "type"])
 
 
 class FunctionSignature(object):
+
+    NoDefault = NoDefault
 
     def __init__(self, args, kwargs):
         self.args = args
