@@ -1,6 +1,9 @@
 import inspect
 from .compat import getfullargspec
 from .signature import get_signature
+from swagger_schema import (
+    Operation, Responses, Response, JsonSchemaObject
+)
 
 
 TRANSMUTE_HTTP_METHOD_ATTRIBUTE = "transmute_http_methods"
@@ -52,9 +55,7 @@ class TransmuteFunction(object):
         # by the final function
         self.produces = ["application/json"]
         self.raw_func = func
-        # status_codes represents the possible status codes
-        # the function can return
-        self.responses = _get_responses(self.return_type)
+        self.swagger = self._get_swagger_operation()
         # this is to make discovery easier.
         # TODO: make sure this doesn't mess up GC, as it's
         # a cyclic reference.
@@ -66,19 +67,32 @@ class TransmuteFunction(object):
     def __call__(self, *args, **kwargs):
         return self.raw_func(*args, **kwargs)
 
-
-def _get_responses(return_type):
-    return {
-        200: {
-            "description": "success",
-            "return_type": {"properties": {"success": {"type": bool},
-                                           "result": {"type": return_type}},
-                            "required": ["success", "result"]}
-        },
-        400: {
-            "description": "invalid input received",
-            "return_type": {"properties": {"success": {"type": bool},
-                                           "message": {"type": str}},
-                            "required": ["success", "message"]}
-        }
-    }
+    def _get_swagger_operation(self):
+        """ get the swagger_schema operation representation. """
+        return Operation(
+            summary=self.description,
+            consumes=self.produces,
+            produces=self.produces,
+            responses=Responses({
+                "200": Response(
+                    description="success",
+                    schema=JsonSchemaObject({
+                        "properties": {
+                            "success": {"type": "bool"},
+                            "result": {"type": "string"}
+                        },
+                        "required": ["success", "result"]
+                    })
+                ),
+                "400": Response(
+                    description="invalid input received",
+                    schema=JsonSchemaObject({
+                        "properties": {
+                            "success": {"type": "bool"},
+                            "message": {"type": "string"}
+                        },
+                        "required": ["success", "message"]
+                    })
+                )
+            })
+        )
