@@ -78,7 +78,7 @@ class TransmuteFunction(object):
                     description="success",
                     schema=JsonSchemaObject({
                         "properties": {
-                            "success": {"type": "bool"},
+                            "success": {"type": "boolean"},
                             "result": {"type": "string"}
                         },
                         "required": ["success", "result"]
@@ -88,7 +88,7 @@ class TransmuteFunction(object):
                     description="invalid input received",
                     schema=JsonSchemaObject({
                         "properties": {
-                            "success": {"type": "bool"},
+                            "success": {"type": "boolean"},
                             "message": {"type": "string"}
                         },
                         "required": ["success", "message"]
