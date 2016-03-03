@@ -8,6 +8,7 @@ def get_default_serializers():
         int: Integer(),
         bool: Boolean(),
         float: Float(),
+        dict: Dict(),
         string_type: String(),
     }
 
@@ -83,6 +84,20 @@ class String(object):
     def load(data):
         try:
             return str(data)
+        except ValueError as ve:
+            raise ValidationError(str(ve))
+
+    @staticmethod
+    def dump(value):
+        return value
+
+
+class Dict(object):
+
+    @staticmethod
+    def load(data):
+        try:
+            return dict(data)
         except ValueError as ve:
             raise ValidationError(str(ve))
 
