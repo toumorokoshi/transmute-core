@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import glob
 import os
 from setuptools import setup, find_packages
 
@@ -14,6 +15,17 @@ install_requires = [
 
 tests_require = []
 
+data_files = [
+    ("web_transmute/swagger", ["web_transmute/swagger/swagger.html"])
+]
+
+directories = glob.glob("web_transmute/swagger/static/**/")
+for directory in directories:
+    files = [
+        f for f in glob.glob(directory+'*') if not os.path.isdir(f)
+    ]
+    data_files.append((directory, files))
+
 setup(name='web-transmute',
       version='0.0.5',
       description=(
@@ -25,6 +37,7 @@ setup(name='web-transmute',
       author='Yusuke Tsutsumi',
       author_email='yusuke@tsutsumi.io',
       url='',
+      data_files=data_files,
       packages=find_packages(),
       install_requires=install_requires,
       classifiers=[
