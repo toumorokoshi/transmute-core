@@ -9,8 +9,9 @@ README_PATH = os.path.join(base, "README.rst")
 
 install_requires = [
     'marshmallow',
-    'pyyaml',
+    'jinja2',
     'swagger-schema',
+    'pyyaml',
 ]
 
 tests_require = []

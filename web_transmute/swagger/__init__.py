@@ -6,7 +6,7 @@ CURDIR = os.path.dirname(__file__)
 
 def generate_swagger(swagger_static_root, swagger_json_url):
     tmpl = get_template("swagger.html")
-    return tmpl.format(
+    return tmpl.render(
         swagger_root=swagger_static_root,
         swagger_json_url=swagger_json_url
     )
