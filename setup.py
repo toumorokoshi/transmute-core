@@ -8,7 +8,7 @@ base = os.path.dirname(os.path.abspath(__file__))
 README_PATH = os.path.join(base, "README.rst")
 
 install_requires = [
-    'marshmallow',
+    'schematics',
     'jinja2',
     'swagger-schema',
     'pyyaml',

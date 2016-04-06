@@ -1,10 +1,9 @@
 from .decorators import (
     PUT, POST, DELETE, annotate
 )
-
-from .serializer_cache import SerializerCache
+from .schematics_serializer import SchematicsSerializer
 from .contenttype_serializers import get_default_serializer_set
 
 # for most cases, a global serializer cache is sufficient, so one is provided.
-serializers = SerializerCache()
+serializers = SchematicsSerializer()
 contenttype_serializers = get_default_serializer_set()
