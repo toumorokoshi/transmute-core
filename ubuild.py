@@ -28,7 +28,7 @@ def distribute(build):
     build.packages.install("wheel")
     build.executables.run([
         "python", "setup.py",
-        "sdist", "--universal", "upload"
+        "sdist", "upload"
     ])
 
 
