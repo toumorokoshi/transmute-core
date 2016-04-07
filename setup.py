@@ -28,7 +28,7 @@ for directory in directories:
     data_files.append((directory, files))
 
 setup(name='web-transmute',
-      version='0.0.7b',
+      version='0.0.7',
       description=(
           "a utility library to help provide api route "
           "generation form function signature for web "
