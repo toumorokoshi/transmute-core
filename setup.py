@@ -16,19 +16,14 @@ install_requires = [
 
 tests_require = []
 
-data_files = [
-    ("web_transmute/swagger", ["web_transmute/swagger/swagger.html"])
-]
+data_files = []
 
-directories = glob.glob("web_transmute/swagger/static/**/")
-for directory in directories:
-    files = [
-        f for f in glob.glob(directory+'*') if not os.path.isdir(f)
-    ]
-    data_files.append((directory, files))
+swagger_statics = glob.glob("web_transmute/swagger/static/**/")
+for directory in swagger_statics:
+    data_files.append(os.path.join("swagger", "static", directory, "*"))
 
 setup(name='web-transmute',
-      version='0.0.8b',
+      version='0.0.10b',
       description=(
           "a utility library to help provide api route "
           "generation form function signature for web "
@@ -38,8 +33,10 @@ setup(name='web-transmute',
       author='Yusuke Tsutsumi',
       author_email='yusuke@tsutsumi.io',
       url='',
-      data_files=data_files,
+      # data_files=data_files,
+      package_data={"web_transmute": data_files},
       packages=find_packages(),
+      include_package_data=True,
       install_requires=install_requires,
       classifiers=[
           'Development Status :: 3 - Alpha',

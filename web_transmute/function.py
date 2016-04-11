@@ -43,7 +43,7 @@ class TransmuteFunction(object):
         self.return_type = self.argspec.annotations.get("return")
         # description should be a description of the api
         # endpoint, for use in autodocumentation
-        self.description = func.__doc__
+        self.description = func.__doc__ or ""
         # error_exceptions represents the exceptions
         # that should be caught and return an API exception
         self.error_exceptions = error_exceptions
@@ -71,6 +71,7 @@ class TransmuteFunction(object):
         """ get the swagger_schema operation representation. """
         return Operation(
             summary=self.description,
+            description=self.description,
             consumes=self.produces,
             produces=self.produces,
             responses=Responses({
