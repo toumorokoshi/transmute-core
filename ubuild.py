@@ -32,6 +32,13 @@ def distribute(build):
     ])
 
 
+def build_docs(build):
+    build.packages.install("sphinx")
+    return subprocess.call(
+        ["make", "html"], cwd=os.path.join(build.root, "docs")
+    )
+
+
 @rule(Once())
 def install_swagger_ui(build):
     import io
