@@ -20,7 +20,7 @@ def test(build):
         pytest, "--cov", "web_transmute",
         "web_transmute/tests",
         "--cov-report", "term-missing"
-    ])
+    ] + build.options.args)
 
 
 def distribute(build):

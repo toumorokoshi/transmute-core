@@ -9,17 +9,6 @@ from swagger_schema import (
 TRANSMUTE_HTTP_METHOD_ATTRIBUTE = "transmute_http_methods"
 
 
-class NoDefault(object):
-
-    def __str__(self):
-        return "NoDefault"
-
-    def __repr__(self):
-        return "NoDefault"
-
-NoDefault = NoDefault()
-
-
 class TransmuteFunction(object):
     """
     VoodooFunctions are objects that wrap a method, allowing
