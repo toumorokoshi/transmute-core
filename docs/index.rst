@@ -16,8 +16,12 @@ web frameworks. A transmute toolbox provides the following:
 
 Contents:
 
+If you are interested in adding a transmute toolbox for your preferred
+web framework, please read :ref:`authoring_a_toolbox`
+
 .. toctree::
    :maxdepth: 2
+   authoring_a_toolbox
 
 
 
