@@ -3,10 +3,14 @@ from .decorators import (
 )
 from .schematics_serializer import SchematicsSerializer
 from .contenttype_serializers import get_default_serializer_set
+from .exceptions import APIException
 
 
 class TransmuteContext(object):
     """
+    TransmuteContext encapsulates all the configuration that transmute's
+    core framework requires for all functionality it provides.
+
     When it's required to provide some customization on some
     of web-transmute's global values, a context can be used.
 
