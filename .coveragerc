@@ -1,2 +1,2 @@
 [run]
-omit = web_transmute/compat.py
+omit = transmute_core/compat.py

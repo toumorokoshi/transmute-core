@@ -17,8 +17,8 @@ def test(build):
     build.packages.install("pytest-cov")
     pytest = os.path.join(build.root, "bin", "py.test")
     subprocess.call([
-        pytest, "--cov", "web_transmute",
-        "web_transmute/tests",
+        pytest, "--cov", "transmute_core",
+        "transmute_core/tests",
         "--cov-report", "term-missing"
     ] + build.options.args)
 
@@ -46,7 +46,7 @@ def install_swagger_ui(build):
     import tarfile
     version = "2.1.4"
     PATH = "https://github.com/swagger-api/swagger-ui/archive/v{0}.tar.gz".format(version)
-    TARGET_PATH = os.path.join(build.root, "web_transmute", "swagger", "static")
+    TARGET_PATH = os.path.join(build.root, "transmute_core", "swagger", "static")
     EXTRACTED_TOP_LEVEL_DIRNAME = "swagger-ui-{0}".format(version)
     build.packages.install("requests")
     import requests
