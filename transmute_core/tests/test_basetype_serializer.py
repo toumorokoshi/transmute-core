@@ -1,6 +1,6 @@
 import pytest
-from web_transmute.compat import string_type
-from web_transmute.exceptions import SerializationException
+from transmute_core.compat import string_type
+from transmute_core.exceptions import SerializationException
 
 
 @pytest.mark.parametrize("inp, expected_output", [

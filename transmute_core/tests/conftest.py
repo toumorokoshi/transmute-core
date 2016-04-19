@@ -1,6 +1,6 @@
 import pytest
-from web_transmute.contenttype_serializers import get_default_serializer_set
-from web_transmute.schematics_serializer import SchematicsSerializer
+from transmute_core.contenttype_serializers import get_default_serializer_set
+from transmute_core.schematics_serializer import SchematicsSerializer
 
 
 @pytest.fixture

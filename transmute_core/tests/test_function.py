@@ -1,9 +1,9 @@
 import pytest
-from web_transmute.function import TransmuteFunction
-import web_transmute
+from transmute_core.function import TransmuteFunction
+import transmute_core
 
 
-@web_transmute.annotate({"return": int})
+@transmute_core.annotate({"return": int})
 def raw_func():
     return 12345
 

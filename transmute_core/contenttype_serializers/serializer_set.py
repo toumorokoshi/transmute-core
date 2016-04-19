@@ -1,4 +1,4 @@
-from web_transmute.exceptions import WebTransmuteException
+from transmute_core.exceptions import WebTransmuteException
 
 
 class NoSerializerFound(WebTransmuteException):

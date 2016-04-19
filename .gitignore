@@ -60,4 +60,5 @@ include/
 .uranium
 .pydistutils.cfg
 # we download swagger on build
-web_transmute/swagger/static
+transmute_core/swagger/static
+

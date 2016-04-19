@@ -18,12 +18,12 @@ tests_require = []
 
 data_files = []
 
-swagger_statics = glob.glob("web_transmute/swagger/static/**/")
+swagger_statics = glob.glob("transmute_core/swagger/static/**/")
 for directory in swagger_statics:
     data_files.append(os.path.join("swagger", "static", directory, "*"))
 
-setup(name='web-transmute',
-      version='0.0.11b',
+setup(name='transmute-core',
+      version='0.1.0b',
       description=(
           "a utility library to help provide api route "
           "generation form function signature for web "
@@ -32,9 +32,9 @@ setup(name='web-transmute',
       long_description=open(README_PATH).read(),
       author='Yusuke Tsutsumi',
       author_email='yusuke@tsutsumi.io',
-      url='',
+      url='https://github.com/toumorokoshi/transmute-core',
       # data_files=data_files,
-      package_data={"web_transmute": data_files},
+      package_data={"transmute_core": data_files},
       packages=find_packages(),
       include_package_data=True,
       install_requires=install_requires,

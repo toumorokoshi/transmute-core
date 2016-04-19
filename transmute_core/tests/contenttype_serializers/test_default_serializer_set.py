@@ -1,5 +1,5 @@
 import pytest
-from web_transmute.contenttype_serializers.serializer_set import NoSerializerFound
+from transmute_core.contenttype_serializers.serializer_set import NoSerializerFound
 
 
 def test_default_serializer_json(serializer_set):

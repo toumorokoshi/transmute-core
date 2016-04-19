@@ -1,4 +1,4 @@
-from web_transmute.swagger import generate_swagger, get_swagger_static_root
+from transmute_core.swagger import generate_swagger, get_swagger_static_root
 
 
 def test_generate_swagger():

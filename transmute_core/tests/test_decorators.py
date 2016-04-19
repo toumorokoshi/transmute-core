@@ -1,5 +1,5 @@
 import pytest
-from web_transmute.decorators import (
+from transmute_core.decorators import (
     PUT, POST, DELETE, annotate, TRANSMUTE_HTTP_METHOD_ATTRIBUTE
 )
 

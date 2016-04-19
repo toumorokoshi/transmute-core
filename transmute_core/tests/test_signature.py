@@ -1,6 +1,6 @@
-from web_transmute.compat import getfullargspec
-from web_transmute import annotate
-from web_transmute.signature import get_signature, NoDefault
+from transmute_core.compat import getfullargspec
+from transmute_core import annotate
+from transmute_core.signature import get_signature, NoDefault
 
 
 def test_signature():
