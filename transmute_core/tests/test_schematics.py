@@ -1,27 +1,27 @@
+import pytest
 from schematics.models import Model
 from schematics.types import StringType, IntType
 
 
-def test_schematics_integration(serializer):
+class Card(Model):
+    name = StringType()
+    price = IntType()
 
-    class Card(Model):
-        name = StringType()
-        description = StringType()
-        price = IntType()
+card_dict = {"name": "foo", "price": 10}
+card = Card(card_dict)
 
-    c = Card({
-        "name": "foo", "description": "test",
-        "price": 10}
-    )
 
-    assert serializer.dump(Card, c) == {
-        "name": "foo",
-        "description": "test",
-        "price": 10
-    }
+@pytest.mark.parametrize("typ,inp,out", [
+    (Card, card, card_dict),
+    ([Card], [card], [card_dict])
+])
+def test_schematics_integration_dump(serializer, typ, inp, out):
+    assert serializer.dump(typ, inp) == out
 
-    assert serializer.load(Card, {
-        "name": "foo",
-        "description": "test",
-        "price": 10
-    }) == c
+
+@pytest.mark.parametrize("typ,inp,out", [
+    (Card, card_dict, card),
+    ([Card], [card_dict], [card])
+])
+def test_schematics_integration_load(serializer, typ, inp, out):
+    assert serializer.load(typ, inp) == out

@@ -1,2 +1,2 @@
-include web_transmute/swagger/*
-recursive-include web_transmute/swagger/static *
+include transmute_core/swagger/*
+recursive-include transmute_core/swagger/static *

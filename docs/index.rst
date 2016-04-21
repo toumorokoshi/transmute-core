@@ -1,12 +1,12 @@
-.. web-transmute documentation master file, created by
+.. transmute-core documentation master file, created by
    sphinx-quickstart on Fri Apr 15 00:25:27 2016.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-web-transmute
+transmute-core
 =============
 
-web-transmute is a core library to create "transmute" toolboxes for
+transmute-core is a library designed to help create "transmute" toolboxes for
 web frameworks. A transmute toolbox provides the following:
 
 * generation of http handlers by reading function signatures.

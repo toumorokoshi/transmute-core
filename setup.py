@@ -8,7 +8,7 @@ base = os.path.dirname(os.path.abspath(__file__))
 README_PATH = os.path.join(base, "README.rst")
 
 install_requires = [
-    'schematics',
+    'schematics>=2.0.0.dev2',
     'jinja2',
     'swagger-schema',
     'pyyaml',
@@ -23,7 +23,7 @@ for directory in swagger_statics:
     data_files.append(os.path.join("swagger", "static", directory, "*"))
 
 setup(name='transmute-core',
-      version='0.1.0',
+      version='0.1.4b',
       description=(
           "a utility library to help provide api route "
           "generation form function signature for web "
