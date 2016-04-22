@@ -11,9 +11,10 @@ TRANSMUTE_HTTP_METHOD_ATTRIBUTE = "transmute_http_methods"
 
 class TransmuteFunction(object):
     """
-    VoodooFunctions are objects that wrap a method, allowing
-    extensions to extract metadata for their own use (such as
-    automatic documentation)
+    TransmuteFunctions wrap a function and add metadata,
+    allowing transmute frameworks to extract that information for
+    their own use (such as web handler generation or automatic
+    documentation)
     """
 
     params = ["error_exceptions"]

@@ -31,7 +31,9 @@ class SchematicsSerializer(object):
     def _translate_to_model(self, model):
         model = self._to_key(model)
         if model not in self._models and isinstance(model, tuple):
-            self._models[model] = ListType(ModelType(model[0]))
+            self._models[model] = ListType(self._translate_to_model(model[0]))
+        if model in self._models:
+            return self._models[model]
         return model
 
     @staticmethod
@@ -43,8 +45,6 @@ class SchematicsSerializer(object):
     def load(self, model, value):
         try:
             model = self._translate_to_model(model)
-            if model in self._models:
-                return self._models[model](value)
             return model(value)
         except ConversionError as e:
             raise SerializationException(str(e))
@@ -52,8 +52,6 @@ class SchematicsSerializer(object):
     def dump(self, model, value):
         try:
             model = self._translate_to_model(model)
-            if model in self._models:
-                return self._models[model].to_primitive(value)
             return model.to_primitive(value)
         except ConversionError as e:
             raise SerializationException(str(e))
