@@ -1,4 +1,4 @@
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod, abstractproperty
 
 
 class ContentTypeSerializer(object):
@@ -8,6 +8,13 @@ class ContentTypeSerializer(object):
     """
 
     __metaclass__ = ABCMeta
+
+    @abstractproperty
+    def content_type(self):
+        """
+        return back what the Content-Type header
+        of a request should be, when using this serializer.
+        """
 
     @abstractmethod
     def to_type(data):

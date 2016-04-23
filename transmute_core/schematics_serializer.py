@@ -34,7 +34,8 @@ class SchematicsSerializer(object):
             self._models[model] = ListType(self._translate_to_model(model[0]))
         if model in self._models:
             return self._models[model]
-        return model
+        else:
+            return ModelType(model)
 
     @staticmethod
     def _to_key(model):

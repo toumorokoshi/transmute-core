@@ -19,3 +19,10 @@ class SerializationException(WebTransmuteException):
     this exceptions signifies an exception with
     serializing values.
     """
+
+
+class NoSerializerFound(WebTransmuteException):
+    """
+    raised when a serializer does not exist to handle the
+    desired content type.
+    """

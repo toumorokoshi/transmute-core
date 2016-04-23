@@ -104,11 +104,28 @@ looks something like:
 .. code-block:: python
 
     from functools import wraps
+    from transmute_core import APIException
+    from bottle import request, response
 
     def create_handler_for_bottle(transmute_func, context):
         extract_params_func = _get_param_extractor(transmute_func, context)
 
         @wraps(transmute_func.raw_func)
         def handler(*args, **kwargs):
+            args, kwargs = extract_params_func(request, *args, **kwargs)
             try:
-                args = extract_params_func()
+                transmute_func.raw_func(*args, **kwargs)
+            except APIException as e:
+                output = {
+                }
+            except Exception as e:
+                output = {
+                }
+            try:
+                body = context.contenttype_serializers.to_type(
+                    request.content_type, output
+                )
+            except NoSerializerFound:
+                body = context.contenttype_serializers.to_type("json", output)
+            response.status = output["code"]
+            response.set_header("Content-Type", request.content_type)

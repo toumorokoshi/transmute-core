@@ -4,8 +4,10 @@ from .interface import ContentTypeSerializer
 
 class JsonSerializer(ContentTypeSerializer):
 
+    content_type = "application/json"
+
     @staticmethod
-    def to_type(data):
+    def dump(data):
         """
         should return back a bytes (or string in python 2),
         representation of your object, to be used in e.g. response
@@ -14,7 +16,7 @@ class JsonSerializer(ContentTypeSerializer):
         return json.dumps(data).encode("UTF-8")
 
     @staticmethod
-    def from_type(raw_bytes):
+    def load(raw_bytes):
         """
         given a bytes object, should return a base python data
         structure that represents the object.

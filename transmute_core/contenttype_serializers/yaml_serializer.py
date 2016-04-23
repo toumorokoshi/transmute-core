@@ -4,8 +4,10 @@ from .interface import ContentTypeSerializer
 
 class YamlSerializer(ContentTypeSerializer):
 
+    content_type = "application/x-yaml"
+
     @staticmethod
-    def to_type(data):
+    def dump(data):
         """
         should return back a bytes (or string in python 2),
         representation of your object, to be used in e.g. response
@@ -14,7 +16,7 @@ class YamlSerializer(ContentTypeSerializer):
         return yaml.dump(data, default_flow_style=False).encode("UTF-8")
 
     @staticmethod
-    def from_type(raw_bytes):
+    def load(raw_bytes):
         """
         given a bytes object, should return a base python data
         structure that represents the object.
