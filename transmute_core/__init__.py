@@ -1,7 +1,7 @@
 from .decorators import (
     PUT, POST, DELETE, annotate
 )
-from .schematics_serializer import SchematicsSerializer
+from .object_serializers.schematics_serializer import SchematicsSerializer
 from .contenttype_serializers import get_default_serializer_set
 from .function import TransmuteFunction
 from .exceptions import *
@@ -9,29 +9,21 @@ from .exceptions import *
 
 class TransmuteContext(object):
     """
-    TransmuteContext encapsulates all the configuration that transmute's
-    core framework requires for all functionality it provides.
+    TransmuteContext contains all of the configuration points for a
+    framework based off of transmute.
 
-    When it's required to provide some customization on some
-    of web-transmute's global values, a context can be used.
-
-    In the case of multiple applications with
+    It is useful for customizing default behaviour in Transmute, such
+    as serialization of additional content types, or using different
+    serializers for objects to and from basic data times.
     """
 
     def __init__(self, serializers=None, contenttype_serializers=None):
-        self._serializers = serializers or SchematicsSerializer()
-        self._contenttype_serializers = (
+        #:
+        self.serializers = serializers or SchematicsSerializer()
+        self.contenttype_serializers = (
             contenttype_serializers or
             get_default_serializer_set()
         )
-
-    @property
-    def serializers(self):
-        return self._serializers
-
-    @property
-    def contenttype_serializers(self):
-        return self._contenttype_serializers
 
 # a global context is provided, if a singleton is sufficient
 # or deviations from the defaults are unnescessary

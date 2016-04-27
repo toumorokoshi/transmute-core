@@ -1,3 +1,4 @@
+from .interface import ObjectSerializer
 from schematics.types import (
     BooleanType,
     IntType,
@@ -9,9 +10,9 @@ from schematics.types.compound import (
     ListType, ModelType
 )
 from schematics.exceptions import ConversionError
-from .exceptions import SerializationException
+from ..exceptions import SerializationException
 from decimal import Decimal
-from .compat import string_type
+from ..compat import string_type
 
 MODEL_MAP = {
     int: IntType(),
@@ -22,7 +23,21 @@ MODEL_MAP = {
 }
 
 
-class SchematicsSerializer(object):
+class SchematicsSerializer(ObjectSerializer):
+    """
+    An ObjectSerializer which allows the serialization of
+    basic types and schematics models.
+
+    The valid types that SchematicsSerializer supports are:
+
+    - int
+    - float
+    - bool
+    - decimal
+    - string
+    - lists, in the form of [Type] (e.g. [Str])
+    - any type that extends the schematics.models.Model.
+    """
 
     def __init__(self, builtin_models=None):
         builtin_models = builtin_models or MODEL_MAP
