@@ -3,8 +3,9 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 
 class ContentTypeSerializer(object):
     """
-    this class describes the interface that
-    a serializer should follow to be allowed as a serializer.
+    A ContentTypeSerializer handles the conversion from
+    a python data structure to a bytes object representing
+    the content in a particular content type.
     """
 
     __metaclass__ = ABCMeta

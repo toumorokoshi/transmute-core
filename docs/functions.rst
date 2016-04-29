@@ -46,3 +46,25 @@ For Python 2, transmute provides an annotate decorator:
    @transmute_core.annotate({"left": int, "right": int, "return": int})
    def add(left, right):
        return left + right
+
+
+----------
+Exceptions
+----------
+
+.. todo:: ref transmute-core
+
+By default, transmute functions only catch exceptions which extend
+transmute_core.APIException, which results in an http response with a
+non-200 status code. (typically 400):
+
+
+.. code-python::
+
+    from transmute_core import APIException
+
+    def my_api() -> int:
+        if not retrieve_from_database():
+            raise transmute_core
+
+However, many transmute frameworks allow the catching of additional exceptions.

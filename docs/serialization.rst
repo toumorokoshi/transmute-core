@@ -13,3 +13,9 @@ an API. This is by chaining two parts:
 
 Both of these components are customizable, either through passing a new
 TransmuteContext object, or modifying the default instance.
+
+The default TransmuteContext supports the json and yaml markup formats,
+and serializes
+
+To learn more about customizing these serializers, please see the API reference
+for TransmuteContext, ObjectSerializer, and ContentTypeSerializer.
