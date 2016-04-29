@@ -9,9 +9,9 @@ transmute-core
 transmute-core is a library designed to help create "transmute" toolboxes for
 web frameworks. A transmute toolbox provides the following:
 
-* declarative generation of http handler interfaces by parsing function signatures.
-* serialization to and from a variety of content types (e.g. json or yaml).
-* serialization to and from native python objects, using `schematics <http://schematics.readthedocs.org/en/latest/>`_.
+* declarative generation of http handler interfaces by parsing :doc:`function <function signatures>`.
+* validation and serialization to and from a variety of content types (e.g. json or yaml).
+* validation and serialization to and from native python objects, using `schematics <http://schematics.readthedocs.org/en/latest/>`_.
 * documentation of all handlers generated this way, via `swagger <http://swagger.io/>`_.
 
 Contents:
