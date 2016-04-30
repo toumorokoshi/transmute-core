@@ -59,7 +59,7 @@ transmute_core.APIException, which results in an http response with a
 non-200 status code. (typically 400):
 
 
-.. code-python::
+.. code-block:: python
 
     from transmute_core import APIException
 

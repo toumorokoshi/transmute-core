@@ -29,7 +29,6 @@ Tutorial
 
 For the tutorial, we will write a transmute library for `Bottle <http://bottlepy.org/>`_.
 
-=========================================================
 1. Convert a function to a handler with TransmuteFunction
 =========================================================
 

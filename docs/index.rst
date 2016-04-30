@@ -4,30 +4,36 @@
    contain the root `toctree` directive.
 
 transmute-core
-=============
+==============
 
-transmute-core is a library designed to help create "transmute" toolboxes for
-web frameworks. A transmute toolbox provides the following:
+transmute-core is a library designed to help create "transmute"
+library for web frameworks. A transmute library provides the
+following:
 
-* declarative generation of http handler interfaces by parsing :doc:`function <function signatures>`.
+* declarative generation of http handler interfaces by parsing :doc:`function <functions>`.
 * validation and serialization to and from a variety of content types (e.g. json or yaml).
 * validation and serialization to and from native python objects, using `schematics <http://schematics.readthedocs.org/en/latest/>`_.
-* :ref:`autodocumentation <documentation>`_ of all handlers generated this way, via `swagger <http://swagger.io/>`_.
+* :doc:`autodocumentation <autodocumentation>` of all handlers generated this way, via `swagger <http://swagger.io/>`_.
 
-Contents:
+transmute-core is released under an `MIT license <https://github.com/toumorokoshi/transmute-core/blob/master/LICENSE>`_.
 
 If you are interested in adding a transmute toolbox for your preferred
-web framework, please read :ref:`authoring_a_toolbox`
+web framework, please read :doc:`authoring_a_toolbox`
+
+User's Guide:
 
 .. toctree::
    :maxdepth: 2
+
+   autodocumentation
+   functions
+   serialization
    authoring_a_toolbox
 
+API Reference:
 
 
-Indices and tables
-==================
+.. toctree::
+   :maxdepth: 2
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   api
