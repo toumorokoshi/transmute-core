@@ -23,7 +23,7 @@ for directory in swagger_statics:
     data_files.append(os.path.join("swagger", "static", directory, "*"))
 
 setup(name='transmute-core',
-      version='0.1.5',
+      version='0.1.6',
       description=(
           "a utility library to help provide api route "
           "generation form function signature for web "

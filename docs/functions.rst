@@ -1,11 +1,11 @@
 ======================================
-Writing Transmute-compatible Functions
+Writing transmute-compatible Functions
 ======================================
 
 Transmute functions are converted to APIs by reading various details:
 
 A transmute function is identical to a standard Python function, with the
-additional of a few details:
+addition of a few details:
 
 ----------------------------------
 Use a decorator on non-GET methods
@@ -34,7 +34,7 @@ annotations <https://www.python.org/dev/peps/pep-3107/>`_ are used.
 
 For Python 2, transmute provides an annotate decorator:
 
-.. code-python::
+.. code-block:: python
 
    import transmute_core
 
@@ -65,6 +65,7 @@ non-200 status code. (typically 400):
 
     def my_api() -> int:
         if not retrieve_from_database():
-            raise transmute_core
+            raise APIException(code=404)
 
-However, many transmute frameworks allow the catching of additional exceptions.
+However, many transmute frameworks allow the catching of additional
+exceptions, and converting them to an error response.
