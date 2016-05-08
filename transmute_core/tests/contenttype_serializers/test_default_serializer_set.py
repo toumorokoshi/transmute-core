@@ -19,3 +19,9 @@ def test_default_serializer_yaml(serializer_set):
 def test_no_serializer_found_raises_exception(serializer_set):
     with pytest.raises(NoSerializerFound):
         assert serializer_set["oogabooga"]
+
+
+def test_keys(serializer_set):
+    assert serializer_set.keys() == [
+        "application/json", "application/x-yaml"
+    ]

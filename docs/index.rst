@@ -26,7 +26,7 @@ User's Guide:
    :maxdepth: 2
 
    autodocumentation
-   functions
+   routes
    serialization
    authoring_a_toolbox
 

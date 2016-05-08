@@ -29,6 +29,7 @@ Tutorial
 
 For the tutorial, we will write a transmute library for `Bottle <http://bottlepy.org/>`_.
 
+
 1. Convert a function to a handler with TransmuteFunction
 =========================================================
 
@@ -116,9 +117,19 @@ looks something like:
                 transmute_func.raw_func(*args, **kwargs)
             except APIException as e:
                 output = {
+                    "result": str(e),
+                    "success": False,
+                    "code": e.code
                 }
             except Exception as e:
+                # we reraise the exception, if it's not amount those expected
+                # by the API.
+                if not isinstance(e, transmute_func.error_exceptions):
+                    raise
                 output = {
+                    "result": str(e),
+                    "success": False,
+                    "code": e.code
                 }
             try:
                 body = context.contenttype_serializers.to_type(
@@ -127,4 +138,9 @@ looks something like:
             except NoSerializerFound:
                 body = context.contenttype_serializers.to_type("json", output)
             response.status = output["code"]
-            response.set_header("Content-Type", request.content_type)
+            response.set_header("Content-Type", request.content_type
+
+
+Once completed, you will need to build some functions to extract the
+parameters to your function. It is usually split into two: one for GET (query parameters),
+and one for all other functions (body parameters)

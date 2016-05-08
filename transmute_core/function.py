@@ -4,6 +4,7 @@ from .signature import get_signature
 from swagger_schema import (
     Operation, Responses, Response, JsonSchemaObject
 )
+from .context import default_context
 
 
 TRANSMUTE_HTTP_METHOD_ATTRIBUTE = "transmute_http_methods"
@@ -19,7 +20,8 @@ class TransmuteFunction(object):
 
     params = ["error_exceptions"]
 
-    def __init__(self, func, error_exceptions=None):
+    def __init__(self, func, error_exceptions=None, context=default_context):
+        self._context = context
         # arguments should be the arguments passed into
         # the function
         #

@@ -9,6 +9,7 @@ class SerializerSet(object):
 
     def __init__(self, serializer_list):
         self._serializers = serializer_list
+        self._keys = [s.content_type for s in self._serializers]
 
     def _get_serializer_for_type(self, content_type):
         for serializer in self._serializers:
@@ -21,3 +22,6 @@ class SerializerSet(object):
 
     def __getitem__(self, content_type):
         return self._get_serializer_for_type(content_type)
+
+    def keys(self):
+        return self._keys.copy()

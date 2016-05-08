@@ -1,13 +1,16 @@
 from .interface import ObjectSerializer
+from collections import OrderedDict
 from schematics.types import (
+    BaseType,
     BooleanType,
-    IntType,
-    FloatType,
     DecimalType,
+    FloatType,
+    IntType,
+    NumberType,
     StringType
 )
 from schematics.types.compound import (
-    ListType, ModelType
+    CompoundType, ListType, ModelType
 )
 from schematics.exceptions import ConversionError
 from ..exceptions import SerializationException
@@ -21,6 +24,12 @@ MODEL_MAP = {
     Decimal: DecimalType(),
     string_type: StringType(),
 }
+
+JSON_SCHEMA_MAP = OrderedDict([
+    (BooleanType, {"type": "boolean"}),
+    (NumberType, {"type": "number"}),
+    (BaseType, {"type": "string"}),
+])
 
 
 class SchematicsSerializer(ObjectSerializer):
@@ -71,3 +80,47 @@ class SchematicsSerializer(ObjectSerializer):
             return model.to_primitive(value)
         except ConversionError as e:
             raise SerializationException(str(e))
+
+    def to_json_schema(self, model):
+        model = self._translate_to_model(model)
+        return _to_json_schema(model)
+
+_cache = {}
+
+
+def _to_json_schema(model):
+    if model not in _cache:
+        _cache[model] = _to_json_schema_no_cache(model)
+    return _cache[model]
+
+
+def _to_json_schema_no_cache(model):
+    if isinstance(model, ModelType):
+        return _model_type_to_json_schema(model)
+    elif isinstance(model, ListType):
+        return _list_type_to_json_schema(model)
+    else:
+        for cls, schema in JSON_SCHEMA_MAP.items():
+            if isinstance(model, cls):
+                return schema
+
+
+def _model_type_to_json_schema(model):
+    schema = {
+        "title": model.model_name,
+        "type": "object",
+        "properties": {},
+        "required": []
+    }
+    for name, field in model.fields.items():
+        if field.required:
+            schema["required"].append(name)
+        schema["properties"][name] = _to_json_schema(field)
+    return schema
+
+
+def _list_type_to_json_schema(list_type):
+    return {
+        "type": "array",
+        "items": {"type": _to_json_schema(list_type.field)}
+    }

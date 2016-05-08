@@ -39,3 +39,9 @@ class ObjectSerializer(object):
 
         if the model or value is not valid, raise a SerializationException
         """
+
+    @abstractmethod
+    def to_json_schema(self, model):
+        """
+        return a dictionary representing a jsonschema for the model.
+        """

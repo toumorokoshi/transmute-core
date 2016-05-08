@@ -69,3 +69,19 @@ non-200 status code. (typically 400):
 
 However, many transmute frameworks allow the catching of additional
 exceptions, and converting them to an error response.
+
+
+-----------------------------------------------------
+Query parameter arguments vs post parameter arguments
+-----------------------------------------------------
+
+The convention in transmute is to have the method dictate the source of the
+argument:
+
+* GET uses query parameters
+* all other methods extract parameters from the body
+
+However, sometimes it makes sense to break those conventions. To help assist with that,
+transmute_core provides decorators to annotate that:
+
+.. code-block:: python
