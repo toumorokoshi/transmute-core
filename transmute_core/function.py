@@ -45,7 +45,7 @@ class TransmuteFunction(object):
         )
         # produces represents the return types supported
         # by the final function
-        self.produces = ["application/json"]
+        self.produces = context.contenttype_serializers.keys()
         self.raw_func = func
         self.swagger = self._get_swagger_operation()
         # this is to make discovery easier.
@@ -72,7 +72,9 @@ class TransmuteFunction(object):
                     schema=JsonSchemaObject({
                         "properties": {
                             "success": {"type": "boolean"},
-                            "result": {"type": "string"}
+                            "result": self._context.serializers.to_json_schema(
+                                self.return_type
+                            )
                         },
                         "required": ["success", "result"]
                     })
