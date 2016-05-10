@@ -8,6 +8,8 @@ from .context import default_context
 
 
 TRANSMUTE_HTTP_METHOD_ATTRIBUTE = "transmute_http_methods"
+TRANSMUTE_QUERY_PARAMETERS = "transmute_query_parameters"
+TRANSMUTE_BODY_PARAMETERS = "transmute_body_parameters"
 
 
 class TransmuteFunction(object):
@@ -20,8 +22,7 @@ class TransmuteFunction(object):
 
     params = ["error_exceptions"]
 
-    def __init__(self, func, error_exceptions=None, context=default_context):
-        self._context = context
+    def __init__(self, func, error_exceptions=None):
         # arguments should be the arguments passed into
         # the function
         #
@@ -40,14 +41,10 @@ class TransmuteFunction(object):
         # that should be caught and return an API exception
         self.error_exceptions = error_exceptions
         # these are the http methods that should route to the given function.
-        self.http_methods = getattr(
-            func, TRANSMUTE_HTTP_METHOD_ATTRIBUTE, set(["GET"])
-        )
-        # produces represents the return types supported
-        # by the final function
-        self.produces = context.contenttype_serializers.keys()
+        self.http_methods = set(getattr(
+            func, TRANSMUTE_HTTP_METHOD_ATTRIBUTE, ["GET"]
+        ))
         self.raw_func = func
-        self.swagger = self._get_swagger_operation()
         # this is to make discovery easier.
         # TODO: make sure this doesn't mess up GC, as it's
         # a cyclic reference.
@@ -59,20 +56,23 @@ class TransmuteFunction(object):
     def __call__(self, *args, **kwargs):
         return self.raw_func(*args, **kwargs)
 
-    def _get_swagger_operation(self):
-        """ get the swagger_schema operation representation. """
+    def get_swagger_operation(self, context=default_context):
+        """
+        get the swagger_schema operation representation.
+        """
+        consumes = produces = context.contenttype_serializers.keys()
         return Operation(
             summary=self.description,
             description=self.description,
-            consumes=self.produces,
-            produces=self.produces,
+            consumes=consumes,
+            produces=produces,
             responses=Responses({
                 "200": Response(
                     description="success",
                     schema=JsonSchemaObject({
                         "properties": {
                             "success": {"type": "boolean"},
-                            "result": self._context.serializers.to_json_schema(
+                            "result": context.serializers.to_json_schema(
                                 self.return_type
                             )
                         },

@@ -1,32 +1,26 @@
 import pytest
+
 from transmute_core.decorators import (
-    PUT, POST, DELETE, annotate, TRANSMUTE_HTTP_METHOD_ATTRIBUTE
+    describe, annotate
+)
+
+from transmute_core.function import (
+    TRANSMUTE_HTTP_METHOD_ATTRIBUTE,
+    TRANSMUTE_QUERY_PARAMETERS,
+    TRANSMUTE_BODY_PARAMETERS,
 )
 
 
-@pytest.mark.parametrize("decorator,method", [
-    (PUT, "PUT"),
-    (POST, "POST"),
-    (DELETE, "DELETE")
+@pytest.mark.parametrize("method", [
+    "PUT", "POST", "DELETE"
 ])
-def test_decorator(decorator, method):
+def test_decorator(method):
 
-    @decorator
+    @describe(methods=method)
     def test():
         pass
 
-    assert getattr(test, TRANSMUTE_HTTP_METHOD_ATTRIBUTE) == set([method])
-
-
-def test_joined_decorator():
-    """ two decorators together should be merged """
-
-    @POST
-    @PUT
-    def test():
-        pass
-
-    assert getattr(test, TRANSMUTE_HTTP_METHOD_ATTRIBUTE) == set(["POST", "PUT"])
+    assert getattr(test, TRANSMUTE_HTTP_METHOD_ATTRIBUTE) == [method]
 
 
 def test_annotate():

@@ -1,34 +1,31 @@
-from .function import TRANSMUTE_HTTP_METHOD_ATTRIBUTE
+from .compat import string_type
+from .function import (
+    TRANSMUTE_HTTP_METHOD_ATTRIBUTE,
+    TRANSMUTE_BODY_PARAMETERS,
+    TRANSMUTE_QUERY_PARAMETERS
+)
 
 
-def PUT(f):
+def describe(methods=None, query_parameters=None, body_parameters=None):
     """
-    this labels a function as one that updates data.
+    describe allows function annotations
     """
-    _add_http_method_to_func("PUT", f)
-    return f
+    # if we have a single method, make it a list.
+    if isinstance(methods, string_type):
+        methods = [methods]
 
+    key_map = {
+        TRANSMUTE_HTTP_METHOD_ATTRIBUTE: methods,
+        TRANSMUTE_QUERY_PARAMETERS: query_parameters,
+        TRANSMUTE_BODY_PARAMETERS: query_parameters
+    }
 
-def POST(f):
-    """
-    this labels a function as one that creates data.
-    """
-    _add_http_method_to_func("POST", f)
-    return f
-
-
-def DELETE(f):
-    """
-    this labels a function as one that deletes data.
-    """
-    _add_http_method_to_func("DELETE", f)
-    return f
-
-
-def _add_http_method_to_func(http_method, func):
-    if not hasattr(func, TRANSMUTE_HTTP_METHOD_ATTRIBUTE):
-        setattr(func, TRANSMUTE_HTTP_METHOD_ATTRIBUTE, set())
-    getattr(func, TRANSMUTE_HTTP_METHOD_ATTRIBUTE).add(http_method)
+    def decorator(f):
+        for key, value in key_map.items():
+            if value is not None:
+                setattr(f, key, value)
+        return f
+    return decorator
 
 
 def annotate(annotations):
