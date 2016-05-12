@@ -44,7 +44,7 @@ class SchematicsSerializer(ObjectSerializer):
     - bool
     - decimal
     - string
-    - lists, in the form of [Type] (e.g. [Str])
+    - lists, in the form of [Type] (e.g. [str])
     - any type that extends the schematics.models.Model.
     """
 

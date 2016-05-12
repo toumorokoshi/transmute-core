@@ -7,8 +7,16 @@ from .function import (
 
 
 def describe(methods=None, query_parameters=None, body_parameters=None):
-    """
-    describe allows function annotations
+    """describe is a decorator to customize the rest API
+    that transmute generates, such as choosing
+    certain arguments to be query parameters or
+    body parameters, or a different method.
+
+    :param list(str) methods: the methods this function should respond to. if non is set, transmute defaults to a GET.
+
+    :param list(str) query_parameters: the names of arguments that should be query parameters
+
+    :param list(str) body_parameters: the names of arguments that should be body parameters
     """
     # if we have a single method, make it a list.
     if isinstance(methods, string_type):
@@ -31,14 +39,19 @@ def describe(methods=None, query_parameters=None, body_parameters=None):
 def annotate(annotations):
     """
     in python2, native annotions on parameters do not exist:
-    def foo(a : str, b: int) -> bool:
-        ...
+
+    .. code-block:: python
+
+        def foo(a : str, b: int) -> bool:
+            ...
 
     this provides a way to provide attribute annotations:
 
-    @annotate({"a": str, "b": int, "return": bool})
-    def foo(a, b):
-        ...
+    .. code-block:: python
+
+        @annotate({"a": str, "b": int, "return": bool})
+        def foo(a, b):
+            ...
     """
 
     def decorate(func):

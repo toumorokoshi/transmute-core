@@ -13,8 +13,8 @@ class ContentTypeSerializer(object):
     @abstractproperty
     def content_type(self):
         """
-        return back what the Content-Type header
-        of a request should be, when using this serializer.
+        return back what a list of content types
+        this serializer should support.
         """
 
     @abstractmethod

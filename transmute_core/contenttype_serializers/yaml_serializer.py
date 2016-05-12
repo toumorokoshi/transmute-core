@@ -4,7 +4,7 @@ from .interface import ContentTypeSerializer
 
 class YamlSerializer(ContentTypeSerializer):
 
-    content_type = "application/x-yaml"
+    content_type = ["application/x-yaml"]
 
     @staticmethod
     def dump(data):

@@ -4,7 +4,7 @@ from .interface import ContentTypeSerializer
 
 class JsonSerializer(ContentTypeSerializer):
 
-    content_type = "application/json"
+    content_type = ["application/json"]
 
     @staticmethod
     def dump(data):

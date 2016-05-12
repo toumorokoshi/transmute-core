@@ -7,23 +7,6 @@ Transmute functions are converted to APIs by reading various details:
 A transmute function is identical to a standard Python function, with the
 addition of a few details:
 
-----------------------------------
-Use a decorator on non-GET methods
-----------------------------------
-
-By default, functions with no decorators will be converted to an HTTP GET method.
-Other request types should be annotated with a PUT, DELETE, or POST as appopriate.
-
-.. code-block:: python
-
-    import transmute_core  # these are usually also imparted into the
-    # top level module of the transmute
-
-    @transmute_core.PUT
-    def create_record(name: str):
-        db.insert_record(name)
-
-
 ------------------------------------------------------------------
 Add function annotations for input type validation / documentation
 ------------------------------------------------------------------
@@ -46,6 +29,36 @@ For Python 2, transmute provides an annotate decorator:
    @transmute_core.annotate({"left": int, "right": int, "return": int})
    def add(left, right):
        return left + right
+
+
+
+------------------------------------------------------
+Use transmute_core.describe to customize your function
+------------------------------------------------------
+
+Not every aspect of a REST api can be extracted from the function
+signature: often additional metadata is required. Transmute provides the "describe" decorator
+to specify those attributes.
+
+.. code-block:: python
+
+    import transmute_core  # these are usually also imparted into the
+    # top level module of the transmute
+
+    @transmute_core.describe(
+        methods=["PUT", "POST"],  # the methods that the function is for
+        # these are usually inferred from the method type, but can
+        # be specified explicitly
+        query_parameters=["blockRequest"],
+        body_parameters=["name"]
+    )
+    def create_record(name: str, blockRequest: bool) -> bool:
+        if block_request:
+            db.insert_record(name)
+        else:
+            db.async_insert_record(name)
+        return True
+
 
 
 ----------
@@ -81,7 +94,4 @@ argument:
 * GET uses query parameters
 * all other methods extract parameters from the body
 
-However, sometimes it makes sense to break those conventions. To help assist with that,
-transmute_core provides decorators to annotate that:
-
-.. code-block:: python
+This behaviour can be overridden with :data:`transmute_core.decorators.describe`.

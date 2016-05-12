@@ -2,14 +2,35 @@
 API Reference
 =============
 
+----------------
+TransmuteContext
+----------------
+
 .. autoclass:: transmute_core.TransmuteContext
     :members:
+
+----------
+Decorators
+----------
+
+.. automodule:: transmute_core.decorators
+    :members:
+
+
+--------------------
+Object Serialization
+--------------------
+
 
 .. autoclass:: transmute_core.object_serializers.ObjectSerializer
     :members:
 
 .. autoclass:: transmute_core.object_serializers.SchematicsSerializer
     :members:
+
+-------------------------
+ContentType Serialization
+-------------------------
 
 .. autoclass:: transmute_core.contenttype_serializers.ContentTypeSerializer
     :members:
@@ -21,4 +42,11 @@ API Reference
     :members:
 
 .. autoclass:: transmute_core.contenttype_serializers.YamlSerializer
+    :members:
+
+-------
+Swagger
+-------
+
+.. automodule:: transmute_core.swagger
     :members:
