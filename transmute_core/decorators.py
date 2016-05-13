@@ -1,16 +1,9 @@
 from .compat import string_type
-from .function import (
-    TRANSMUTE_HTTP_METHOD_ATTRIBUTE,
-    TRANSMUTE_BODY_PARAMETERS,
-    TRANSMUTE_QUERY_PARAMETERS,
-    TRANSMUTE_HEADER_PARAMETERS,
-    TRANSMUTE_PATH_PARAMETERS
-)
+from .function import TransmuteAttributes
 
 
-def describe(methods=None, query_parameters=None, body_parameters=None,
-             header_parameters=None, path_parameters=None):
-    """describe is a decorator to customize the rest API
+def describe(**kwargs):
+    """ describe is a decorator to customize the rest API
     that transmute generates, such as choosing
     certain arguments to be query parameters or
     body parameters, or a different method.
@@ -29,20 +22,11 @@ def describe(methods=None, query_parameters=None, body_parameters=None,
             that are found in the path are used first before the query_parameters and body_parameters.
     """
     # if we have a single method, make it a list.
-    if isinstance(methods, string_type):
-        methods = [methods]
-
-    key_map = {
-        TRANSMUTE_HTTP_METHOD_ATTRIBUTE: methods,
-        TRANSMUTE_QUERY_PARAMETERS: query_parameters,
-        TRANSMUTE_BODY_PARAMETERS: body_parameters
-    }
+    if isinstance(kwargs["methods"], string_type):
+        kwargs["methods"] = [kwargs["methods"]]
 
     def decorator(f):
-        for key, value in key_map.items():
-            if value is not None:
-                setattr(f, key, value)
-        return f
+        f.transmute = TransmuteAttributes(**kwargs)
     return decorator
 
 

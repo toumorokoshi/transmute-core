@@ -1,11 +1,11 @@
 import inspect
-from .compat import getfullargspec
-from .signature import get_signature
 from swagger_schema import (
     Operation, Responses, Response, JsonSchemaObject
 )
-from .context import default_context
+from ..compat import getfullargspec
+from ..context import default_context
 from .attributes import TransmuteAttributes
+from .signature import get_signature
 
 
 class TransmuteFunction(object):
@@ -27,7 +27,7 @@ class TransmuteFunction(object):
         # for a dynamic language like Python, it's not a huge deal:
         # transmute will still json serialize whatever object you pass it.
         # however, the return type is valuable for autodocumentation systems.
-        func.transmute = getattr(
+        self.transmute_attributes = getattr(
             func, "transmute_attributes", TransmuteAttributes()
         )
         self.argspec = getfullargspec(func)
@@ -111,4 +111,4 @@ class TransmuteFunction(object):
         3. If the method of the function is GET and only GET, then "arg" will be
         be added to the expected query parameters. Otherwise, "arg" will be added as
         a body parameter.
-        """
+        ""

@@ -1,10 +1,16 @@
 from collections import namedtuple
 from .compat import getfullargspec
 
-Parameters = namedtuple("Parameters", ["query", "body", "header", "path"])
+
+class Parameters(object):
+    def __init__(self, query=None, body=None, header=None, path=None):
+        self.query = query or {}
+        self.body = body or {}
+        self.header = header or {}
+        self.path = path or {}
 
 
-def get_parameters(func):
+def get_parameters(func, transmute_func):
     """given a function, categorize which arguments should be passed by
     what types of parameters. The choices are:
 
@@ -26,9 +32,23 @@ def get_parameters(func):
     be added to the expected query parameters. Otherwise, "arg" will be added as
     a body parameter.
     """
-    argspec = getfullargspec(func)
+    signature = get_signature(getfullargspec(func))
+    params = Parameters()
+    used_keys = set()
+    # examine what variables are categorized first.
+    for key in ["query", "body", "header", "path"]:
+        explicit_parameters = getattr(transmute_func, key + "_parameters")
+        for name in explicit_parameters:
+            getattr(params, key)[name] = retrieve_argument(argspec, name)
+            used_keys.add(name)
 
-    # exam
+    # check the method type, and decide if the parameters should be extracted
+    # from query parameters or the body
+    default_param_key = (
+        "query" if transmute_func.methods == set(["GET"]) else "body"
+    )
+
+    args =
 
 
 def get_signature(argspec):
