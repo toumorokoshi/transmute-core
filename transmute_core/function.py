@@ -10,6 +10,8 @@ from .context import default_context
 TRANSMUTE_HTTP_METHOD_ATTRIBUTE = "transmute_http_methods"
 TRANSMUTE_QUERY_PARAMETERS = "transmute_query_parameters"
 TRANSMUTE_BODY_PARAMETERS = "transmute_body_parameters"
+TRANSMUTE_HEADER_PARAMETERS = "transmute_header_parameters"
+TRANSMUTE_PATH_PARAMETERS = "transmute_path_parameters"
 
 
 class TransmuteFunction(object):
@@ -91,3 +93,27 @@ class TransmuteFunction(object):
                 )
             })
         )
+
+    # @staticmethod
+    def get_argument_sets(func):
+        """given a function, categorize which arguments should be passed by
+        what types of parameters. The choices are:
+
+        * query parameters: passed in as query parameters in the url
+        * body parameters: retrieved from the request body (includes forms)
+        * header parameters: retrieved from the request header
+        * path parameters: retrieved from the uri path
+
+        The categorization is performed for an argument "arg" by:
+
+        1. examining the transmute parameters attached to the function (e.g.
+        func.transmute_query_parameters), and checking if "arg" is mentioned. If so,
+        it is added to the category.
+
+        2. If the argument is available in the path, it will be added
+        as a path parameter.
+
+        3. If the method of the function is GET and only GET, then "arg" will be
+        be added to the expected query parameters. Otherwise, "arg" will be added as
+        a body parameter.
+        """
