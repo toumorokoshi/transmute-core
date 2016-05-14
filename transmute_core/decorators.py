@@ -22,11 +22,12 @@ def describe(**kwargs):
             that are found in the path are used first before the query_parameters and body_parameters.
     """
     # if we have a single method, make it a list.
-    if isinstance(kwargs["methods"], string_type):
+    if isinstance(kwargs.get("methods"), string_type):
         kwargs["methods"] = [kwargs["methods"]]
 
     def decorator(f):
         f.transmute = TransmuteAttributes(**kwargs)
+        return f
     return decorator
 
 

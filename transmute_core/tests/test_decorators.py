@@ -4,13 +4,6 @@ from transmute_core.decorators import (
     describe, annotate
 )
 
-from transmute_core.function import (
-    TRANSMUTE_HTTP_METHOD_ATTRIBUTE,
-    TRANSMUTE_QUERY_PARAMETERS,
-    TRANSMUTE_BODY_PARAMETERS,
-)
-
-
 @pytest.mark.parametrize("method", [
     "PUT", "POST", "DELETE"
 ])
@@ -20,7 +13,7 @@ def test_decorator(method):
     def test():
         pass
 
-    assert getattr(test, TRANSMUTE_HTTP_METHOD_ATTRIBUTE) == [method]
+    assert test.transmute.methods == set([method])
 
 
 def test_annotate():

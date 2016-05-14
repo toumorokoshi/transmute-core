@@ -1,5 +1,6 @@
 from collections import namedtuple
-from .compat import getfullargspec
+from .attributes import TransmuteAttributes
+from ..compat import getfullargspec
 
 
 class Parameters(object):
@@ -10,7 +11,7 @@ class Parameters(object):
         self.path = path or {}
 
 
-def get_parameters(func, transmute_func):
+def get_parameters(signature, transmute_attrs=None):
     """given a function, categorize which arguments should be passed by
     what types of parameters. The choices are:
 
@@ -32,49 +33,36 @@ def get_parameters(func, transmute_func):
     be added to the expected query parameters. Otherwise, "arg" will be added as
     a body parameter.
     """
-    signature = get_signature(getfullargspec(func))
     params = Parameters()
     used_keys = set()
     # examine what variables are categorized first.
     for key in ["query", "body", "header", "path"]:
-        explicit_parameters = getattr(transmute_func, key + "_parameters")
+        explicit_parameters = getattr(transmute_attrs, key + "_parameters")
         for name in explicit_parameters:
-            getattr(params, key)[name] = retrieve_argument(argspec, name)
+            getattr(params, key)[name] = signature.get_argument(name)
             used_keys.add(name)
 
     # check the method type, and decide if the parameters should be extracted
     # from query parameters or the body
     default_param_key = (
-        "query" if transmute_func.methods == set(["GET"]) else "body"
+        "query" if transmute_attrs.methods == set(["GET"]) else "body"
     )
+    default_params = getattr(params, default_param_key)
 
-    args =
-
-
-def get_signature(argspec):
-    """
-    retrieve a FunctionSignature object
-    from the argspec and the annotations passed.
-    """
-    attributes = (getattr(argspec, "args", []) +
-                  getattr(argspec, "keywords", []))
-    defaults = argspec.defaults or []
-
-    arguments, keywords = [], {}
-
-    attribute_list = attributes[:-len(defaults)] if len(defaults) != 0 else attributes[:]
-    for name in attribute_list:
-        if name == "self":
+    # parse all positional params
+    for arg in signature.args:
+        if arg.name in used_keys:
             continue
-        typ = argspec.annotations.get(name)
-        arguments.append(Argument(name, NoDefault, typ))
+        used_keys.add(arg.name)
+        default_params[arg.name] = arg
 
-    if len(defaults) != 0:
-        for name, default in zip(attributes[-len(defaults):], defaults):
-            typ = argspec.annotations.get(name)
-            keywords[name] = Argument(name, default, typ)
+    for name, arg in signature.kwargs.items():
+        if name in used_keys:
+            continue
+        used_keys.add(name)
+        default_params[name] = arg
 
-    return FunctionSignature(arguments, keywords)
+    return params
 
 
 class NoDefault(object):
@@ -98,3 +86,38 @@ class FunctionSignature(object):
     def __init__(self, args, kwargs):
         self.args = args
         self.kwargs = kwargs
+
+    def get_argument(self, key):
+        if key in self.kwargs:
+            return self.kwargs[key]
+        for arg in self.args:
+            if arg.name == key:
+                return key
+
+    @staticmethod
+    def from_argspec(argspec):
+        """
+        retrieve a FunctionSignature object
+        from the argspec and the annotations passed.
+        """
+        attributes = (getattr(argspec, "args", []) +
+                      getattr(argspec, "keywords", []))
+        defaults = argspec.defaults or []
+
+        arguments, keywords = [], {}
+
+        attribute_list = (attributes[:-len(defaults)]
+                          if len(defaults) != 0
+                          else attributes[:])
+        for name in attribute_list:
+            if name == "self":
+                continue
+            typ = argspec.annotations.get(name)
+            arguments.append(Argument(name, NoDefault, typ))
+
+        if len(defaults) != 0:
+            for name, default in zip(attributes[-len(defaults):], defaults):
+                typ = argspec.annotations.get(name)
+                keywords[name] = Argument(name, default, typ)
+
+        return FunctionSignature(arguments, keywords)

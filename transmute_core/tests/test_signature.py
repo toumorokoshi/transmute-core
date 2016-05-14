@@ -1,6 +1,10 @@
 from transmute_core.compat import getfullargspec
 from transmute_core import annotate, describe
-from transmute_core.signature import get_argument_sets, get_signature, NoDefault
+from transmute_core.function.signature import (
+    FunctionSignature,
+    get_parameters,
+    NoDefault
+)
 
 
 def test_get_argument_set():
@@ -10,8 +14,10 @@ def test_get_argument_set():
     def make_square(x, y, width=None, height=12):
         pass
 
-    argument_sets = get_argument_sets(make_square)
-    assert ["y"] == argument_sets.body.keys()
+    argspec = getfullargspec(make_square)
+    signature = FunctionSignature.from_argspec(argspec)
+    argument_sets = get_parameters(signature, make_square.transmute)
+    assert ["y"] == list(argument_sets.body.keys())
     assert set(["x", "width", "height"]) == set(argument_sets.query.keys())
 
 
@@ -22,7 +28,7 @@ def test_signature():
         pass
 
     argspec = getfullargspec(make_square)
-    signature = get_signature(argspec)
+    signature = FunctionSignature.from_argspec(argspec)
     assert len(signature.args) == 2
     assert signature.args[0].name == "x"
     assert signature.args[0].default == NoDefault
@@ -40,7 +46,7 @@ def test_signature_no_kwargs():
         return x * y
 
     argspec = getfullargspec(make_square)
-    signature = get_signature(argspec)
+    signature = FunctionSignature.from_argspec(argspec)
     assert len(signature.args) == 2
     assert signature.args[0].name == "x"
     assert signature.args[0].default == NoDefault
@@ -57,7 +63,7 @@ def test_self_signature():
         pass
 
     argspec = getfullargspec(square)
-    signature = get_signature(argspec)
+    signature = FunctionSignature.from_argspec(argspec)
 
     assert len(signature.args) == 1
     assert len(signature.kwargs) == 1
