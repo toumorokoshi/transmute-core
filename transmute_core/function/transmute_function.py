@@ -1,11 +1,13 @@
 import inspect
 from swagger_schema import (
-    Operation, Responses, Response, JsonSchemaObject
+    Operation, Responses, Response, JsonSchemaObject, Path
 )
 from ..compat import getfullargspec
 from ..context import default_context
 from .attributes import TransmuteAttributes
-from .signature import (get_parameters, FunctionSignature)
+from .signature import FunctionSignature
+from .parameters import get_parameters
+from ..exceptions import InvalidTransmuteDefinition
 
 
 class TransmuteFunction(object):
@@ -18,7 +20,7 @@ class TransmuteFunction(object):
 
     params = ["error_exceptions"]
 
-    def __init__(self, func, error_exceptions=None):
+    def __init__(self, func):
         # arguments should be the arguments passed into
         # the function
         #
@@ -27,21 +29,23 @@ class TransmuteFunction(object):
         # for a dynamic language like Python, it's not a huge deal:
         # transmute will still json serialize whatever object you pass it.
         # however, the return type is valuable for autodocumentation systems.
-        self.transmute_attributes = getattr(
-            func, "transmute_attributes", TransmuteAttributes()
-        )
-        self.argspec = getfullargspec(func)
-        self.signature = FunctionSignature.from_argspec(self.argspec)
-        self.return_type = self.argspec.annotations.get("return")
-        self.parameters = get_parameters(self.signature, self.transmute_attributes)
+        attrs = getattr(func, "transmute", TransmuteAttributes())
+        self._validate_attributes(attrs)
+        # these are the paths that the transmute function
+        # should respond to.
+        self.paths = attrs.paths
+        argspec = getfullargspec(func)
+        self.signature = FunctionSignature.from_argspec(argspec)
+        self.return_type = argspec.annotations.get("return")
+        self.parameters = get_parameters(self.signature, attrs)
         # description should be a description of the api
         # endpoint, for use in autodocumentation
         self.description = func.__doc__ or ""
         # error_exceptions represents the exceptions
         # that should be caught and return an API exception
-        self.error_exceptions = error_exceptions
+        self.error_exceptions = tuple(attrs.error_exceptions)
         # these are the http methods that should route to the given function.
-        self.http_methods = self.transmute_attributes.methods
+        self.methods = attrs.methods
         self.raw_func = func
         # this is to make discovery easier.
         # TODO: make sure this doesn't mess up GC, as it's
@@ -53,6 +57,13 @@ class TransmuteFunction(object):
 
     def __call__(self, *args, **kwargs):
         return self.raw_func(*args, **kwargs)
+
+    def get_swagger_path(self, context=default_context):
+        operation = self.get_swagger_operation(context)
+        path = Path()
+        for m in self.methods:
+            setattr(path, m.lower(), operation)
+        return path
 
     def get_swagger_operation(self, context=default_context):
         """
@@ -89,3 +100,14 @@ class TransmuteFunction(object):
                 )
             })
         )
+
+    @staticmethod
+    def _validate_attributes(attrs):
+        """
+        validate a TransmuteAttributes contains valid configuration
+        that can be converted into a TransmuteFunction.
+        """
+        if len(attrs.paths) == 0:
+            raise InvalidTransmuteDefinition(
+                "at least one path is required for a valid set of transmute attribute: {0}".format(str(attrs))
+            )

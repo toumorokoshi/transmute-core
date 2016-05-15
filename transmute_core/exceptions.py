@@ -26,3 +26,10 @@ class NoSerializerFound(WebTransmuteException):
     raised when a serializer does not exist to handle the
     desired content type.
     """
+
+
+class InvalidTransmuteDefinition(WebTransmuteException):
+    """
+    this exception is raised when an invalid configuration for
+    transmute is encountered
+    """

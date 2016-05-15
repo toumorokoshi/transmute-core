@@ -1,7 +1,8 @@
 from abc import ABCMeta, abstractmethod
+from ..compat import with_metaclass
 
 
-class ObjectSerializer(object):
+class ObjectSerializer(with_metaclass(ABCMeta, object)):
     """
     The object serializer is responsible for converting objects to and
     from basic data types. Basic data types are serializable to and
@@ -21,8 +22,6 @@ class ObjectSerializer(object):
 
     `SchematicsSerializer` is the default implementation used.
     """
-
-    __metaclass__ = ABCMeta
 
     @abstractmethod
     def load(self, model, value):

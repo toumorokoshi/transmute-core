@@ -8,6 +8,8 @@ def describe(**kwargs):
     certain arguments to be query parameters or
     body parameters, or a different method.
 
+    :param list(str) paths: the path(s) for the handler to represent (using swagger's syntax for a path)
+
     :param list(str) methods: the methods this function should respond to. if non is set, transmute defaults to a GET.
 
     :param list(str) query_parameters: the names of arguments that
@@ -22,11 +24,17 @@ def describe(**kwargs):
             that are found in the path are used first before the query_parameters and body_parameters.
     """
     # if we have a single method, make it a list.
+    if isinstance(kwargs.get("paths"), string_type):
+        kwargs["paths"] = [kwargs["paths"]]
     if isinstance(kwargs.get("methods"), string_type):
         kwargs["methods"] = [kwargs["methods"]]
+    attrs = TransmuteAttributes(**kwargs)
 
     def decorator(f):
-        f.transmute = TransmuteAttributes(**kwargs)
+        if hasattr(f, "transmute"):
+            f.transmute = f.transmute | attrs
+        else:
+            f.transmute = attrs
         return f
     return decorator
 

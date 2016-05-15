@@ -7,13 +7,23 @@ from transmute_core.decorators import (
 @pytest.mark.parametrize("method", [
     "PUT", "POST", "DELETE"
 ])
-def test_decorator(method):
+def test_describe(method):
 
     @describe(methods=method)
     def test():
         pass
 
     assert test.transmute.methods == set([method])
+
+
+def test_describe_join():
+    """ two describe annotations should merge the descriptions """
+    @describe(methods=["GET"])
+    @describe(methods=["PUT"])
+    def test():
+        pass
+
+    assert test.transmute.methods == set(["GET", "PUT"])
 
 
 def test_annotate():

@@ -2,23 +2,8 @@ from transmute_core.compat import getfullargspec
 from transmute_core import annotate, describe
 from transmute_core.function.signature import (
     FunctionSignature,
-    get_parameters,
     NoDefault
 )
-
-
-def test_get_argument_set():
-
-    @describe(body_parameters=["y"])
-    @annotate({"x": int, "y": float, "width": int, "height": float})
-    def make_square(x, y, width=None, height=12):
-        pass
-
-    argspec = getfullargspec(make_square)
-    signature = FunctionSignature.from_argspec(argspec)
-    argument_sets = get_parameters(signature, make_square.transmute)
-    assert ["y"] == list(argument_sets.body.keys())
-    assert set(["x", "width", "height"]) == set(argument_sets.query.keys())
 
 
 def test_signature():

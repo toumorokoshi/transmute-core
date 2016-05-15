@@ -1,14 +1,13 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
+from ..compat import with_metaclass
 
 
-class ContentTypeSerializer(object):
+class ContentTypeSerializer(with_metaclass(ABCMeta, object)):
     """
     A ContentTypeSerializer handles the conversion from
     a python data structure to a bytes object representing
     the content in a particular content type.
     """
-
-    __metaclass__ = ABCMeta
 
     @abstractproperty
     def content_type(self):
@@ -18,7 +17,7 @@ class ContentTypeSerializer(object):
         """
 
     @abstractmethod
-    def to_type(data):
+    def dump(data):
         """
         should return back a bytes (or string in python 2),
         representation of your object, to be used in e.g. response
@@ -29,7 +28,7 @@ class ContentTypeSerializer(object):
         """
 
     @abstractmethod
-    def from_type(raw_bytes):
+    def load(raw_bytes):
         """
         given a bytes object, should return a base python data
         structure that represents the object.
