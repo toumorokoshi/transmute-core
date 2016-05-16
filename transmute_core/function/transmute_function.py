@@ -20,7 +20,13 @@ class TransmuteFunction(object):
 
     params = ["error_exceptions"]
 
-    def __init__(self, func):
+    def __init__(self, func, args_not_from_request=None):
+        """
+        :param list(str) args_not_from_request: a list of arguments that
+            transmute_function should not retrieve from the request
+            (e.g. from query parameters). This is useful for frameworks
+            with pass in an argument to represent the request, or response object.
+        """
         # arguments should be the arguments passed into
         # the function
         #
@@ -37,7 +43,9 @@ class TransmuteFunction(object):
         argspec = getfullargspec(func)
         self.signature = FunctionSignature.from_argspec(argspec)
         self.return_type = argspec.annotations.get("return")
-        self.parameters = get_parameters(self.signature, attrs)
+        self.parameters = get_parameters(
+            self.signature, attrs, arguments_to_ignore=args_not_from_request
+        )
         # description should be a description of the api
         # endpoint, for use in autodocumentation
         self.description = func.__doc__ or ""

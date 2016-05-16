@@ -1,5 +1,5 @@
 from transmute_core.compat import getfullargspec
-from transmute_core import annotate, describe
+from transmute_core import annotate
 from transmute_core.function.signature import (
     FunctionSignature,
     NoDefault
@@ -53,3 +53,18 @@ def test_self_signature():
     assert len(signature.args) == 1
     assert len(signature.kwargs) == 1
     assert signature.kwargs["multiplier"].name == "multiplier"
+
+
+def test_get_signature():
+
+    def square(self, resource, multiplier=None):
+        pass
+
+    argspec = getfullargspec(square)
+    signature = FunctionSignature.from_argspec(argspec)
+
+    arg = signature.get_argument("resource")
+    assert arg.name == "resource"
+
+    kwarg = signature.get_argument("multiplier")
+    assert kwarg.name == "multiplier"

@@ -1,2 +1,3 @@
 [run]
 omit = transmute_core/compat.py
+       transmute_core/tests/*

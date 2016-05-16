@@ -23,6 +23,7 @@ MODEL_MAP = {
     float: FloatType(),
     Decimal: DecimalType(),
     string_type: StringType(),
+    None: BaseType()
 }
 
 JSON_SCHEMA_MAP = OrderedDict([
@@ -44,6 +45,7 @@ class SchematicsSerializer(ObjectSerializer):
     - bool
     - decimal
     - string
+    - none
     - lists, in the form of [Type] (e.g. [str])
     - any type that extends the schematics.models.Model.
     """
@@ -106,21 +108,23 @@ def _to_json_schema_no_cache(model):
 
 
 def _model_type_to_json_schema(model):
+    required = []
     schema = {
         "title": model.model_name,
         "type": "object",
-        "properties": {},
-        "required": []
+        "properties": {}
     }
     for name, field in model.fields.items():
         if field.required:
-            schema["required"].append(name)
+            required.append(name)
         schema["properties"][name] = _to_json_schema(field)
+    if len(required) > 0:
+        schema["required"] = required
     return schema
 
 
 def _list_type_to_json_schema(list_type):
     return {
         "type": "array",
-        "items": {"type": _to_json_schema(list_type.field)}
+        "items": _to_json_schema(list_type.field)
     }

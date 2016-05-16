@@ -28,19 +28,35 @@ def test_schematics_integration_load(serializer, typ, inp, out):
 
 
 def test_schematics_to_json_schema(serializer):
-    serializer.to_json_schema(Card) == {
+    assert serializer.to_json_schema(Card) == {
         "properties": {
             "name": {"type": "string"},
             "price": {"type": "number"}
         },
         "title": "Card",
-        "required": [],
+        "type": "object"
+    }
+
+
+def test_schematics_to_json_schema_required_value(serializer):
+
+    class CardNameRequired(Model):
+        name = StringType(required=True)
+        price = IntType()
+
+    assert serializer.to_json_schema(CardNameRequired) == {
+        "properties": {
+            "name": {"type": "string"},
+            "price": {"type": "number"}
+        },
+        "title": "CardNameRequired",
+        "required": ["name"],
         "type": "object"
     }
 
 
 def test_to_json_list(serializer):
-    serializer.to_json_schema([int]) == {
+    assert serializer.to_json_schema([int]) == {
         "type": "array",
         "items": {"type": "number"}
     }

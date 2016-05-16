@@ -3,11 +3,11 @@ from transmute_core import annotate, describe
 from transmute_core.compat import getfullargspec
 from transmute_core.function.signature import (
     FunctionSignature,
-    NoDefault
 )
 from transmute_core.function.parameters import (
     get_parameters, _extract_path_parameters_from_paths
 )
+from transmute_core.function.attributes import TransmuteAttributes
 from transmute_core.exceptions import InvalidTransmuteDefinition
 
 
@@ -24,6 +24,19 @@ def test_get_argument_set():
     assert ["y"] == list(argument_sets.body.keys())
     assert set(["x"]) == set(argument_sets.path.keys())
     assert set(["z", "width", "height"]) == set(argument_sets.query.keys())
+
+
+def test_ignore_request_parameter():
+
+    def handle_request(request, x: int, y: int):
+        pass
+
+    argspec = getfullargspec(handle_request)
+    signature = FunctionSignature.from_argspec(argspec)
+    params = get_parameters(signature, TransmuteAttributes(),
+                            arguments_to_ignore=["request"])
+    for typ in ["query", "body", "header", "path"]:
+        assert "request" not in getattr(params, typ)
 
 
 @pytest.mark.parametrize("invalid_paths", [

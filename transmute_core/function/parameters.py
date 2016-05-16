@@ -10,7 +10,7 @@ class Parameters(object):
         self.path = path or {}
 
 
-def get_parameters(signature, transmute_attrs):
+def get_parameters(signature, transmute_attrs, arguments_to_ignore=None):
     """given a function, categorize which arguments should be passed by
     what types of parameters. The choices are:
 
@@ -32,6 +32,7 @@ def get_parameters(signature, transmute_attrs):
     be added to the expected query parameters. Otherwise, "arg" will be added as
     a body parameter.
     """
+    arguments_to_ignore = arguments_to_ignore or []
     params = Parameters()
     used_keys = set()
     # examine what variables are categorized first.
@@ -55,12 +56,16 @@ def get_parameters(signature, transmute_attrs):
 
     # parse all positional params
     for arg in signature.args:
+        if arg.name in arguments_to_ignore:
+            continue
         if arg.name in used_keys:
             continue
         used_keys.add(arg.name)
         default_params[arg.name] = arg
 
     for name, arg in signature.kwargs.items():
+        if name in arguments_to_ignore:
+            continue
         if name in used_keys:
             continue
         used_keys.add(name)

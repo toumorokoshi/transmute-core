@@ -28,7 +28,7 @@ class FunctionSignature(object):
             return self.kwargs[key]
         for arg in self.args:
             if arg.name == key:
-                return key
+                return arg
 
     @staticmethod
     def from_argspec(argspec):
