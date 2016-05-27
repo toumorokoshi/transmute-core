@@ -10,7 +10,7 @@ from schematics.types import (
     StringType
 )
 from schematics.types.compound import (
-    CompoundType, ListType, ModelType
+    CompoundType, ListType, ModelType, DictType
 )
 from schematics.exceptions import ConversionError
 from ..exceptions import SerializationException
@@ -60,6 +60,8 @@ class SchematicsSerializer(ObjectSerializer):
             self._models[model] = ListType(self._translate_to_model(model[0]))
         if model in self._models:
             return self._models[model]
+        elif isinstance(model, BaseType):
+            return model
         else:
             return ModelType(model)
 
@@ -101,6 +103,8 @@ def _to_json_schema_no_cache(model):
         return _model_type_to_json_schema(model)
     elif isinstance(model, ListType):
         return _list_type_to_json_schema(model)
+    elif isinstance(model, DictType):
+        return _dict_type_to_json_schema(model)
     else:
         for cls, schema in JSON_SCHEMA_MAP.items():
             if isinstance(model, cls):
@@ -127,4 +131,11 @@ def _list_type_to_json_schema(list_type):
     return {
         "type": "array",
         "items": _to_json_schema(list_type.field)
+    }
+
+
+def _dict_type_to_json_schema(dict_type):
+    return {
+        "type": "object",
+        "additionalProperties": _to_json_schema(dict_type.field)
     }

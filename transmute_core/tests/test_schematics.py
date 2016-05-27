@@ -1,6 +1,7 @@
 import pytest
 from schematics.models import Model
 from schematics.types import StringType, IntType
+from schematics.types.compound import DictType
 
 
 class Card(Model):
@@ -60,3 +61,15 @@ def test_to_json_list(serializer):
         "type": "array",
         "items": {"type": "number"}
     }
+
+
+def test_to_json_dict(serializer):
+    assert serializer.to_json_schema(DictType(IntType())) == {
+        "type": "object",
+        "additionalProperties": {"type": "number"}
+    }
+
+
+def test_serialize_type(serializer):
+    """ serializer should be able to serialize a raw type. """
+    assert serializer.dump(DictType(StringType()), {"key": "foo"}) == {"key": "foo"}

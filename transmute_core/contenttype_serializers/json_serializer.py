@@ -1,5 +1,6 @@
 import json
 from .interface import ContentTypeSerializer
+from ..exceptions import SerializationException
 
 
 class JsonSerializer(ContentTypeSerializer):
@@ -21,7 +22,10 @@ class JsonSerializer(ContentTypeSerializer):
         given a bytes object, should return a base python data
         structure that represents the object.
         """
-        return json.loads(raw_bytes.decode("UTF-8"))
+        try:
+            return json.loads(raw_bytes.decode("UTF-8"))
+        except json.decoder.JSONDecodeError as e:
+            raise SerializationException(str(e))
 
     @staticmethod
     def can_handle(content_type_name):

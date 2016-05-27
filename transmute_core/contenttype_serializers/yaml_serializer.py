@@ -1,5 +1,6 @@
 import yaml
 from .interface import ContentTypeSerializer
+from ..exceptions import SerializationException
 
 
 class YamlSerializer(ContentTypeSerializer):
@@ -21,7 +22,10 @@ class YamlSerializer(ContentTypeSerializer):
         given a bytes object, should return a base python data
         structure that represents the object.
         """
-        return yaml.load(raw_bytes)
+        try:
+            return yaml.load(raw_bytes)
+        except yaml.scanner.ScannerError as e:
+            raise SerializationException(str(e))
 
     @staticmethod
     def can_handle(content_type_name):

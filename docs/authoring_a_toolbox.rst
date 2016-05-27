@@ -144,3 +144,14 @@ looks something like:
 Once completed, you will need to build some functions to extract the
 parameters to your function. It is usually split into two: one for GET (query parameters),
 and one for all other functions (body parameters)
+
+
+-------
+Testing
+-------
+
+The following scenarios should be tested, to ensure your toolbox
+correctly supports all of transmute's functionality.
+
+* 400 on unsupported content type
+* 400 on bad object for content type
