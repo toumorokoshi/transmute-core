@@ -48,4 +48,4 @@ def test_bool_load_happy(serializer, inp, expected_output):
     ("foo", "foo")
 ])
 def test_string_load_happy(serializer, inp, expected_output):
-    assert serializer.load(string_type, inp) is expected_output
+    assert serializer.load(string_type, inp) == expected_output

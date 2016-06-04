@@ -24,7 +24,7 @@ class JsonSerializer(ContentTypeSerializer):
         """
         try:
             return json.loads(raw_bytes.decode("UTF-8"))
-        except json.decoder.JSONDecodeError as e:
+        except ValueError as e:
             raise SerializationException(str(e))
 
     @staticmethod

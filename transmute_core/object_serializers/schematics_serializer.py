@@ -9,10 +9,12 @@ from schematics.types import (
     NumberType,
     StringType
 )
+from schematics.models import Model, ModelMeta
 from schematics.types.compound import (
     CompoundType, ListType, ModelType, DictType
 )
 from schematics.exceptions import ConversionError
+from schematics.transforms import get_import_context
 from ..exceptions import SerializationException
 from decimal import Decimal
 from ..compat import string_type
@@ -56,14 +58,22 @@ class SchematicsSerializer(ObjectSerializer):
 
     def _translate_to_model(self, model):
         model = self._to_key(model)
+
+        if isinstance(model, BaseType):
+            return model
+
+        if isinstance(model, ModelMeta):
+            return ModelType(model)
+
         if model not in self._models and isinstance(model, tuple):
-            self._models[model] = ListType(self._translate_to_model(model[0]))
+            self._models[model] = ListType(
+                self._translate_to_model(model[0])
+            )
+
         if model in self._models:
             return self._models[model]
-        elif isinstance(model, BaseType):
-            return model
-        else:
-            return ModelType(model)
+
+        return model
 
     @staticmethod
     def _to_key(model):
@@ -74,7 +84,10 @@ class SchematicsSerializer(ObjectSerializer):
     def load(self, model, value):
         try:
             model = self._translate_to_model(model)
-            return model(value)
+            # return model(value, context={"oo": True})
+            return model(value, context=get_import_context(
+                oo=True
+            ))
         except ConversionError as e:
             raise SerializationException(str(e))
 
@@ -137,5 +150,5 @@ def _list_type_to_json_schema(list_type):
 def _dict_type_to_json_schema(dict_type):
     return {
         "type": "object",
-        "additionalProperties": _to_json_schema(dict_type.field)
+        "additionalProperties": True
     }

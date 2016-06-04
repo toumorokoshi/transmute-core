@@ -28,7 +28,8 @@ def test_get_argument_set():
 
 def test_ignore_request_parameter():
 
-    def handle_request(request, x: int, y: int):
+    @annotate({"x": int, "y": int})
+    def handle_request(request, x, y):
         pass
 
     argspec = getfullargspec(handle_request)

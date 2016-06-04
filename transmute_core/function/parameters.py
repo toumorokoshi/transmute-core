@@ -1,5 +1,8 @@
 import re
 from ..exceptions import InvalidTransmuteDefinition
+from swagger_schema import (
+    QueryParameter, HeaderParameter, PathParameter, BodyParameter
+)
 
 
 class Parameters(object):
@@ -100,3 +103,35 @@ def _extract_path_parameters_from_paths(paths):
                 "paths {0} do not match in the parameters they can support.".format(paths)
             )
     return params or set()
+
+
+def generate_parameters_swagger(parameters):
+    """ froma a parameters object, generate the swagger values. """
+    result = {}
+    for name, argument in parameters.query.items():
+        result[name] = QueryParameter({
+            "name": name,
+            "required": argument.required,
+            "type": "string"
+        })
+
+    for name, argument in parameters.body.items():
+        result[name] = QueryParameter({
+            "name": name,
+            "required": argument.required,
+            "type": "string"
+        })
+
+    for name, argument in parameters.body.items():
+        result[name] = QueryParameter({
+            "name": name,
+            "required": argument.required,
+            "type": "string"
+        })
+
+    for name, argument in parameters.path.items():
+        result[name] = QueryParameter({
+            "name": name,
+            "required": argument.required,
+            "type": "string"
+        })

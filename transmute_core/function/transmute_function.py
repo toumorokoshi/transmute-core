@@ -1,6 +1,6 @@
 import inspect
 from swagger_schema import (
-    Operation, Responses, Response, JsonSchemaObject, Path
+    Operation, Response, Schema, PathItem
 )
 from ..compat import getfullargspec
 from ..context import default_context
@@ -68,7 +68,7 @@ class TransmuteFunction(object):
 
     def get_swagger_path(self, context=default_context):
         operation = self.get_swagger_operation(context)
-        path = Path()
+        path = PathItem()
         for m in self.methods:
             setattr(path, m.lower(), operation)
         return path
@@ -78,36 +78,41 @@ class TransmuteFunction(object):
         get the swagger_schema operation representation.
         """
         consumes = produces = context.contenttype_serializers.keys()
-        return Operation(
-            summary=self.description,
-            description=self.description,
-            consumes=consumes,
-            produces=produces,
-            responses=Responses({
-                "200": Response(
-                    description="success",
-                    schema=JsonSchemaObject({
-                        "properties": {
-                            "success": {"type": "boolean"},
-                            "result": context.serializers.to_json_schema(
-                                self.return_type
-                            )
-                        },
-                        "required": ["success", "result"]
+        try:
+            return Operation({
+                "summary": self.description,
+                "description": self.description,
+                "consumes": consumes,
+                "produces": produces,
+                "parameters": {
+                },
+                "responses": {
+                    "200": Response({
+                        "description": "success",
+                        "schema": Schema({
+                            "properties": {
+                                "success": {"type": "boolean"},
+                                "result": context.serializers.to_json_schema(
+                                    self.return_type
+                                )
+                            },
+                            "required": ["success", "result"]
+                        }),
+                    }),
+                    "400": Response({
+                        "description": "invalid input received",
+                        "schema": Schema({
+                            "properties": {
+                                "success": {"type": "boolean"},
+                                "message": {"type": "string"}
+                            },
+                            "required": ["success", "message"]
+                        })
                     })
-                ),
-                "400": Response(
-                    description="invalid input received",
-                    schema=JsonSchemaObject({
-                        "properties": {
-                            "success": {"type": "boolean"},
-                            "message": {"type": "string"}
-                        },
-                        "required": ["success", "message"]
-                    })
-                )
+                }
             })
-        )
+        except Exception as e:
+            pass
 
     @staticmethod
     def _validate_attributes(attrs):
