@@ -10,17 +10,18 @@ def main(build):
 
 
 def test(build):
-    main(build)
-    build.packages.install("jedi")
-    build.packages.install("sphinx")
-    build.packages.install("pytest")
-    build.packages.install("pytest-cov")
-    pytest = os.path.join(build.root, "bin", "py.test")
-    subprocess.call([
-        pytest, "--cov", "transmute_core",
+    if not build.history.get("test_deps"):
+        main(build)
+        build.packages.install("pytest")
+        build.packages.install("pytest-cov")
+        build.packages.install("flake8")
+        build.history["test_deps"] = True
+    build.executables.run([
+        "py.test", "--cov", "transmute_core",
         "transmute_core/tests",
         "--cov-report", "term-missing"
     ] + build.options.args)
+    build.executables.run(["flake8", "transmute_core"])
 
 
 def distribute(build):

@@ -4,6 +4,7 @@ from transmute_core.decorators import (
     describe, annotate
 )
 
+
 @pytest.mark.parametrize("method", [
     "PUT", "POST", "DELETE"
 ])

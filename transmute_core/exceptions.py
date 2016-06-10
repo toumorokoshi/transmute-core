@@ -14,7 +14,7 @@ class APIException(WebTransmuteException):
         self.code = code
 
 
-class SerializationException(WebTransmuteException):
+class SerializationException(APIException):
     """
     this exceptions signifies an exception with
     serializing values.

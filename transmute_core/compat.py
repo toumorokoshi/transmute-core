@@ -24,9 +24,9 @@ def getfullargspec(func):
         )
 
 if is_py3:
-    string_type = str
+    string_type = str  # noqa
 else:
-    string_type = basestring
+    string_type = basestring  # noqa
 
 
 # From six

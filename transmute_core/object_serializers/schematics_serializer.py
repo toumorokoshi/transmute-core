@@ -150,5 +150,5 @@ def _list_type_to_json_schema(list_type):
 def _dict_type_to_json_schema(dict_type):
     return {
         "type": "object",
-        "additionalProperties": True
+        "additionalProperties": _to_json_schema(dict_type.field)
     }

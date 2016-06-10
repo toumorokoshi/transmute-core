@@ -34,7 +34,7 @@ class TransmuteAttributes(object):
     def __str__(self):
         arg_list = []
         for k in ["paths", "methods",
-                  "query_parameters",  "body_parameters",
+                  "query_parameters", "body_parameters",
                   "header_parameters", "path_parameters",
                   "error_exceptions"]:
             arg_list.append("{0}={1}".format(
