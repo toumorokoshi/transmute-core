@@ -115,23 +115,23 @@ def generate_parameters_swagger(parameters):
             "type": "string"
         })
 
-    for name, argument in parameters.body.items():
-        result[name] = QueryParameter({
-            "name": name,
-            "required": argument.required,
-            "type": "string"
-        })
+    #for name, argument in parameters.headers.items():
+    #    result[name] = HeaderParameter({
+    #        "name": name,
+    #        "required": argument.required,
+    #        "type": "string"
+    #    })
 
-    for name, argument in parameters.body.items():
-        result[name] = QueryParameter({
-            "name": name,
-            "required": argument.required,
-            "type": "string"
-        })
+    #for name, argument in parameters.body.items():
+    #    result[name] = BodyParameter({
+    #        "name": name,
+    #        "required": argument.required,
+    #        "type": "string"
+    #    })
 
-    for name, argument in parameters.path.items():
-        result[name] = QueryParameter({
-            "name": name,
-            "required": argument.required,
-            "type": "string"
-        })
+    #for name, argument in parameters.path.items():
+    #    result[name] = PathParameter({
+    #        "name": name,
+    #        "required": argument.required,
+    #        "type": "string"
+    #    })

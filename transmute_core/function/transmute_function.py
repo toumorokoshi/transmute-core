@@ -1,6 +1,8 @@
 import inspect
 from swagger_schema import (
-    Operation, Response, Schema, PathItem
+    Operation, Response, Schema, PathItem,
+    QueryParameter, HeaderParameter, PathParameter,
+    BodyParameter
 )
 from ..compat import getfullargspec
 from ..context import default_context
@@ -78,41 +80,67 @@ class TransmuteFunction(object):
         get the swagger_schema operation representation.
         """
         consumes = produces = context.contenttype_serializers.keys()
-        try:
-            return Operation({
-                "summary": self.description,
-                "description": self.description,
-                "consumes": consumes,
-                "produces": produces,
-                "parameters": {
-                },
-                "responses": {
-                    "200": Response({
-                        "description": "success",
-                        "schema": Schema({
-                            "properties": {
-                                "success": {"type": "boolean"},
-                                "result": context.serializers.to_json_schema(
-                                    self.return_type
-                                )
-                            },
-                            "required": ["success", "result"]
-                        }),
+        return Operation({
+            "summary": self.description,
+            "description": self.description,
+            "consumes": consumes,
+            "produces": produces,
+            "parameters": self._get_swagger_parameters(context),
+            "responses": {
+                "200": Response({
+                    "description": "success",
+                    "schema": Schema({
+                        "title": "SuccessObject",
+                        "properties": {
+                            "success": {"type": "boolean"},
+                            "result": context.serializers.to_json_schema(
+                                self.return_type
+                            )
+                        },
+                        "required": ["success", "result"]
                     }),
-                    "400": Response({
-                        "description": "invalid input received",
-                        "schema": Schema({
-                            "properties": {
-                                "success": {"type": "boolean"},
-                                "message": {"type": "string"}
-                            },
-                            "required": ["success", "message"]
-                        })
+                }),
+                "400": Response({
+                    "description": "invalid input received",
+                    "schema": Schema({
+                        "title": "FailureObject",
+                        "properties": {
+                            "success": {"type": "boolean"},
+                            "message": {"type": "string"}
+                        },
+                        "required": ["success", "message"]
                     })
-                }
-            })
-        except Exception as e:
-            pass
+                })
+            }
+        })
+
+    def _get_swagger_parameters(self, context=default_context):
+        parameters = []
+        for name, details in self.parameters.query.items():
+            parameters.append(QueryParameter({
+                "name": name,
+                "required": details.default is None,
+                "type": "string"
+            }))
+        for name, details in self.parameters.header.items():
+            parameters.append(HeaderParameter({
+                "name": name,
+                "required": details.default is None,
+                "type": "string"
+            }))
+        for name, details in self.parameters.body.items():
+            parameters.append(BodyParameter({
+                "name": name,
+                "required": details.default is None,
+                "schema": context.serializers.to_json_schema(details.type),
+            }))
+        for name, details in self.parameters.path.items():
+            parameters.append(PathParameter({
+                "name": name,
+                "required": True,
+                "type": "string"
+            }))
+        return parameters
 
     @staticmethod
     def _validate_attributes(attrs):

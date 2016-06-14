@@ -6,6 +6,7 @@ from uranium.rules import rule, Once
 
 @uranium.task_requires("install_swagger_ui")
 def main(build):
+    build.packages.install("../swagger-schema", develop=True)
     build.packages.install(".", develop=True)
 
 
@@ -21,7 +22,7 @@ def test(build):
         "transmute_core/tests",
         "--cov-report", "term-missing"
     ] + build.options.args)
-    build.executables.run(["flake8", "transmute_core"])
+    # build.executables.run(["flake8", "transmute_core"])
 
 
 def distribute(build):

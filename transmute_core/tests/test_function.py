@@ -27,6 +27,7 @@ def test_return_type(func):
 def test_swagger_schema_has_object(func):
     swagger = func.get_swagger_operation()
     assert swagger.responses["200"].schema.to_primitive() == {
+        "title": "SuccessObject",
         "required": ["success", "result"],
         "properties": {
             "success": {"type": "boolean"},
@@ -38,6 +39,7 @@ def test_swagger_schema_has_object(func):
 def test_swagger_schema_path(func):
     swagger = func.get_swagger_path()
     assert swagger.get.responses["200"].schema.to_primitive() == {
+        "title": "SuccessObject",
         "required": ["success", "result"],
         "properties": {
             "success": {"type": "boolean"},
