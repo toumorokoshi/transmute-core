@@ -10,12 +10,12 @@ transmute-core is a library designed to help create "transmute"
 library for web frameworks. A transmute library provides the
 following:
 
-* declarative generation of http handler interfaces by parsing :doc:`function <functions>`.
+* declarative generation of http handler interfaces by parsing :doc:`route functions <routes>`.
 * validation and serialization to and from a variety of content types (e.g. json or yaml).
 * validation and serialization to and from native python objects, using `schematics <http://schematics.readthedocs.org/en/latest/>`_.
 * :doc:`autodocumentation <autodocumentation>` of all handlers generated this way, via `swagger <http://swagger.io/>`_.
 
-transmute-core is released under an `MIT license <https://github.com/toumorokoshi/transmute-core/blob/master/LICENSE>`_.
+transmute-core is released under the `MIT license <https://github.com/toumorokoshi/transmute-core/blob/master/LICENSE>`_.
 
 If you are interested in adding a transmute toolbox for your preferred
 web framework, please read :doc:`authoring_a_toolbox`

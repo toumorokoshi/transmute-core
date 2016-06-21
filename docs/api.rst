@@ -6,7 +6,7 @@ API Reference
 TransmuteContext
 ----------------
 
-.. autoclass:: transmute_core.TransmuteContext
+.. autoclass:: transmute_core.context.TransmuteContext
     :members:
 
 ----------
