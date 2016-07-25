@@ -102,7 +102,7 @@ Additional Examples
 Optional Values
 ===============
 
-transmute libraries supprot optional values by providing them as keyword arguments:
+transmute libraries support optional values by providing them as keyword arguments:
 
 .. code-block:: python
 
