@@ -31,7 +31,6 @@ For Python 2, transmute provides an annotate decorator:
        return left + right
 
 
-
 ------------------------------------------------------
 Use transmute_core.describe to customize your function
 ------------------------------------------------------
@@ -95,3 +94,19 @@ argument:
 * all other methods extract parameters from the body
 
 This behaviour can be overridden with :data:`transmute_core.decorators.describe`.
+
+-------------------
+Additional Examples
+-------------------
+
+Optional Values
+===============
+
+transmute libraries supprot optional values by providing them as keyword arguments:
+
+.. code-block:: python
+
+    # count and page will be optional with default values,
+    # but query will be required.
+    def add(count: int=100, page: int=0, query: str) -> [str]:
+        return db.query(query=query, page=page, count=count)
