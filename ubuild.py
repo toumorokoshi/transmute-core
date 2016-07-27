@@ -6,7 +6,6 @@ from uranium.rules import rule, Once
 
 @uranium.task_requires("install_swagger_ui")
 def main(build):
-    build.packages.install("../swagger-schema", develop=True)
     build.packages.install(".", develop=True)
 
 
