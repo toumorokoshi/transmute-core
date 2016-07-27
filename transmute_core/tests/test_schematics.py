@@ -2,11 +2,24 @@ import pytest
 from schematics.models import Model
 from schematics.types import StringType, IntType
 from schematics.types.compound import DictType
+from schematics.exceptions import ValidationError
+from transmute_core.exceptions import SerializationException
 
 
 class Card(Model):
     name = StringType()
     price = IntType()
+
+
+def greater_than_zero(value):
+    if value < 0:
+        raise ValidationError("must be greater than zero")
+    return value
+
+
+class Person(Model):
+    age = IntType(required=True, validators=[greater_than_zero])
+    bio = StringType()
 
 card_dict = {"name": "foo", "price": 10}
 card = Card(card_dict)
@@ -18,6 +31,11 @@ card = Card(card_dict)
 ])
 def test_schematics_integration_dump(serializer, typ, inp, out):
     assert serializer.dump(typ, inp) == out
+
+
+def test_schematics_validate_is_called(serializer):
+    with pytest.raises(SerializationException):
+        serializer.load(Person, {"age": -1, "bio": "foo"})
 
 
 @pytest.mark.parametrize("typ,inp,out", [

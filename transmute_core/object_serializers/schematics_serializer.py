@@ -13,7 +13,7 @@ from schematics.models import Model, ModelMeta
 from schematics.types.compound import (
     CompoundType, ListType, ModelType, DictType
 )
-from schematics.exceptions import ConversionError
+from schematics.exceptions import BaseError
 from schematics.transforms import get_import_context
 from ..exceptions import SerializationException
 from decimal import Decimal
@@ -84,18 +84,20 @@ class SchematicsSerializer(ObjectSerializer):
     def load(self, model, value):
         try:
             model = self._translate_to_model(model)
-            # return model(value, context={"oo": True})
-            return model(value, context=get_import_context(
+            result = model(value, context=get_import_context(
                 oo=True
             ))
-        except ConversionError as e:
+            if hasattr(result, "validate"):
+                result.validate()
+            return result
+        except BaseError as e:
             raise SerializationException(str(e))
 
     def dump(self, model, value):
         try:
             model = self._translate_to_model(model)
             return model.to_primitive(value)
-        except ConversionError as e:
+        except BaseError as e:
             raise SerializationException(str(e))
 
     def to_json_schema(self, model):
