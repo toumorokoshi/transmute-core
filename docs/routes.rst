@@ -2,6 +2,8 @@
 Writing transmute-compatible Functions
 ======================================
 
+.. _functions:
+
 Transmute functions are converted to APIs by reading various details:
 
 A transmute function is identical to a standard Python function, with the

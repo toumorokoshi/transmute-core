@@ -7,10 +7,10 @@ transmute-core
 ==============
 
 transmute-core is a library designed to help create "transmute"
-library for web frameworks. A transmute library provides the
+libraries for web frameworks. A transmute library provides the
 following:
 
-* declarative generation of http handler interfaces by parsing :doc:`route functions <routes>`.
+* declarative generation of http handler interfaces by parsing :ref:`route functions <functions>`.
 * validation and serialization to and from a variety of content types (e.g. json or yaml).
 * validation and serialization to and from native python objects, using `schematics <http://schematics.readthedocs.org/en/latest/>`_.
 * :doc:`autodocumentation <autodocumentation>` of all handlers generated this way, via `swagger <http://swagger.io/>`_.
