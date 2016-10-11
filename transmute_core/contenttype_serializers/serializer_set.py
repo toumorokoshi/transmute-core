@@ -14,6 +14,7 @@ class SerializerSet(object):
 
     def __init__(self, serializer_list):
         self.serializers = serializer_list
+        assert len(self.serializers) > 0, "at least one serializer should be passed!"
 
     def _get_serializer_for_type(self, content_type):
         for serializer in self.serializers:
@@ -45,3 +46,7 @@ class SerializerSet(object):
         for s in self.serializers:
             return_value += s.content_type
         return return_value
+
+    @property
+    def default(self):
+        return self.serializers[0]

@@ -16,6 +16,13 @@ class ContentTypeSerializer(with_metaclass(ABCMeta, object)):
         this serializer should support.
         """
 
+    @abstractproperty
+    def main_type(self):
+        """
+        return back a single content type that represents this
+        serializer.
+        """
+
     @abstractmethod
     def dump(data):
         """

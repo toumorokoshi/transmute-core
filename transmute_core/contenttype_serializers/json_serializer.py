@@ -16,6 +16,10 @@ class JsonSerializer(ContentTypeSerializer):
         """
         return json.dumps(data).encode("UTF-8")
 
+    @property
+    def main_type(self):
+        return self.content_type[0]
+
     @staticmethod
     def load(raw_bytes):
         """

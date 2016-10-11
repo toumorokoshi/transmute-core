@@ -16,6 +16,10 @@ class YamlSerializer(ContentTypeSerializer):
         """
         return yaml.dump(data, default_flow_style=False).encode("UTF-8")
 
+    @classmethod
+    def main_type(cls):
+        return cls.content_type[0]
+
     @staticmethod
     def load(raw_bytes):
         """
