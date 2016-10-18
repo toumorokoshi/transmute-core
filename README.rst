@@ -1,4 +1,6 @@
-# transmute-core
+==============
+transmute-core
+==============
 
 A utility library to help build transmute api generators.
 
