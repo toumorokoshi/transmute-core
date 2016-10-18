@@ -2,7 +2,7 @@
 transmute-core
 ==============
 
-A utility library to help build transmute api generators.
+A utility library to help build transmute api generators for Python webframeworks.
 
 You can find out more here:
 
