@@ -1,2 +1,3 @@
 include transmute_core/swagger/*
+include VERSION
 recursive-include transmute_core/swagger/static *

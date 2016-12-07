@@ -61,4 +61,4 @@ include/
 .pydistutils.cfg
 # we download swagger on build
 transmute_core/swagger/static
-
+VERSION

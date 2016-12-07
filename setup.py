@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 import glob
 import os
+import sys
 from setuptools import setup, find_packages
+
+is_release = False
+if "--release" in sys.argv:
+    is_release = True
+    sys.argv.remove("--release")
 
 base = os.path.dirname(os.path.abspath(__file__))
 
@@ -23,7 +29,11 @@ for directory in swagger_statics:
     data_files.append(os.path.join("swagger", "static", directory, "*"))
 
 setup(name='transmute-core',
-      version='0.2.11',
+      setup_requires=["vcver"],
+      vcver={
+          "is_release": is_release,
+          "path": base
+      },
       description=(
           "a utility library to help provide api route "
           "generation form function signature for web "
