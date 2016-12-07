@@ -91,6 +91,7 @@ class TransmuteFunction(object):
                     "description": "success",
                     "schema": Schema({
                         "title": "SuccessObject",
+                        "type": "object",
                         "properties": {
                             "success": {"type": "boolean"},
                             "result": context.serializers.to_json_schema(
@@ -104,6 +105,7 @@ class TransmuteFunction(object):
                     "description": "invalid input received",
                     "schema": Schema({
                         "title": "FailureObject",
+                        "type": "object",
                         "properties": {
                             "success": {"type": "boolean"},
                             "message": {"type": "string"}

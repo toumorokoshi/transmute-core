@@ -24,12 +24,12 @@ def test(build):
     # build.executables.run(["flake8", "transmute_core"])
 
 
-def distribute(build):
-    """ distribute the uranium package """
+def publish(build):
+    """ publish the uranium package """
     build.packages.install("wheel")
     build.executables.run([
         "python", "setup.py",
-        "sdist", "upload"
+        "sdist", "bdist_wheel", "--universal", "upload", "--release"
     ])
 
 
