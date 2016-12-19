@@ -1,5 +1,6 @@
 import os
 import jinja2
+from swagger_schema import Swagger, Info
 
 CURDIR = os.path.dirname(__file__)
 
@@ -24,3 +25,31 @@ def get_template(template_name):
         with open(template_path) as fh:
             _template_cache[template_name] = jinja2.Template(fh.read())
     return _template_cache[template_name]
+
+
+class SwaggerSpec(object):
+    """ a class for aggregating and outputting swagger definitions. """
+
+    def __init__(self):
+        self._swagger = {}
+
+    def add_func(self, transmute_func, transmute_context):
+        swagger_path = transmute_func.get_swagger_path(transmute_context)
+        for p in transmute_func.paths:
+            if p not in self._swagger:
+                self._swagger[p] = swagger_path
+            else:
+                for method, definition in swagger_path.items():
+                    setattr(self._swagger[p], method, definition)
+
+    @property
+    def paths(self):
+        return self._swagger
+
+    def swagger_definition(self, title="example", version="1.0"):
+        return Swagger({
+            "info": Info({"title": title, "version": version}),
+            "paths": self.paths,
+            "swagger": "2.0",
+            "basePath": "/",
+        }).to_primitive()

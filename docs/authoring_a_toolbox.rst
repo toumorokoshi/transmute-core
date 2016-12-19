@@ -15,7 +15,7 @@ A transmute library should provide at a minimum the following functionality:
 Reference implementations exist at:
 
 * https://github.com/toumorokoshi/aiohttp-transmute
-* https://github.com/toumorokoshi/tornado-transmute
+* https://github.com/toumorokoshi/flask-transmute
 
 .. important:
 
@@ -71,7 +71,6 @@ Our to_route function could look something like:
 
 
 The two main points are:
-
 
 1. use :class:`transmute_core.function.TransmuteFunc` to get a transmute_func backh
    the original function annotated with metadata that make generating a route from it easier.
@@ -145,6 +144,24 @@ Once completed, you will need to build some functions to extract the
 parameters to your function. It is usually split into two: one for GET (query parameters),
 and one for all other functions (body parameters)
 
+---------------
+Swagger Support
+---------------
+
+To allow swagger specs, three steps are necessary:
+
+
+1. creating and attaching a :class:`transmute_core.swagger.SwaggerSpec` object to an application
+   global. In the case of flask, this is the app object.
+
+   .. tip:: when attaching to the global, make sure to use a name that will ensure collisions do not occur
+            with objects attached by the user. A name like "_transmute_swagger_spec" works great.
+
+
+2. whenever a route is mounted onto the application, it should add itself to the global swagger spec object.
+
+3. provide a function that mounts both a swagger json file, and the ui. As a convenience, transmute-core
+   bundles swagger's ui with itself, and can be retrieved by :func:`transmutee_core.swagger.get_swagger_static_root`.
 
 -------
 Testing
