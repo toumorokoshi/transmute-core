@@ -1,29 +1,24 @@
-from abc import ABCMeta, abstractmethod, abstractproperty
-from ..compat import with_metaclass
-
-
-class ContentTypeSerializer(with_metaclass(ABCMeta, object)):
+class ContentTypeSerializer(object):
     """
     A ContentTypeSerializer handles the conversion from
     a python data structure to a bytes object representing
     the content in a particular content type.
     """
 
-    @abstractproperty
     def content_type(self):
         """
         return back what a list of content types
         this serializer should support.
         """
+        raise NotImplementedError()  # noqa
 
-    @abstractproperty
     def main_type(self):
         """
         return back a single content type that represents this
         serializer.
         """
+        raise NotImplementedError()  # noqa
 
-    @abstractmethod
     def dump(data):
         """
         should return back a bytes (or string in python 2),
@@ -33,8 +28,8 @@ class ContentTypeSerializer(with_metaclass(ABCMeta, object)):
         a ValueError should be returned in the case where
         the object cannote be serialized.
         """
+        raise NotImplementedError()  # noqa
 
-    @abstractmethod
     def load(raw_bytes):
         """
         given a bytes object, should return a base python data
@@ -43,10 +38,11 @@ class ContentTypeSerializer(with_metaclass(ABCMeta, object)):
         a ValueError should be returned in the case where
         the object cannot be serialized.
         """
+        raise NotImplementedError()  # noqa
 
-    @abstractmethod
     def can_handle(content_type_name):
         """
         given a content type, returns true if this serializer
         can convert bodies of the given type.
         """
+        raise NotImplementedError()  # noqa

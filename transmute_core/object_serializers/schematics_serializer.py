@@ -17,16 +17,19 @@ from schematics.exceptions import BaseError
 from schematics.transforms import get_import_context
 from ..exceptions import SerializationException
 from decimal import Decimal
-from ..compat import string_type
+from ..compat import all_string_types
 
 MODEL_MAP = {
     int: IntType(),
     bool: BooleanType(),
     float: FloatType(),
     Decimal: DecimalType(),
-    string_type: StringType(),
     None: BaseType()
 }
+
+for t in all_string_types:
+    MODEL_MAP[t] = StringType()
+
 
 JSON_SCHEMA_MAP = OrderedDict([
     (BooleanType, {"type": "boolean"}),

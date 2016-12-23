@@ -4,7 +4,7 @@ Writing transmute-compatible Functions
 
 .. _functions:
 
-Transmute functions are converted to APIs by reading various details:
+functions are converted to APIs by using an intermediary TransmuteFunction object.
 
 A transmute function is identical to a standard Python function, with the
 addition of a few details:
@@ -33,9 +33,9 @@ For Python 2, transmute provides an annotate decorator:
        return left + right
 
 
-------------------------------------------------------
-Use transmute_core.describe to customize your function
-------------------------------------------------------
+--------------------------------------------------
+Use transmute_core.describe to customize behaviour
+--------------------------------------------------
 
 Not every aspect of a REST api can be extracted from the function
 signature: often additional metadata is required. Transmute provides the "describe" decorator
@@ -48,12 +48,14 @@ to specify those attributes.
 
     @transmute_core.describe(
         methods=["PUT", "POST"],  # the methods that the function is for
-        # these are usually inferred from the method type, but can
+        # the source of the arguments are usually inferred from the method type, but can
         # be specified explicitly
         query_parameters=["blockRequest"],
         body_parameters=["name"]
+        header_parameters=["authtoken"]
+        path_parameters=["username"]
     )
-    def create_record(name: str, blockRequest: bool) -> bool:
+    def create_record(name: str, blockRequest: bool, authtoken: str, username: str) -> bool:
         if block_request:
             db.insert_record(name)
         else:
@@ -66,11 +68,9 @@ to specify those attributes.
 Exceptions
 ----------
 
-.. todo:: ref transmute-core
-
 By default, transmute functions only catch exceptions which extend
-transmute_core.APIException, which results in an http response with a
-non-200 status code. (typically 400):
+:ref:`transmute_core.APIException`, which results in an http response
+with a non-200 status code. (400 by default):
 
 
 .. code-block:: python

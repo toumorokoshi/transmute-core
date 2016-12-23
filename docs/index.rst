@@ -12,10 +12,12 @@ following:
 
 * declarative generation of http handler interfaces by parsing :ref:`route functions <functions>`.
 * validation and serialization to and from a variety of content types (e.g. json or yaml).
-* validation and serialization to and from native python objects, using `schematics <http://schematics.readthedocs.org/en/latest/>`_.
+* validation and serialization to and from native python objects which use `schematics <http://schematics.readthedocs.org/en/latest/>`_.
 * :doc:`autodocumentation <autodocumentation>` of all handlers generated this way, via `swagger <http://swagger.io/>`_.
 
 transmute-core is released under the `MIT license <https://github.com/toumorokoshi/transmute-core/blob/master/LICENSE>`_.
+
+Reference implementations exist for `flask <https://github.com/toumorokoshi/flask-transmute>`_ and `aiohttp <https://github.com/toumorokoshi/aiohttp-transmute>`_.
 
 If you are interested in adding a transmute toolbox for your preferred
 web framework, please read :doc:`authoring_a_toolbox`

@@ -48,5 +48,5 @@ ContentType Serialization
 Swagger
 -------
 
-.. automodule:: transmute_core.swagger
+.. automodule:: transmute_core.swagger.__init__
     :members:

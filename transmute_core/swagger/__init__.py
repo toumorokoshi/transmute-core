@@ -6,6 +6,11 @@ CURDIR = os.path.dirname(__file__)
 
 
 def generate_swagger(swagger_static_root, swagger_json_url):
+    """
+    given a root directory for the swagger statics, and
+    a swagger json path, return back a swagger html designed
+    to use those values.
+    """
     tmpl = get_template("swagger.html")
     return tmpl.render(
         swagger_root=swagger_static_root,
@@ -28,12 +33,16 @@ def get_template(template_name):
 
 
 class SwaggerSpec(object):
-    """ a class for aggregating and outputting swagger definitions. """
+    """
+    a class for aggregating and outputting swagger definitions, from
+    transmute primitives
+    """
 
     def __init__(self):
         self._swagger = {}
 
     def add_func(self, transmute_func, transmute_context):
+        """ add a transmute function's swagger definition to the spec """
         swagger_path = transmute_func.get_swagger_path(transmute_context)
         for p in transmute_func.paths:
             if p not in self._swagger:
@@ -44,9 +53,14 @@ class SwaggerSpec(object):
 
     @property
     def paths(self):
+        """
+        return the path section of the final swagger spec,
+        aggregated from the paths added.
+        """
         return self._swagger
 
     def swagger_definition(self, title="example", version="1.0"):
+        """ return a valid swagger definition """
         return Swagger({
             "info": Info({"title": title, "version": version}),
             "paths": self.paths,

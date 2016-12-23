@@ -2,7 +2,10 @@
 Autodocumentation
 =================
 
-For transmute routes, transmute-core provides functionality for documentation generation via `Swagger <http://swagger.io/>`_.
+For transmute routes, transmute-core provides functionality for
+documentation generation via `Swagger <http://swagger.io/>`_. This is performed
+by reading the schematics model.
 
-The swagger integration is dependent on the framework. In general, a swagger html page is added, as well as a swagger.json
-documenting the available apis.
+The swagger apis are dependent on the framework, so refer the
+documentation for that project. In general, a function to generate a
+swagger html page and a swagger.json is provided.

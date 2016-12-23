@@ -9,15 +9,17 @@ an API. This is by chaining two parts:
 1. object serialization to / from basic Python data types.
 2. data types serialization to / from standard data notations (e.g. json or yaml)
 
+out of the box, object serialization is supported for:
+
 By default, transmute supports the json and yaml markup formats, and
-serializes objects to and from basic python data types and `schematics
+serializes objects to and from basic python data types (int, float, str) and `schematics
 <http://schematics.readthedocs.org/en/latest/>`_ models.
 
 -------------
 Customization
 -------------
 
-.. todo:: ref TransmuteContext
+:class:`TransmuteContext`
 
 Both of these components are customizable, either through passing a new
 TransmuteContext object, or modifying the default instance.

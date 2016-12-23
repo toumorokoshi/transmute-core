@@ -1,8 +1,4 @@
-from abc import ABCMeta, abstractmethod
-from ..compat import with_metaclass
-
-
-class ObjectSerializer(with_metaclass(ABCMeta, object)):
+class ObjectSerializer(object):
     """
     The object serializer is responsible for converting objects to and
     from basic data types. Basic data types are serializable to and
@@ -23,24 +19,24 @@ class ObjectSerializer(with_metaclass(ABCMeta, object)):
     `SchematicsSerializer` is the default implementation used.
     """
 
-    @abstractmethod
     def load(self, model, value):
         """
         load the value from a basic datatype, into a class.
 
         if the model or value is not valid, raise a SerializationException
         """
+        raise NotImplementedError()
 
-    @abstractmethod
     def dump(self, model, value):
         """
         dump the value from a class to a basic datatype.
 
         if the model or value is not valid, raise a SerializationException
         """
+        raise NotImplementedError()
 
-    @abstractmethod
     def to_json_schema(self, model):
         """
         return a dictionary representing a jsonschema for the model.
         """
+        raise NotImplementedError()

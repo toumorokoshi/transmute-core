@@ -9,7 +9,11 @@ from ..context import default_context
 from .attributes import TransmuteAttributes
 from .signature import FunctionSignature
 from .parameters import get_parameters
-from ..exceptions import InvalidTransmuteDefinition
+from ..exceptions import (
+    InvalidTransmuteDefinition,
+    APIException
+)
+from ..handler import process_result
 
 
 class TransmuteFunction(object):
@@ -143,6 +147,17 @@ class TransmuteFunction(object):
                 "type": "string"
             }))
         return parameters
+
+    def process_result(self, context, result_body, exc, content_type):
+        """
+        given an result body and an exception object,
+        return the appropriate result object,
+        or raise an exception.
+        """
+        return process_result(
+            self, context,
+            result_body, exc, content_type
+        )
 
     @staticmethod
     def _validate_attributes(attrs):
