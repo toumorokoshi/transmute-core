@@ -14,6 +14,12 @@ def pos_type(pos):
     pass
 
 
+@describe(paths=["/"])
+@annotate({"framework_arg": str})
+def with_framework_arg(framework_arg):
+    pass
+
+
 @describe(
     paths=["/"],
     query_parameters=["query"],
@@ -33,6 +39,11 @@ def all_param_type(query=1, header=2, path=3, body=4):
 class ParamExtractorMock(ParamExtractor):
 
     body = json.dumps({"body": "body"})
+
+    def _get_framework_args(self):
+        return {
+            "framework_arg": "framework_arg"
+        }
 
     def _query_argument(self, key, is_list):
         if is_list:
@@ -118,7 +129,7 @@ def test_extract_params_bad_body_content_type(all_param_type_transmute_func):
         )
 
 
-def test_extract_params_positional_args(all_param_type_transmute_func):
+def test_extract_params_positional_args():
     """ if no arguments are passed, use the defaults """
     tf = TransmuteFunction(pos_type)
     extractor = ParamExtractorMock()
@@ -126,4 +137,15 @@ def test_extract_params_positional_args(all_param_type_transmute_func):
         default_context, tf, "application/json"
     )
     assert args == ["query"]
+    assert kwargs == {}
+
+
+def test_with_framework_arg():
+    """ """
+    tf = TransmuteFunction(with_framework_arg)
+    extractor = ParamExtractorMock()
+    args, kwargs = extractor.extract_params(
+        default_context, tf, "application/json"
+    )
+    assert args == ["framework_arg"]
     assert kwargs == {}

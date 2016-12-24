@@ -18,11 +18,16 @@ class ParamExtractor(object):
         signature = transmute_func.signature
 
         args = {}
-        self._add_framework_args(args)
+        framework_args = self._get_framework_args()
+        for key, value in framework_args.items():
+            if signature.get_argument(key):
+                args[key] = value
 
         empty_args = []
 
         for name, arginfo in parameters.query.items():
+            if name in framework_args:
+                continue
             values = self._query_argument(
                 name, isinstance(arginfo.type, list)
             )
@@ -32,6 +37,8 @@ class ParamExtractor(object):
                 args[name] = context.serializers.load(arginfo.type, values)
 
         for name, arginfo in parameters.header.items():
+            if name in framework_args:
+                continue
             value = self._header_argument(name)
             if value is NoArgument:
                 empty_args.append(arginfo)
@@ -50,12 +57,16 @@ class ParamExtractor(object):
             else:
                 body_dict = serializer.load(self.body)
             for name, arginfo in parameters.body.items():
+                if name in framework_args:
+                    continue
                 if name in body_dict:
                     args[name] = context.serializers.load(arginfo.type, body_dict[name])
                 else:
                     empty_args.append(arginfo)
 
         for name, arginfo in parameters.path.items():
+            if name in framework_args:
+                continue
             values = self._path_argument(name)
             if values is not NoArgument:
                 args[name] = context.serializers.load(arginfo.type, values)
@@ -81,11 +92,12 @@ class ParamExtractor(object):
             del args[arg.name]
         return pos_args, args
 
-    def _add_framework_args(self, args):
+    def _get_framework_args(self):
         """
         often, a framework provides specific variables that are passed
         into the handler function (e.g. the request object in
-        aiohttp). Override this method to preload arguments.
+        aiohttp). return a dictionary of these arguments, which will be
+        added to the function arguments if they appear.
         """
         pass
 
