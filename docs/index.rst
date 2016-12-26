@@ -67,6 +67,8 @@ User's Guide:
    autodocumentation
    context
    creating_a_framework
+   changelog
+
 
 API Reference:
 

@@ -38,7 +38,7 @@ def publish(build):
 def changelog(build):
     """ create a changelog """
     build.packages.install("gitchangelog")
-    changelog_text = subprocess.check_output(["gitchangelog"])
+    changelog_text = subprocess.check_output(["gitchangelog", "show", "^v0.2.9"])
     with open(os.path.join(build.root, "CHANGELOG"), "wb+") as fh:
         fh.write(changelog_text)
 

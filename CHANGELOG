@@ -1,0 +1,19 @@
+v0.4.1 (2016-12-26)
+-------------------
+
+- Fixing bug with schematics schema not matching result object from
+  response_shape. [Yusuke Tsutsumi]
+
+v0.4.0 (2016-12-26)
+-------------------
+
+- Adding the ability to customize the response shape, and changing the
+  default to simple. [Yusuke Tsutsumi]
+
+v0.3.1 (2016-12-24)
+-------------------
+
+- Modifying method to add framework arguments, to defer logic to core.
+  [Yusuke Tsutsumi]
+
+

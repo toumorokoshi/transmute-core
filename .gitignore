@@ -63,4 +63,3 @@ include/
 transmute_core/swagger/static
 VERSION
 templates/
-CHANGELOG
