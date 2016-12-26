@@ -18,11 +18,11 @@ def test_process_result_200(complex_transmute_func):
         default_context, result,
         exc, CONTENT_TYPE
     )
-    assert output["body"] == json.dumps({
-            "result": result,
-            "success": True,
-            "code": 200
-    })
+    assert json.loads(output["body"].decode()) == {
+        "result": result,
+        "success": True,
+        "code": 200
+    }
     assert output["code"] == 200
     assert output["content-type"] == CONTENT_TYPE
 
@@ -35,11 +35,11 @@ def test_process_result_api_exception(complex_transmute_func):
         default_context, result,
         exc, CONTENT_TYPE
     )
-    assert output["body"] == json.dumps({
+    assert json.loads(output["body"].decode()) == {
         "result": "invalid api use: " + str(exc),
         "success": False,
         "code": 400
-    })
+    }
     assert output["code"] == 400
     assert output["content-type"] == CONTENT_TYPE
 
@@ -63,9 +63,9 @@ def test_unknown_content_type_defaults_to_json(complex_transmute_func):
         default_context, result,
         exc, "application/myson"
     )
-    assert output["body"] == json.dumps({
-            "result": result,
-            "success": True,
-            "code": 200
-    })
+    assert json.loads(output["body"].decode()) == {
+        "result": result,
+        "success": True,
+        "code": 200
+    }
     assert output["content-type"] == "application/json"

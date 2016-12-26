@@ -1,6 +1,7 @@
 import json
 from .interface import ContentTypeSerializer
 from ..exceptions import SerializationException
+from ..compat import string_type
 
 
 class JsonSerializer(ContentTypeSerializer):
@@ -27,7 +28,9 @@ class JsonSerializer(ContentTypeSerializer):
         structure that represents the object.
         """
         try:
-            return json.loads(raw_bytes.decode("UTF-8"))
+            if not isinstance(raw_bytes, string_type):
+                raw_bytes = raw_bytes.decode()
+            return json.loads(raw_bytes)
         except ValueError as e:
             raise SerializationException(str(e))
 
