@@ -7,3 +7,4 @@ from .context import TransmuteContext, default_context
 from .handler import process_result
 from .param_extractor import NoArgument, ParamExtractor
 from .swagger import generate_swagger_html, get_swagger_static_root, SwaggerSpec
+from .response_shape import ResponseShape, ResponseShapeComplex, ResponseShapeSimple

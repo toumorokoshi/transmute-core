@@ -1,8 +1,12 @@
 import pytest
-from transmute_core.contenttype_serializers import get_default_serializer_set
-from transmute_core.object_serializers import SchematicsSerializer
-from transmute_core.function import TransmuteFunction
-from transmute_core import annotate, describe
+from transmute_core import (
+    annotate, describe,
+    default_context,
+    SchematicsSerializer,
+    get_default_serializer_set,
+    ResponseShapeComplex,
+    TransmuteFunction
+)
 from schematics.models import Model
 from schematics.types import StringType, IntType
 

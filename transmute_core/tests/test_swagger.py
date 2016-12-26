@@ -1,5 +1,5 @@
 from transmute_core.swagger import (
-    generate_swagger, get_swagger_static_root,
+    generate_swagger_html, get_swagger_static_root,
     SwaggerSpec
 )
 from transmute_core import default_context
@@ -8,7 +8,7 @@ from transmute_core import default_context
 def test_generate_swagger():
     swagger_static_root = "/statics/_swagger"
     swagger_json_url = "/swagger.json"
-    body = generate_swagger(swagger_static_root, swagger_json_url)
+    body = generate_swagger_html(swagger_static_root, swagger_json_url)
     assert swagger_static_root in body
     assert swagger_json_url in body
 

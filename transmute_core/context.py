@@ -1,5 +1,6 @@
 from .object_serializers import SchematicsSerializer
 from .contenttype_serializers import get_default_serializer_set
+from .response_shape import ResponseShapeSimple
 
 
 class TransmuteContext(object):
@@ -12,13 +13,14 @@ class TransmuteContext(object):
     serializers for objects to and from basic data times.
     """
 
-    def __init__(self, serializers=None, contenttype_serializers=None):
-        #:
+    def __init__(self, serializers=None, contenttype_serializers=None,
+                 response_shape=None):
         self.serializers = serializers or SchematicsSerializer()
         self.contenttype_serializers = (
             contenttype_serializers or
             get_default_serializer_set()
         )
+        self.response_shape = ResponseShapeSimple
 
 # a global context is provided, if a singleton is sufficient
 # or deviations from the defaults are unnescessary

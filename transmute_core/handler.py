@@ -36,7 +36,11 @@ def process_result(transmute_func, context, result, exc, content_type):
         serializer = context.contenttype_serializers.default
         content_type = serializer.main_type
     output["code"] = code
-    body = serializer.dump(output)
+    if output["success"]:
+        result = context.response_shape.create_body(output)
+    else:
+        result = output
+    body = serializer.dump(result)
     # keeping the return type a dict to
     # reduce performance overhead.
     return {
