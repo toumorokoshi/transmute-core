@@ -1,3 +1,6 @@
+from swagger_schema import Schema
+
+
 class ResponseShape(object):
     """
     result shapes define the return format of the
@@ -51,8 +54,9 @@ class ResponseShapeComplex(object):
 
     @staticmethod
     def swagger(result_schema):
-        return {
-            "success": {"type": "boolean"},
-            "result": result_schema,
-            "code": {"type": "integer"}
-        }
+        return Schema({
+            "title": "SuccessObject",
+            "type": "object",
+            "properties": result_schema,
+            "required": ["success", "result"]
+        })

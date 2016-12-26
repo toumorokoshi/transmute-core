@@ -84,6 +84,7 @@ class TransmuteFunction(object):
         get the swagger_schema operation representation.
         """
         consumes = produces = context.contenttype_serializers.keys()
+        return_type_schema = context.serializers.to_json_schema(self.return_type)
         return Operation({
             "summary": self.description,
             "description": self.description,
@@ -93,17 +94,9 @@ class TransmuteFunction(object):
             "responses": {
                 "200": Response({
                     "description": "success",
-                    "schema": Schema({
-                        "title": "SuccessObject",
-                        "type": "object",
-                        "properties": {
-                            "success": {"type": "boolean"},
-                            "result": context.serializers.to_json_schema(
-                                self.return_type
-                            )
-                        },
-                        "required": ["success", "result"]
-                    }),
+                    "schema": context.response_shape.swagger(
+                        return_type_schema
+                    )
                 }),
                 "400": Response({
                     "description": "invalid input received",
