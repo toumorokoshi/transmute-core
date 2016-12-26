@@ -1,10 +1,12 @@
 ======================================
-Writing transmute-compatible Functions
+Writing transmute-compatible functions
 ======================================
 
 .. _functions:
 
-functions are converted to APIs by using an intermediary TransmuteFunction object.
+.. note:: in general, this section is broadly applicable to all transmute frameworks.
+
+Functions are converted to APIs by using an intermediary TransmuteFunction object.
 
 A transmute function is identical to a standard Python function, with the
 addition of a few details:
@@ -33,11 +35,14 @@ For Python 2, transmute provides an annotate decorator:
        return left + right
 
 
+By default, primitive types and `schematics <http://schematics.readthedocs.org/en/latest/>`_ models are
+accepted. See :ref:`serialization <serialization>` for more information.
+
 --------------------------------------------------
 Use transmute_core.describe to customize behaviour
 --------------------------------------------------
 
-Not every aspect of a REST api can be extracted from the function
+Not every aspect of an api can be extracted from the function
 signature: often additional metadata is required. Transmute provides the "describe" decorator
 to specify those attributes.
 
@@ -69,7 +74,7 @@ Exceptions
 ----------
 
 By default, transmute functions only catch exceptions which extend
-:ref:`transmute_core.APIException`, which results in an http response
+:class:`transmute_core.APIException`, which results in an http response
 with a non-200 status code. (400 by default):
 
 

@@ -7,6 +7,8 @@ from uranium.rules import rule, Once
 @uranium.task_requires("install_swagger_ui")
 def main(build):
     build.packages.install(".", develop=True)
+    # we install flask to allow testing the example.
+    build.packages.install("flask")
 
 
 def test(build):
@@ -34,10 +36,13 @@ def publish(build):
 
 
 def build_docs(build):
-    build.packages.install("sphinx")
-    return subprocess.call(
-        ["make", "html"], cwd=os.path.join(build.root, "docs")
-    )
+    build.packages.install("Babel")
+    build.packages.install("Sphinx")
+    build.packages.install("sphinx_rtd_theme")
+    return build.executables.run([
+        "sphinx-build", "docs",
+        os.path.join("docs", "_build")
+    ] + build.options.args)[0]
 
 
 @rule(Once())

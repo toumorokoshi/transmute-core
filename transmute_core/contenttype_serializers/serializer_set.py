@@ -10,6 +10,8 @@ class SerializerSet(object):
     serializers is done by get the content type item:
 
     .. code-block:: python
+
+        serializers["application/json"]
     """
 
     def __init__(self, serializer_list):
@@ -38,8 +40,8 @@ class SerializerSet(object):
         """
         return a list of the contetn types this set supports.
 
-        this is not a complete list: serializers can accept multiple
-        content types. However, it is a good representation of the
+        this is not a complete list: serializers can accept more than
+        one content type. However, it is a good representation of the
         class of content types supported.
         """
         return_value = []

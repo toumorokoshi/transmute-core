@@ -5,13 +5,13 @@ from swagger_schema import Swagger, Info
 CURDIR = os.path.dirname(__file__)
 
 
-def generate_swagger(swagger_static_root, swagger_json_url):
+def generate_swagger_html(swagger_static_root, swagger_json_url):
     """
     given a root directory for the swagger statics, and
     a swagger json path, return back a swagger html designed
     to use those values.
     """
-    tmpl = get_template("swagger.html")
+    tmpl = _get_template("swagger.html")
     return tmpl.render(
         swagger_root=swagger_static_root,
         swagger_json_url=swagger_json_url
@@ -19,12 +19,17 @@ def generate_swagger(swagger_static_root, swagger_json_url):
 
 
 def get_swagger_static_root():
+    """
+    transmute-core includes the statics to render
+    a swagger page. Use this function to
+    return the directory containing said statics.
+    """
     return os.path.join(CURDIR, "static")
 
 _template_cache = {}
 
 
-def get_template(template_name):
+def _get_template(template_name):
     if template_name not in _template_cache:
         template_path = os.path.join(CURDIR, template_name)
         with open(template_path) as fh:
@@ -60,7 +65,9 @@ class SwaggerSpec(object):
         return self._swagger
 
     def swagger_definition(self, title="example", version="1.0"):
-        """ return a valid swagger definition """
+        """
+        return a valid swagger spec, with the values passed.
+        """
         return Swagger({
             "info": Info({"title": title, "version": version}),
             "paths": self.paths,

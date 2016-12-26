@@ -48,5 +48,26 @@ ContentType Serialization
 Swagger
 -------
 
-.. automodule:: transmute_core.swagger.__init__
+.. automodule:: transmute_core.swagger
+    :members:
+
+-----------------
+TransmuteFunction
+-----------------
+
+.. warning:: transmute framework authors should not need to use
+             attributes in TransmuteFunction directly.  see
+             :doc:`authoring_a_toolbox`
+
+
+.. automodule:: transmute_core.function.attributes
+    :members:
+
+.. automodule:: transmute_core.function.transmute_function
+    :members:
+
+.. automodule:: transmute_core.function.signature
+    :members:
+
+.. automodule:: transmute_core.function.parameters
     :members:
