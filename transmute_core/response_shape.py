@@ -26,7 +26,7 @@ class ResponseShape(object):
         raise NotImplementedError()
 
 
-class ResponseShapeSimple(object):
+class ResponseShapeSimple(ResponseShape):
     """ return back just the result object. """
 
     @staticmethod
@@ -38,7 +38,7 @@ class ResponseShapeSimple(object):
         return result_schema
 
 
-class ResponseShapeComplex(object):
+class ResponseShapeComplex(ResponseShape):
     """
     return back an object with the result nested,
     providing a little more context on the result:
@@ -50,13 +50,17 @@ class ResponseShapeComplex(object):
 
     @staticmethod
     def create_body(result_dict):
-        return result_dict["result"]
+        return result_dict
 
     @staticmethod
     def swagger(result_schema):
         return Schema({
             "title": "SuccessObject",
             "type": "object",
-            "properties": result_schema,
-            "required": ["success", "result"]
+            "properties": {
+                "result": result_schema,
+                "success": {"type": "boolean"},
+                "code": {"type": "number"}
+            },
+            "required": ["success", "result", "code"]
         })

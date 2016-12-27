@@ -65,9 +65,9 @@ User's Guide:
    function
    serialization
    autodocumentation
+   response
    context
    creating_a_framework
-   changelog
 
 
 API Reference:
@@ -77,3 +77,11 @@ API Reference:
    :maxdepth: 2
 
    api
+
+
+Changelog:
+
+.. toctree::
+   :maxdepth: 2
+
+   changelog

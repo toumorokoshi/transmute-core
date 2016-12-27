@@ -51,13 +51,22 @@ Swagger
 .. automodule:: transmute_core.swagger
     :members:
 
+
+-----
+Shape
+-----
+
+.. automodule:: transmute_core.response_shape
+    :members:
+
+
 -----------------
 TransmuteFunction
 -----------------
 
 .. warning:: transmute framework authors should not need to use
              attributes in TransmuteFunction directly.  see
-             :doc:`authoring_a_toolbox`
+             :doc:`creating_a_framework`
 
 
 .. automodule:: transmute_core.function.attributes
