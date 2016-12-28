@@ -31,3 +31,6 @@ def get_swagger_parameters(parameters, context):
             "type": context.serializers.to_json_schema(details.type)["type"],
         }))
     return ret_parameters
+
+def _extract_base_type(context, details):
+    """ extract the basic type of the context """

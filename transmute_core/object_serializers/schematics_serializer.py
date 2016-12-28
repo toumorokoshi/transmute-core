@@ -127,6 +127,13 @@ def _to_json_schema_no_cache(model):
         for cls, schema in JSON_SCHEMA_MAP.items():
             if isinstance(model, cls):
                 return schema
+    if isinstance(model, BaseType):
+        return {"type": "string"}
+    raise SerializationException(
+        "unable to create json schema for type " +
+        "{0}. Expected a primitive or ".format(model) +
+        " a schematics model or type"
+    )
 
 
 def _model_type_to_json_schema(model):

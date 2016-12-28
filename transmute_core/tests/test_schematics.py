@@ -1,6 +1,6 @@
 import pytest
 from schematics.models import Model
-from schematics.types import StringType, IntType
+from schematics.types import StringType, IntType, BaseType
 from schematics.types.compound import DictType
 from schematics.exceptions import ValidationError
 from transmute_core.exceptions import SerializationException
@@ -72,6 +72,25 @@ def test_schematics_to_json_schema_required_value(serializer):
         "required": ["name"],
         "type": "object"
     }
+
+
+def test_type_not_found_defaults_to_string(serializer):
+
+    class MyType(BaseType):
+        pass
+
+    assert serializer.to_json_schema(MyType()) == {
+        "type": "string"
+    }
+
+
+def test_non_model_or_primitive_raises_exception(serializer):
+
+    class MyType(object):
+        pass
+
+    with pytest.raises(SerializationException):
+        serializer.to_json_schema(MyType)
 
 
 def test_to_json_list(serializer):
