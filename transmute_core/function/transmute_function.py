@@ -1,17 +1,15 @@
 import inspect
 from swagger_schema import (
-    Operation, Response, Schema, PathItem,
-    QueryParameter, HeaderParameter, PathParameter,
-    BodyParameter
+    Operation, Response, Schema, PathItem
 )
 from ..compat import getfullargspec
 from ..context import default_context
 from .attributes import TransmuteAttributes
 from .signature import FunctionSignature
 from .parameters import get_parameters
+from ..swagger.function import get_swagger_parameters
 from ..exceptions import (
     InvalidTransmuteDefinition,
-    APIException
 )
 from ..handler import process_result
 
@@ -85,12 +83,13 @@ class TransmuteFunction(object):
         """
         consumes = produces = context.contenttype_serializers.keys()
         return_type_schema = context.serializers.to_json_schema(self.return_type)
+        parameters = get_swagger_parameters(self.parameters, context)
         return Operation({
             "summary": self.description,
             "description": self.description,
             "consumes": consumes,
             "produces": produces,
-            "parameters": self._get_swagger_parameters(context),
+            "parameters": parameters,
             "responses": {
                 "200": Response({
                     "description": "success",
@@ -112,34 +111,6 @@ class TransmuteFunction(object):
                 })
             }
         })
-
-    def _get_swagger_parameters(self, context=default_context):
-        parameters = []
-        for name, details in self.parameters.query.items():
-            parameters.append(QueryParameter({
-                "name": name,
-                "required": details.default is None,
-                "type": "string"
-            }))
-        for name, details in self.parameters.header.items():
-            parameters.append(HeaderParameter({
-                "name": name,
-                "required": details.default is None,
-                "type": "string"
-            }))
-        for name, details in self.parameters.body.items():
-            parameters.append(BodyParameter({
-                "name": name,
-                "required": details.default is None,
-                "schema": context.serializers.to_json_schema(details.type),
-            }))
-        for name, details in self.parameters.path.items():
-            parameters.append(PathParameter({
-                "name": name,
-                "required": True,
-                "type": "string"
-            }))
-        return parameters
 
     def process_result(self, context, result_body, exc, content_type):
         """

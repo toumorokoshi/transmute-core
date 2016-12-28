@@ -23,7 +23,6 @@ def test(build):
         "transmute_core/tests",
         "--cov-report", "term-missing"
     ] + build.options.args)
-    # build.executables.run(["flake8", "transmute_core"])
 
 
 def publish(build):

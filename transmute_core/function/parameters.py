@@ -1,8 +1,5 @@
 import re
 from ..exceptions import InvalidTransmuteDefinition
-from swagger_schema import (
-    QueryParameter, HeaderParameter, PathParameter, BodyParameter
-)
 
 
 class Parameters(object):

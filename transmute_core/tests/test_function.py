@@ -29,14 +29,6 @@ def test_swagger_schema_has_object(func):
     assert swagger.responses["200"].schema.to_primitive() == {
         "type": "number"
     }
-    #     "title": "SuccessObject",
-    #     "type": "object",
-    #     "required": ["success", "result"],
-    #     "properties": {
-    #         "success": {"type": "boolean"},
-    #         "result": {"type": "number"}
-    #     }
-    # }
 
 
 def test_swagger_schema_path(func):
@@ -44,14 +36,6 @@ def test_swagger_schema_path(func):
     assert swagger.get.responses["200"].schema.to_primitive() == {
         "type": "number"
     }
-    #     "title": "SuccessObject",
-    #     "type": "object",
-    #     "required": ["success", "result"],
-    #     "properties": {
-    #         "success": {"type": "boolean"},
-    #         "result": {"type": "number"}
-    #     }
-    # }
 
 
 def test_function_raises_exception_on_path_missing():
