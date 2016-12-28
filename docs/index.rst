@@ -16,6 +16,9 @@ specifically, transmute-core provides:
 * validation and serialization to and from native python objects which use `schematics <http://schematics.readthedocs.org/en/latest/>`_.
 * :doc:`autodocumentation <autodocumentation>` of all handlers generated this way, via `swagger <http://swagger.io/>`_.
 
+To use this functionality, it's recommended to build or use a
+framework-specific wrapper library, to handle a more fluid integration.
+
 An example in flask looks like:
 
 .. code-block:: python
@@ -44,8 +47,6 @@ An example in flask looks like:
 
 transmute-core is released under the `MIT license <https://github.com/toumorokoshi/transmute-core/blob/master/LICENSE>`_.
 
-To use this functionality, it's recommended to build or use a
-framework-specific wrapper library, to handler integration.
 
 Reference Implementations exist for:
 
