@@ -1,3 +1,17 @@
+v0.4.3 (2016-12-28)
+-------------------
+
+- Fixing an issue with required parameters not documented properly in
+  swagger. [Yusuke Tsutsumi]
+
+v0.4.2 (2016-12-27)
+-------------------
+
+Fix
+~~~
+
+- Fixing complex shape return type. [Yusuke Tsutsumi]
+
 v0.4.1 (2016-12-26)
 -------------------
 
@@ -15,5 +29,13 @@ v0.3.1 (2016-12-24)
 
 - Modifying method to add framework arguments, to defer logic to core.
   [Yusuke Tsutsumi]
+
+v0.3.0 (2016-12-23)
+-------------------
+
+- Adding unit tests for new shared functionality. [Yusuke Tsutsumi]
+
+- Adding a SwaggerSpec object, to help with swagger generation. [Yusuke
+  Tsutsumi]
 
 

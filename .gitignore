@@ -63,3 +63,4 @@ include/
 transmute_core/swagger/static
 VERSION
 templates/
+gitchangelog.rc.reference
