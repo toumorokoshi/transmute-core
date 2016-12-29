@@ -69,6 +69,7 @@ User's Guide:
    response
    context
    creating_a_framework
+   install
 
 
 API Reference:
