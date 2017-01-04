@@ -57,7 +57,7 @@ def install_swagger_ui(build):
     import io
     import shutil
     import tarfile
-    version = "2.1.4"
+    version = "2.2.8"
     PATH = "https://github.com/swagger-api/swagger-ui/archive/v{0}.tar.gz".format(version)
     TARGET_PATH = os.path.join(build.root, "transmute_core", "swagger", "static")
     EXTRACTED_TOP_LEVEL_DIRNAME = "swagger-ui-{0}".format(version)

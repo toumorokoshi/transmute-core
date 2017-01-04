@@ -52,7 +52,9 @@ class TransmuteFunction(object):
         )
         # description should be a description of the api
         # endpoint, for use in autodocumentation
-        self.description = func.__doc__ or ""
+        self.description = inspect.cleandoc(func.__doc__ or "")
+        # summary should be a shortened version of description.
+        self.summary = self._summary(self.description)
         # error_exceptions represents the exceptions
         # that should be caught and return an API exception
         self.error_exceptions = tuple(attrs.error_exceptions)
@@ -85,7 +87,7 @@ class TransmuteFunction(object):
         return_type_schema = context.serializers.to_json_schema(self.return_type)
         parameters = get_swagger_parameters(self.parameters, context)
         return Operation({
-            "summary": self.description,
+            "summary": self.summary,
             "description": self.description,
             "consumes": consumes,
             "produces": produces,
@@ -133,3 +135,10 @@ class TransmuteFunction(object):
             raise InvalidTransmuteDefinition(
                 "at least one path is required for a valid set of transmute attribute: {0}".format(str(attrs))
             )
+
+    @staticmethod
+    def _summary(description):
+        for s in description.splitlines():
+            if s != "":
+                return s
+        return ""

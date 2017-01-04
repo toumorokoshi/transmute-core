@@ -1,3 +1,4 @@
+import inspect
 import pytest
 from transmute_core.function import TransmuteFunction
 import transmute_core
@@ -6,6 +7,11 @@ import transmute_core
 @transmute_core.describe(paths="/")
 @transmute_core.annotate({"return": int})
 def raw_func():
+    """
+    foo bar
+
+    baz
+    """
     return 12345
 
 
@@ -17,6 +23,16 @@ def func():
 def test_callable(func):
     """ test function is callable, and routes to the inner function. """
     assert func() == 12345
+
+
+def test_description(func):
+    """ description should be the docstring. """
+    assert func.description == inspect.cleandoc(raw_func.__doc__)
+
+
+def test_summary(func):
+    """ summary should be the first non-empty line in the docstring. """
+    assert func.summary == "foo bar"
 
 
 def test_return_type(func):
