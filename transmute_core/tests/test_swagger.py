@@ -46,3 +46,21 @@ def test_swagger_transmute_func(transmute_func):
         "swagger": "2.0",
         "basePath": "/"
     }
+
+
+def test_swagger_add_path(transmute_func):
+    """
+    add_path should add the specified path to the main swagger object.
+    """
+    routes = SwaggerSpec()
+    swagger_path = transmute_func.get_swagger_path(default_context)
+    for p in transmute_func.paths:
+        routes.add_path(p, swagger_path)
+    assert routes.swagger_definition() == {
+        "info": {"title": "example", "version": "1.0"},
+        "paths": {
+            "/api/v1/multiply": transmute_func.get_swagger_path(default_context).to_primitive(),
+        },
+        "swagger": "2.0",
+        "basePath": "/"
+    }
