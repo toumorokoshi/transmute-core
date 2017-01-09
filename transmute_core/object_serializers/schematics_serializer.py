@@ -1,5 +1,6 @@
 from .interface import ObjectSerializer
 from collections import OrderedDict
+from datetime import datetime
 from schematics.types import (
     BaseType,
     BooleanType,
@@ -7,7 +8,8 @@ from schematics.types import (
     FloatType,
     IntType,
     NumberType,
-    StringType
+    StringType,
+    DateTimeType,
 )
 from schematics.models import Model, ModelMeta
 from schematics.types.compound import (
@@ -24,7 +26,8 @@ MODEL_MAP = {
     bool: BooleanType(),
     float: FloatType(),
     Decimal: DecimalType(),
-    None: BaseType()
+    None: BaseType(),
+    datetime: DateTimeType(),
 }
 
 for t in all_string_types:

@@ -1,6 +1,9 @@
 import pytest
 from transmute_core.compat import string_type
 from transmute_core.exceptions import SerializationException
+from datetime import datetime
+
+NOW = datetime.now()
 
 
 @pytest.mark.parametrize("inp, expected_output", [
@@ -49,3 +52,18 @@ def test_bool_load_happy(serializer, inp, expected_output):
 ])
 def test_string_load_happy(serializer, inp, expected_output):
     assert serializer.load(string_type, inp) == expected_output
+
+
+@pytest.mark.parametrize("inp, expected_output", [
+    (NOW.isoformat(), NOW)
+])
+def test_datetime_load_happy(serializer, inp, expected_output):
+    assert serializer.load(datetime, inp) == expected_output
+
+
+@pytest.mark.parametrize("inp", [
+    ("")
+])
+def test_datetime_load_unhappy(serializer, inp):
+    with pytest.raises(SerializationException):
+        serializer.load(datetime, inp)

@@ -11,9 +11,13 @@ an API. This is by chaining two parts:
 
 out of the box, object serialization is supported for:
 
-By default, transmute supports the json and yaml markup formats, and
-serializes objects to and from basic python data types (int, float, str) and `schematics
-<http://schematics.readthedocs.org/en/latest/>`_ models.
+* bool
+* float
+* int
+* str
+* decimal.Decimal
+* datetime.datetime
+* `schematics <http://schematics.readthedocs.org/en/latest/>`_ models.
 
 -------------
 Customization
