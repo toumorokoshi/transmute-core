@@ -43,9 +43,11 @@ def changelog(build):
 
 
 def build_docs(build):
+    changelog(build)
     build.packages.install("Babel")
     build.packages.install("Sphinx")
     build.packages.install("sphinx_rtd_theme")
+    build.packages.install("sphinxcontrib-programoutput")
     return build.executables.run([
         "sphinx-build", "docs",
         os.path.join("docs", "_build")
