@@ -51,13 +51,17 @@ def test_process_general_exception(complex_transmute_func):
         )
 
 
-def test_unknown_content_type_defaults_to_json(complex_transmute_func):
+@pytest.mark.parametrize("content_type", [
+    "application/myson",
+    None,
+])
+def test_unknown_content_type_defaults_to_json(content_type, complex_transmute_func):
     result = {"kind": "dog", "age": 5}
     exc = None
     output = process_result(
         complex_transmute_func,
         default_context, result,
-        exc, "application/myson"
+        exc, content_type
     )
     assert json.loads(output["body"].decode()) == result
     assert output["content-type"] == "application/json"

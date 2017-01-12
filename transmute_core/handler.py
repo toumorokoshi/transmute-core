@@ -31,6 +31,7 @@ def process_result(transmute_func, context, result, exc, content_type):
             "success": True
         }
     try:
+        content_type = str(content_type)
         serializer = context.contenttype_serializers[content_type]
     except NoSerializerFound:
         serializer = context.contenttype_serializers.default
