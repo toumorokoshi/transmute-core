@@ -32,6 +32,17 @@ def transmute_func():
     return TransmuteFunction(multiply)
 
 
+@pytest.fixture
+def transmute_func_post():
+
+    @describe(paths="/api/v1/multiply", methods=["POST"])
+    @annotate({"left": int, "right": int, "return": int})
+    def multiply(left, right):
+        return left * right
+
+    return TransmuteFunction(multiply)
+
+
 class Pet(Model):
 
     kind = StringType(required=True)

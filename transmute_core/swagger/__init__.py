@@ -58,7 +58,8 @@ class SwaggerSpec(object):
             self._swagger[path] = path_item
         else:
             for method, definition in path_item.items():
-                setattr(self._swagger[path], method, definition)
+                if definition is not None:
+                    setattr(self._swagger[path], method, definition)
 
     @property
     def paths(self):

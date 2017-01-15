@@ -64,3 +64,16 @@ def test_swagger_add_path(transmute_func):
         "swagger": "2.0",
         "basePath": "/"
     }
+
+
+def test_swagger_get_post(transmute_func, transmute_func_post):
+    """
+    adding different paths of diffrent methods should have both
+    present in the spec.
+    """
+    routes = SwaggerSpec()
+    routes.add_func(transmute_func, default_context)
+    routes.add_func(transmute_func_post, default_context)
+    spec = routes.swagger_definition()
+    assert "get" in spec["paths"]["/api/v1/multiply"]
+    assert "post" in spec["paths"]["/api/v1/multiply"]
