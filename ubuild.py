@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 import uranium
 from uranium.rules import rule, Once
@@ -25,6 +26,7 @@ def test(build):
     ] + build.options.args)
 
 
+@uranium.task_requires("clean_and_install_swagger_ui")
 def publish(build):
     """ publish the uranium package """
     build.packages.install("wheel")
@@ -56,6 +58,10 @@ def build_docs(build):
 
 @rule(Once())
 def install_swagger_ui(build):
+    clean_and_install_swagger_ui(build)
+
+
+def clean_and_install_swagger_ui(build):
     import io
     import shutil
     import tarfile
@@ -70,6 +76,8 @@ def install_swagger_ui(build):
     stream.write(r.content)
     stream.seek(0)
     tf = tarfile.TarFile.open(fileobj=stream)
+    if os.path.exists(TARGET_PATH):
+        shutil.rmtree(TARGET_PATH)
     tf.extractall(path=TARGET_PATH)
     # move the files under the top level directory.
     for name in os.listdir(os.path.join(TARGET_PATH, EXTRACTED_TOP_LEVEL_DIRNAME, "dist")):
