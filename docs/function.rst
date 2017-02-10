@@ -152,3 +152,7 @@ can be used:
             return Response("this is unauthorized!", 201)
         else:
             return Response(True, 401)
+
+note that adding these will remove the documentation and type honoring
+for the default success result: it is assumed you will document all non-400
+responses in the response_types dict yourself.
