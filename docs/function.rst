@@ -149,9 +149,9 @@ can be used:
     @annotate({"username": str})
     def create_if_authorized(username):
         if username != "im the boss":
-            return Response("this is unauthorized!", 201)
+            return Response("this is unauthorized!", 401)
         else:
-            return Response(True, 401)
+            return Response(True, 201)
 
 note that adding these will remove the documentation and type honoring
 for the default success result: it is assumed you will document all non-400
