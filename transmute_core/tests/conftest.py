@@ -1,10 +1,10 @@
 import pytest
 from transmute_core import (
-    annotate, describe,
-    default_context,
-    SchematicsSerializer,
+    annotate,
+    describe,
     get_default_serializer_set,
-    ResponseShapeComplex,
+    Response,
+    SchematicsSerializer,
     TransmuteFunction
 )
 from schematics.models import Model
@@ -25,6 +25,17 @@ def serializer():
 def transmute_func():
 
     @describe(paths="/api/v1/multiply")
+    @annotate({"left": int, "right": int, "return": int})
+    def multiply(left, right):
+        return left * right
+
+    return TransmuteFunction(multiply)
+
+
+@pytest.fixture
+def transmute_func_custom_code():
+
+    @describe(paths="/api/v1/multiply", success_code=201)
     @annotate({"left": int, "right": int, "return": int})
     def multiply(left, right):
         return left * right
@@ -61,3 +72,21 @@ def complex_transmute_func():
         })
 
     return TransmuteFunction(adopt)
+
+
+@pytest.fixture
+def response_transmute_func():
+
+    @describe(paths="/api/v1/create_if_authorized/",
+              response_types={
+                  401: {"type": str, "description": "unauthorized"},
+                  201: {"type": bool}
+              })
+    @annotate({"username": str})
+    def create_if_authorized(username):
+        if username != "im the boss":
+            return Response("this is unauthorized!", 201)
+        else:
+            return Response(True, 401)
+
+    return TransmuteFunction(create_if_authorized)

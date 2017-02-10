@@ -4,12 +4,16 @@ utilities to help with generating handlers.
 from .exceptions import (
     APIException, NoSerializerFound
 )
+from .function import Response
 
 
 def process_result(transmute_func, context, result, exc, content_type):
     """ process a result """
     output = None
-    code = 200
+    code = transmute_func.success_code
+    if isinstance(result, Response):
+        code = result.code
+        result = result.result
     if exc:
         if isinstance(exc, APIException):
             output = {
@@ -22,10 +26,9 @@ def process_result(transmute_func, context, result, exc, content_type):
             # to keep traceback context.
             raise exc
     else:
-        if transmute_func.return_type:
-            result = context.serializers.dump(
-                transmute_func.return_type, result
-            )
+        return_type = transmute_func.get_response_by_code(code)
+        if return_type:
+            result = context.serializers.dump(return_type, result)
         output = {
             "result": result,
             "success": True

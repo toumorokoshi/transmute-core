@@ -1,4 +1,5 @@
 import pytest
+from transmute_core import describe, annotate, Response
 from transmute_core.context import TransmuteContext
 from transmute_core.response_shape import ResponseShapeComplex
 
@@ -17,7 +18,9 @@ def test_complex_response_shape_in_func(transmute_func, context):
         "title": "SuccessObject",
         "type": "object",
         "properties": {
-            "result": context.serializers.to_json_schema(transmute_func.return_type),
+            "result": context.serializers.to_json_schema(
+                transmute_func.response_types[200]["type"]
+            ),
             "success": {"type": "boolean"},
             "code": {"type": "number"}
         },

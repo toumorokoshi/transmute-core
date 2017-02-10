@@ -11,9 +11,9 @@ from schematics.types import (
     StringType,
     DateTimeType,
 )
-from schematics.models import Model, ModelMeta
+from schematics.models import ModelMeta
 from schematics.types.compound import (
-    CompoundType, ListType, ModelType, DictType
+    ListType, ModelType, DictType
 )
 from schematics.exceptions import BaseError
 from schematics.transforms import get_import_context

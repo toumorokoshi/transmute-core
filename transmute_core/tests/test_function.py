@@ -37,7 +37,7 @@ def test_summary(func):
 
 def test_return_type(func):
     """ test function is callable, and routes to the inner function. """
-    assert func.return_type is int
+    assert func.get_response_by_code(200) is int
 
 
 def test_swagger_schema_has_object(func):

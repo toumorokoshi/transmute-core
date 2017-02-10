@@ -44,9 +44,10 @@ class TransmuteFunction(object):
         # these are the paths that the transmute function
         # should respond to.
         self.paths = attrs.paths
+        self.success_code = attrs.success_code
         argspec = getfullargspec(func)
         self.signature = FunctionSignature.from_argspec(argspec)
-        self.return_type = argspec.annotations.get("return")
+        self.response_types = self._parse_response_types(argspec, attrs)
         self.parameters = get_parameters(
             self.signature, attrs, arguments_to_ignore=args_not_from_request
         )
@@ -72,6 +73,10 @@ class TransmuteFunction(object):
     def __call__(self, *args, **kwargs):
         return self.raw_func(*args, **kwargs)
 
+    def get_response_by_code(self, code):
+        """ return the return type, by code """
+        return self.response_types.get(code, {}).get("type")
+
     def get_swagger_path(self, context=default_context):
         operation = self.get_swagger_operation(context)
         path = PathItem()
@@ -84,34 +89,35 @@ class TransmuteFunction(object):
         get the swagger_schema operation representation.
         """
         consumes = produces = context.contenttype_serializers.keys()
-        return_type_schema = context.serializers.to_json_schema(self.return_type)
         parameters = get_swagger_parameters(self.parameters, context)
+        responses = {
+            "400": Response({
+                "description": "invalid input received",
+                "schema": Schema({
+                    "title": "FailureObject",
+                    "type": "object",
+                    "properties": {
+                        "success": {"type": "boolean"},
+                        "message": {"type": "string"}
+                    },
+                    "required": ["success", "message"]
+                })
+            })
+        }
+        for code, details in self.response_types.items():
+            responses[str(code)] = Response({
+                "description": details.get("description"),
+                "schema": context.response_shape.swagger(
+                    context.serializers.to_json_schema(details["type"])
+                )
+            })
         return Operation({
             "summary": self.summary,
             "description": self.description,
             "consumes": consumes,
             "produces": produces,
             "parameters": parameters,
-            "responses": {
-                "200": Response({
-                    "description": "success",
-                    "schema": context.response_shape.swagger(
-                        return_type_schema
-                    )
-                }),
-                "400": Response({
-                    "description": "invalid input received",
-                    "schema": Schema({
-                        "title": "FailureObject",
-                        "type": "object",
-                        "properties": {
-                            "success": {"type": "boolean"},
-                            "message": {"type": "string"}
-                        },
-                        "required": ["success", "message"]
-                    })
-                })
-            }
+            "responses": responses
         })
 
     def process_result(self, context, result_body, exc, content_type):
@@ -135,6 +141,20 @@ class TransmuteFunction(object):
             raise InvalidTransmuteDefinition(
                 "at least one path is required for a valid set of transmute attribute: {0}".format(str(attrs))
             )
+
+    @staticmethod
+    def _parse_response_types(argspec, attrs):
+        """
+        from the given parameters, return back the response type dictionaries.
+        """
+        return_type = argspec.annotations.get("return") or None
+        response_types = attrs.response_types.copy()
+        if return_type or len(response_types) == 0:
+            response_types[attrs.success_code] = {
+                "type": return_type,
+                "description": "success"
+            }
+        return response_types
 
     @staticmethod
     def _summary(description):

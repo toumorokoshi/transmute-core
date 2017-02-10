@@ -117,3 +117,38 @@ transmute libraries support optional values by providing them as keyword argumen
     # but query will be required.
     def add(count: int=100, page: int=0, query: str) -> [str]:
         return db.query(query=query, page=page, count=count)
+
+Custom Response Code
+====================
+
+In the case where it desirable to override the default response code, the
+response_code parameter can be used:
+
+.. code-block:: python
+
+    @describe(success_code=201)
+    def create() -> bool:
+        return True
+
+
+Multiple Response Types
+=======================
+
+To allow multiple response types, there is a combination of types that
+can be used:
+
+.. code-block:: python
+
+    from transmute_core import Response
+
+    @describe(paths="/api/v1/create_if_authorized/",
+              response_types={
+                  401: {"type": str, "description": "unauthorized"},
+                  201: {"type": bool}
+              })
+    @annotate({"username": str})
+    def create_if_authorized(username):
+        if username != "im the boss":
+            return Response("this is unauthorized!", 201)
+        else:
+            return Response(True, 401)

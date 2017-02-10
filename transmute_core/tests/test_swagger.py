@@ -2,6 +2,7 @@ from transmute_core.swagger import (
     generate_swagger_html, get_swagger_static_root,
     SwaggerSpec
 )
+import swagger_schema
 from transmute_core import default_context
 
 
@@ -46,6 +47,26 @@ def test_swagger_transmute_func(transmute_func):
         "swagger": "2.0",
         "basePath": "/"
     }
+
+
+def test_multiple_response_types(response_transmute_func):
+    """ multiple response types should be indicated as such in
+    the swagger documentation.
+    """
+    routes = SwaggerSpec()
+    routes.add_func(response_transmute_func, default_context)
+    definition = routes.swagger_definition()
+    path = definition["paths"]["/api/v1/create_if_authorized/"]
+    responses = path["get"]["responses"]
+    assert responses["201"] == swagger_schema.Response({
+        "schema": {"type": "boolean"}
+    }).to_primitive()
+    assert responses["401"] == swagger_schema.Response({
+        "description": "unauthorized",
+        "schema": {"type": "string"}
+    }).to_primitive()
+    assert "200" not in responses
+    assert "400" in responses
 
 
 def test_swagger_add_path(transmute_func):

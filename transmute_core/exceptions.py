@@ -1,8 +1,8 @@
-class WebTransmuteException(Exception):
+class TransmuteCoreException(Exception):
     """ base exception """
 
 
-class APIException(WebTransmuteException):
+class APIException(TransmuteCoreException):
     """
     this exception signifies an exception
     with API
@@ -21,14 +21,14 @@ class SerializationException(APIException):
     """
 
 
-class NoSerializerFound(WebTransmuteException):
+class NoSerializerFound(TransmuteCoreException):
     """
     raised when a serializer does not exist to handle the
     desired content type.
     """
 
 
-class InvalidTransmuteDefinition(WebTransmuteException):
+class InvalidTransmuteDefinition(TransmuteCoreException):
     """
     this exception is raised when an invalid configuration for
     transmute is encountered
