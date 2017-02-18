@@ -23,10 +23,7 @@ An example in flask looks like:
 
 .. code-block:: python
 
-    from flask_transmute import (
-        transmute_route, annotate,
-        add_swagger
-    )
+    import flask_transmute
     from flask import Flask
 
     app = Flask(__name__)
@@ -35,20 +32,20 @@ An example in flask looks like:
     # api GET method, path = /multiply
     # take query arguments left and right which are integers, return an
     # integer.
-    @transmute_route(app, paths='/multiply')
-    @annotate({"left": int, "right": int, "return": int})
+    @flask_transmute.route(app, paths='/multiply')
+    @flask_transmute.annotate({"left": int, "right": int, "return": int})
     def multiply(left, right):
         return left * right
 
     # finally, you can add a swagger json and a documentation page by:
-    add_swagger(app, "/swagger.json", "/swagger")
+    flask_transmute.add_swagger(app, "/swagger.json", "/swagger")
 
     app.run()
 
 transmute-core is released under the `MIT license <https://github.com/toumorokoshi/transmute-core/blob/master/LICENSE>`_.
 
 
-Reference Implementations exist for:
+Implementations exist for:
 
 * `flask <https://github.com/toumorokoshi/flask-transmute>`_
 * `aiohttp <https://github.com/toumorokoshi/aiohttp-transmute>`_
