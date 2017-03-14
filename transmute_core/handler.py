@@ -5,7 +5,7 @@ from .exceptions import (
     APIException, NoSerializerFound
 )
 from .function import Response
-from .compat import reraise
+from six import reraise
 
 
 def process_result(transmute_func, context, result, exc, content_type):
@@ -39,7 +39,7 @@ def process_result(transmute_func, context, result, exc, content_type):
             }
             code = exc.code
         else:
-            reraise(exc)
+            reraise(type(exc), exc, getattr(exc, "__traceback__", None))
     else:
         return_type = transmute_func.get_response_by_code(code)
         if return_type:

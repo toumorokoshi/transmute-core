@@ -15,6 +15,7 @@ README_PATH = os.path.join(base, "README.rst")
 
 install_requires = [
     'schematics>=2.0.0.dev2',
+    'six',
     'jinja2',
     'swagger-schema',
     'pyyaml',

@@ -29,14 +29,3 @@ if is_py3:
 else:
     string_type = basestring  # noqa
     all_string_types = [basestring, str, unicode]
-
-
-if is_py3:
-    def reraise(exc):
-        raise exc
-else:
-    reraise = eval("""
-def reraise(exc):
-    traceback = getattr(exc, '__traceback__', None)
-    raise exc, None, traceback
-    """.strip())
