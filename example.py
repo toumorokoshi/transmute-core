@@ -2,6 +2,7 @@
 An example integration with flask.
 """
 import json
+import sys
 from transmute_core import (
     describe, annotate,
     default_context,
@@ -60,6 +61,12 @@ def create_routes_and_handler(transmute_func, context):
             result = transmute_func(*args, **kwargs)
         except Exception as e:
             exc = e
+            """
+            attaching the traceack is done for you in Python 3, but
+            in Python 2 the __traceback__ must be
+            attached to the object manually.
+            """
+            exc.__traceback__ = sys.exc_info[:2]
         """
         transmute_func.process_result handles converting
         the response from the function into the response body,

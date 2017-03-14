@@ -24,7 +24,7 @@ def test_process_result_200(complex_transmute_func):
 
 
 def test_process_result_api_exception(complex_transmute_func):
-    result = {"kind": "dog", "age": 5}
+    result = None
     exc = APIException("foo")
     output = process_result(
         complex_transmute_func,
