@@ -15,7 +15,7 @@ from schematics.models import ModelMeta
 from schematics.types.compound import (
     ListType, ModelType, DictType
 )
-from schematics.exceptions import BaseError
+from schematics.exceptions import BaseError, ConversionError
 from schematics.transforms import get_import_context
 from ..exceptions import SerializationException
 from decimal import Decimal
@@ -97,6 +97,8 @@ class SchematicsSerializer(ObjectSerializer):
                 result.validate()
             return result
         except BaseError as e:
+            raise SerializationException(str(e))
+        except ConversionError as e:
             raise SerializationException(str(e))
 
     def dump(self, model, value):
