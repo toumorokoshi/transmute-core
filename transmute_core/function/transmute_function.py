@@ -98,9 +98,9 @@ class TransmuteFunction(object):
                     "type": "object",
                     "properties": {
                         "success": {"type": "boolean"},
-                        "message": {"type": "string"}
+                        "result": {"type": "string"}
                     },
-                    "required": ["success", "message"]
+                    "required": ["success", "result"]
                 })
             })
         }
