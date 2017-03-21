@@ -117,7 +117,8 @@ class TransmuteFunction(object):
             "consumes": consumes,
             "produces": produces,
             "parameters": parameters,
-            "responses": responses
+            "responses": responses,
+            "operationId": self.raw_func.__name__
         })
 
     def process_result(self, context, result_body, exc, content_type):
