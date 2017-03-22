@@ -1,6 +1,8 @@
-import os
 import jinja2
+import os
+
 from swagger_schema import Swagger, Info
+
 
 CURDIR = os.path.dirname(__file__)
 
@@ -69,7 +71,7 @@ class SwaggerSpec(object):
         """
         return self._swagger
 
-    def swagger_definition(self, title="example", version="1.0"):
+    def swagger_definition(self, title="example", version="1.0", base_path=None):
         """
         return a valid swagger spec, with the values passed.
         """
@@ -77,5 +79,5 @@ class SwaggerSpec(object):
             "info": Info({"title": title, "version": version}),
             "paths": self.paths,
             "swagger": "2.0",
-            "basePath": "/",
+            "basePath": "/" if base_path is None else base_path,
         }).to_primitive()

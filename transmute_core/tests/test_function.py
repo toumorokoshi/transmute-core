@@ -1,7 +1,8 @@
 import inspect
 import pytest
-from transmute_core.function import TransmuteFunction
+
 import transmute_core
+from transmute_core.function import TransmuteFunction
 
 
 @transmute_core.describe(paths="/")
@@ -45,6 +46,11 @@ def test_swagger_schema_has_object(func):
     assert swagger.responses["200"].schema.to_primitive() == {
         "type": "number"
     }
+
+
+def test_swagger_operation_has_operation_id(func):
+    op = func.get_swagger_operation()
+    assert op.operationId == "raw_func"
 
 
 def test_swagger_schema_path(func):
