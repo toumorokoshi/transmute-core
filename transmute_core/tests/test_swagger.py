@@ -1,9 +1,9 @@
+import swagger_schema
+from transmute_core import default_context
 from transmute_core.swagger import (
     generate_swagger_html, get_swagger_static_root,
     SwaggerSpec
 )
-import swagger_schema
-from transmute_core import default_context
 
 
 def test_generate_swagger():
@@ -84,6 +84,15 @@ def test_swagger_add_path(transmute_func):
         },
         "swagger": "2.0",
         "basePath": "/"
+    }
+
+
+def test_basepath_override():
+    assert SwaggerSpec().swagger_definition(base_path="dummy_path") == {
+        'basePath': 'dummy_path',
+        'info': {'title': 'example', 'version': '1.0'},
+        'paths': {},
+        'swagger': '2.0'
     }
 
 
