@@ -102,6 +102,7 @@ class SchematicsSerializer(ObjectSerializer):
             raise SerializationException(str(e))
 
     def dump(self, model, value):
+        model = _enforce_instance(model)
         try:
             model = self._translate_to_model(model)
             return model.to_primitive(value)
@@ -109,6 +110,7 @@ class SchematicsSerializer(ObjectSerializer):
             raise SerializationException(str(e))
 
     def to_json_schema(self, model):
+        model = _enforce_instance(model)
         model = self._translate_to_model(model)
         return _to_json_schema(model)
 
@@ -169,3 +171,14 @@ def _dict_type_to_json_schema(dict_type):
         "type": "object",
         "additionalProperties": _to_json_schema(dict_type.field)
     }
+
+def _enforce_instance(model_or_class):
+    """
+    It's a common mistake to not initialize a
+    schematics class. We should handle that by just
+    calling the default constructor.
+    """
+    if (isinstance(model_or_class, type) and
+        issubclass(model_or_class, BaseType)):
+        return model_or_class()
+    return model_or_class

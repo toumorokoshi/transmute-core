@@ -1,6 +1,7 @@
+import uuid
 import pytest
 from schematics.models import Model
-from schematics.types import StringType, IntType, BaseType
+from schematics.types import StringType, IntType, BaseType, UUIDType
 from schematics.types.compound import DictType
 from schematics.exceptions import ValidationError
 from transmute_core.exceptions import SerializationException
@@ -57,6 +58,13 @@ def test_schematics_to_json_schema(serializer):
     }
 
 
+@pytest.mark.parametrize("inp, expected", [
+    (UUIDType, {"type": "string"})
+])
+def test_to_json_schema(serializer, inp, expected):
+    assert serializer.to_json_schema(inp) == expected
+
+
 def test_schematics_to_json_schema_required_value(serializer):
 
     class CardNameRequired(Model):
@@ -110,3 +118,8 @@ def test_to_json_dict(serializer):
 def test_serialize_type(serializer):
     """ serializer should be able to serialize a raw type. """
     assert serializer.dump(DictType(StringType()), {"key": "foo"}) == {"key": "foo"}
+
+
+def test_uuid_serializer(serializer):
+    i = uuid.uuid4()
+    assert serializer.dump(UUIDType, i) == str(i)

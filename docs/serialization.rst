@@ -17,7 +17,10 @@ out of the box, object serialization is supported for:
 * str
 * decimal.Decimal
 * datetime.datetime
+* lists, denoted by the form [<type]
 * `schematics <http://schematics.readthedocs.org/en/latest/>`_ models.
+* schematics types
+    * if a type class is passed, it will initialize the class to an instance.
 
 -------------
 Customization
