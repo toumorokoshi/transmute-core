@@ -88,6 +88,7 @@ class SchematicsSerializer(ObjectSerializer):
         return model
 
     def load(self, model, value):
+        model = _enforce_instance(model)
         try:
             model = self._translate_to_model(model)
             result = model(value, context=get_import_context(

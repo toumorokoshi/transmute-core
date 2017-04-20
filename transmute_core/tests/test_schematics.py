@@ -122,4 +122,6 @@ def test_serialize_type(serializer):
 
 def test_uuid_serializer(serializer):
     i = uuid.uuid4()
-    assert serializer.dump(UUIDType, i) == str(i)
+    dumped = serializer.dump(UUIDType, i)
+    assert dumped == str(i)
+    assert serializer.load(UUIDType, dumped) == i
