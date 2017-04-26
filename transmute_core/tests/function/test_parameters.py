@@ -40,14 +40,13 @@ def test_ignore_request_parameter():
         assert "request" not in getattr(params, typ)
 
 
-@pytest.mark.parametrize("invalid_paths", [
-    (["/foo/{bar}/baz", "/foo/{baz}/bar"]),
-    (["/foo/{bar}/baz", "/foo/{bar}/bar/{extra}"]),
+@pytest.mark.parametrize("invalid_paths, expected", [
+    (["/foo/{bar}/baz", "/foo/{baz}/bar"], {"bar", "baz"}),
+    (["/foo/{bar}/baz", "/foo/{bar}/bar/{extra}"], {"bar", "extra"}),
 ])
-def test_non_matching_path_parameters(invalid_paths):
-    """ an exception should be raised when a non matching parameter is found. """
-    with pytest.raises(InvalidTransmuteDefinition):
-        _extract_path_parameters_from_paths(invalid_paths)
+def test_non_matching_path_parameters(invalid_paths, expected):
+    """ with non matching paths, the whole set of values should be used. """
+    assert _extract_path_parameters_from_paths(invalid_paths) == expected
 
 
 @pytest.mark.parametrize("paths, params", [

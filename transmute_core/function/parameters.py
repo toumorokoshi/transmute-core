@@ -85,18 +85,11 @@ def _extract_path_parameters_from_paths(paths):
     the arguments available in all of the paths must match: if not,
     an exception will be raised.
     """
-    params = None
+    params = set()
     for path in paths:
-        current_params = set()
         parts = PART_REGEX.split(path)
         for p in parts:
             match = PARAM_REGEX.match(p)
             if match:
-                current_params.add(match.group("name"))
-        if params is None:
-            params = current_params
-        elif params != current_params:
-            raise InvalidTransmuteDefinition(
-                "paths {0} do not match in the parameters they can support.".format(paths)
-            )
-    return params or set()
+                params.add(match.group("name"))
+    return params
