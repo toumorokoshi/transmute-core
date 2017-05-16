@@ -7,7 +7,10 @@ from transmute_core import default_context
 def test_swagger_parameters():
     parameters = Parameters(
         query={"query": Argument("query", None, int)},
-        body={"body": Argument("body", NoDefault, int)},
+        body={
+            "left": Argument("left", NoDefault, int),
+            "right": Argument("right", 2, int)
+        },
         header={"header": Argument("header", NoDefault, int)},
         path={"path": Argument("path", NoDefault, int)},
     )
@@ -22,7 +25,14 @@ def test_swagger_parameters():
     assert {
         "in": "body",
         "name": "body",
-        "schema": {"type": "number"},
+        "schema": {
+            "type": "object",
+            "required": ["left"],
+            "properties": {
+                "left": {"type": "number"},
+                "right": {"type": "number"}
+            }
+        },
         "required": True,
     } in params
     assert {
