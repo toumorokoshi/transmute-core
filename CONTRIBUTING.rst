@@ -2,22 +2,43 @@
 Contributing
 ============
 
+Thanks for your interest in contributing! The help is always appreciated.
+
+`Uranium`<http://uranium.readthedocs.io/en/latest/> is used to simplify setup and task execution.
+
+------------------
+Submitting a Patch
+------------------
+
+If you have a more general idea, it may be good to start it as an
+issue first. That gives a channel of feedback to hone or validate the
+idea with the maintainers.
+
+Patches should:
+
+* pass the existing unit tests
+* include unit tests for any modified behaviour
+
+Commits may be squashed or modified, to fit into the commit style of
+the repo.
+
 ------------------------
 Building / Running Tests
 ------------------------
 
-transmute-core uses uranium, so the ubuild.py contains all of the
-available functions.
+No local setup is necessary to run unit tests and work with the
+project.
 
-testing:
+run the unit tests:
 
 .. code-block::
 
     ./uranium test
 
 
----------------------------------------------
-Format log messages using gitchangelog format
----------------------------------------------
+-------------
+Patch License
+-------------
 
-- @minor for changes that should not appear in a changelog.
+The patch should be licensed under the same license as the main
+project (MIT).

@@ -13,6 +13,7 @@ def main(build):
 
 
 def test(build):
+    """ execute the unit tests. """
     if not build.history.get("test_deps"):
         main(build)
         build.packages.install("pytest")
@@ -28,7 +29,7 @@ def test(build):
 
 @uranium.task_requires("clean_and_install_swagger_ui")
 def publish(build):
-    """ publish the uranium package """
+    """ publish the package itself """
     build.packages.install("wheel")
     build.executables.run([
         "python", "setup.py",
@@ -39,7 +40,7 @@ def publish(build):
 def changelog(build):
     """ create a changelog """
     build.packages.install("gitchangelog")
-    changelog_text = subprocess.check_output(["gitchangelog", "show", "^v0.2.9"])
+    changelog_text = subprocess.check_output(["gitchangelog", "HEAD...v0.2.9"])
     with open(os.path.join(build.root, "CHANGELOG"), "wb+") as fh:
         fh.write(changelog_text)
 
