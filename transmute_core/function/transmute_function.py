@@ -81,7 +81,12 @@ class TransmuteFunction(object):
         operation = self.get_swagger_operation(context)
         path = PathItem()
         for m in self.methods:
-            setattr(path, m.lower(), operation)
+            name = m.lower()
+            if name == "get":
+                # get is a reserved keyword in a schematics dict
+                # https://github.com/schematics/schematics/pull/489
+                name = "get_"
+            setattr(path, name, operation)
         return path
 
     def get_swagger_operation(self, context=default_context):

@@ -55,7 +55,7 @@ def test_swagger_operation_has_operation_id(func):
 
 def test_swagger_schema_path(func):
     swagger = func.get_swagger_path()
-    assert swagger.get.responses["200"].schema.to_primitive() == {
+    assert swagger.get_.responses["200"].schema.to_primitive() == {
         "type": "number"
     }
 
