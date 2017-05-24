@@ -60,7 +60,6 @@ include/
 .uranium
 .pydistutils.cfg
 # we download swagger on build
-transmute_core/swagger/static
 VERSION
 templates/
 gitchangelog.rc.reference
