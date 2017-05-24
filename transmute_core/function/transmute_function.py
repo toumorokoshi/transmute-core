@@ -110,12 +110,13 @@ class TransmuteFunction(object):
             })
         }
         for code, details in self.response_types.items():
-            responses[str(code)] = Response({
-                "description": details.get("description"),
-                "schema": context.response_shape.swagger(
+            response = {}
+            response["description"] = details.get("description")
+            if "type" in details:
+                response["schema"] = context.response_shape.swagger(
                     context.serializers.to_json_schema(details["type"])
                 )
-            })
+            responses[str(code)] = Response(response)
         return Operation({
             "summary": self.summary,
             "description": self.description,
