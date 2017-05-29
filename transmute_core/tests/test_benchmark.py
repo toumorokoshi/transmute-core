@@ -34,6 +34,12 @@ def simple_body_method(body):
     return body
 
 
+@describe(paths="/foo", body_parameters="body")
+@annotate({"body": str, "return": str})
+def body_string(body):
+    return body
+
+
 def execute(context, func, obj_as_json):
     extractor = ParamExtractorMock(obj_as_json)
     args, kwargs = extractor.extract_params(
@@ -46,6 +52,18 @@ def execute(context, func, obj_as_json):
         exc = e
         exc.__traceback__ = sys.exc_info[:2]
     process_result(func, context, result, exc, "application/json")
+
+
+def test_large_str_benchmark(benchmark, context):
+    """
+    a benchmark of a fake full execution flow of a transmute function.
+    """
+    s = "a" * 100000
+
+    func = TransmuteFunction(body_string)
+    obj_json = json.dumps(s)
+
+    benchmark(lambda: execute(context, func, obj_json))
 
 
 def test_complex_benchmark(benchmark, context):
