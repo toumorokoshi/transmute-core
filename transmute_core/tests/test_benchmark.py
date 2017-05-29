@@ -10,21 +10,45 @@ from schematics.models import Model
 from schematics.types import StringType, BooleanType, IntType
 from schematics.types.compound import ModelType
 
+
 class User(Model):
     name = StringType()
     age = IntType()
+
 
 class ComplexModel(Model):
     user = ModelType(User)
     description = StringType()
     is_allowed = BooleanType()
 
+
 @describe(paths="/foo", body_parameters="body")
 @annotate({"body": ComplexModel, "return": ComplexModel})
-def body_method(body):
+def complex_body_method(body):
     return body
 
-def test_benchmark_roundtrip(benchmark, context):
+
+@describe(paths="/foo", body_parameters="body")
+@annotate({"body": int, "return": int})
+def simple_body_method(body):
+    return body
+
+
+def execute(context, func, obj_as_json):
+    extractor = ParamExtractorMock(obj_as_json)
+    args, kwargs = extractor.extract_params(
+        context, func, "application/json"
+    )
+    exc, result = None, None
+    try:
+        result = func(*args, **kwargs)
+    except Exception as e:
+        exc = e
+        exc.__traceback__ = sys.exc_info[:2]
+    process_result(func, context, result, exc, "application/json")
+
+
+def test_complex_benchmark(benchmark, context):
     """
     a benchmark of a fake full execution flow of a transmute function.
     """
@@ -36,29 +60,24 @@ def test_benchmark_roundtrip(benchmark, context):
         "description": "this is a test",
         "is_allowed": True
     })
-    obj_as_json = json.dumps(obj.to_primitive())
 
-    func = TransmuteFunction(body_method)
+    complex_func = TransmuteFunction(complex_body_method)
+    complex_json = json.dumps(obj.to_primitive())
 
-    def execute():
-        extractor = ParamExtractorMock(obj_as_json)
-        args, kwargs = extractor.extract_params(
-            context, func, "application/json"
-        )
-        exc, result = None, None
-        try:
-            result = func(*args, **kwargs)
-        except Exception as e:
-            exc = e
-            exc.__traceback__ = sys.exc_info[:2]
-        process_result(func, context, result, exc, "application/json")
+    benchmark(lambda: execute(context, complex_func, complex_json))
+
+
+def test_simple_benchmark(benchmark, context):
+
+    simple_func = TransmuteFunction(simple_body_method)
+    simple_json = json.dumps(1)
+
+    benchmark(lambda: execute(context, simple_func, simple_json))
 
     # def profile():
     #     for i in range(10000):
     #         execute()
     # cProfile.runctx('profile()', globals(), locals())
-
-    benchmark(execute)
 
 
 class ParamExtractorMock(ParamExtractor):

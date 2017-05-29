@@ -64,3 +64,6 @@ VERSION
 templates/
 gitchangelog.rc.reference
 CHANGELOG
+lib-python
+lib_pypy
+site-packages
