@@ -7,7 +7,7 @@ TransmuteContext
 To enable rapidly generating apis, transmute-core has embedded several
 defaults and decisions about technology choices (such as Schematics for schema validation).
 
-The :class:`TransmuteContext <tranmsute_core.TransmuteContext>` allows customizing this behaviour. Transmute
+The :class:`TransmuteContext <transmute_core.TransmuteContext>` allows customizing this behaviour. Transmute
 frameworks should allow one to provide and specify their own context by passing it as a keyword argument
 during a function call:
 

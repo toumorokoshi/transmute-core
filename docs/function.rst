@@ -4,7 +4,7 @@ Writing transmute-compatible functions
 
 .. _functions:
 
-.. note:: in general, this section is broadly applicable to all transmute frameworks.
+.. note:: this section is broadly applicable to all transmute frameworks.
 
 Functions are converted to APIs by using an intermediary TransmuteFunction object.
 
@@ -128,6 +128,18 @@ response_code parameter can be used:
 
     @describe(success_code=201)
     def create() -> bool:
+        return True
+
+Use a single schema for the body parameter
+==========================================
+
+It's often desired to represent the body parameter as a single
+argument. That can be done using a string for body_parameters describe:
+
+.. code-block:: python
+
+    @describe(body_parameters="body", methods="POST"):
+    def submit_data(body: int) -> bool:
         return True
 
 

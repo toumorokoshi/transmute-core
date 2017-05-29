@@ -2,6 +2,8 @@
 Serialization
 =============
 
+.. _serialization:
+
 transmute-core provides a framework and default implementation to
 allow serializing objects to and from common data representation for
 an API. This is by chaining two parts:

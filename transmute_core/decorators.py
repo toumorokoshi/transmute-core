@@ -15,8 +15,12 @@ def describe(**kwargs):
     :param list(str) query_parameters: the names of arguments that
            should be query parameters. By default, all arguments are query_or path parameters for a GET request.
 
-    :param list(str) body_parameters: the names of arguments that should be body parameters.
+    :param body_parameters: the names of arguments that should be body parameters.
            By default, all arguments are either body or path parameters for a non-GET request.
+
+           in the case of a single string, the whole body is validated against a single object.
+
+    :type body_parameters: List[str] or str
 
     :param list(str) header_parameters: the arguments that should be passed into the header.
 
