@@ -12,14 +12,13 @@ def main(build):
     build.packages.install("flask")
 
 
+@uranium.task_requires("main")
 def test(build):
     """ execute the unit tests. """
-    if not build.history.get("test_deps"):
-        main(build)
-        build.packages.install("pytest")
-        build.packages.install("pytest-cov")
-        build.packages.install("flake8")
-        build.history["test_deps"] = True
+    build.packages.install("pytest")
+    build.packages.install("pytest-benchmark")
+    build.packages.install("pytest-cov")
+    build.packages.install("flake8")
     build.executables.run([
         "py.test", "--cov", "transmute_core",
         "transmute_core/tests",
