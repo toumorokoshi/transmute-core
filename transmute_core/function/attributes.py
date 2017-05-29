@@ -47,7 +47,7 @@ class TransmuteAttributes(object):
             methods=(self.methods | other.methods),
             success_code=(other.success_code or self.success_code),
             query_parameters=(self.query_parameters | other.query_parameters),
-            body_parameters=self._join_parameters(self.body_parameters, other.body_parameters),
+            body_parameters=self._join_parameters(other.body_parameters, self.body_parameters),
             header_parameters=(self.header_parameters | other.header_parameters),
             path_parameters=(self.path_parameters | other.path_parameters),
             error_exceptions=(self.error_exceptions | other.error_exceptions),

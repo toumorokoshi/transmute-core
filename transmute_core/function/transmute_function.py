@@ -7,7 +7,7 @@ from ..context import default_context
 from .attributes import TransmuteAttributes
 from .signature import FunctionSignature
 from .parameters import get_parameters
-from ..swagger.function import get_swagger_parameters
+from ..http_parameters import get_swagger_parameters
 from ..exceptions import (
     InvalidTransmuteDefinition,
 )

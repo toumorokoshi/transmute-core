@@ -2,6 +2,7 @@ import pytest
 from transmute_core import (
     annotate,
     describe,
+    default_context,
     get_default_serializer_set,
     Response,
     SchematicsSerializer,
@@ -9,6 +10,10 @@ from transmute_core import (
 )
 from schematics.models import Model
 from schematics.types import StringType, IntType
+
+@pytest.fixture
+def context():
+    return default_context
 
 
 @pytest.fixture
@@ -58,6 +63,18 @@ class Pet(Model):
 
     kind = StringType(required=True)
     age = IntType()
+
+
+@pytest.fixture
+def single_body_transmute_func():
+
+    @describe(paths="/", body_parameters="body")
+    @annotate({"body": Pet})
+    def body_param_func():
+        return None
+
+    return TransmuteFunction(body_param_func)
+
 
 
 @pytest.fixture

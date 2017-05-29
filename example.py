@@ -193,9 +193,16 @@ def add_swagger(app, json_route, html_route, **kwargs):
 def multiply(left, right):
     return left * right
 
+
+@describe(paths="/api/v1/multiply_body", body_parameters="body")
+@annotate({"body": int})
+def multiply_body(body):
+    return left * right
+
 app = Flask(__name__)
 transmute_route(app, multiply)
-add_swagger(app, "/api/v1/swagger.json", "/api/v1/")
+transmute_route(app, multiply_body)
+add_swagger(app, "/api/swagger.json", "/api/")
 
 if __name__ == "__main__":
     app.run()

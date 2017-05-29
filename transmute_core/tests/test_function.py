@@ -3,6 +3,9 @@ import pytest
 
 import transmute_core
 from transmute_core.function import TransmuteFunction
+from transmute_core.http_parameters import Param
+from transmute_core.function.signature import Argument
+from .conftest import Pet
 
 
 @transmute_core.describe(paths="/")
@@ -14,7 +17,6 @@ def raw_func():
     baz
     """
     return 12345
-
 
 @pytest.fixture
 def func():
@@ -58,6 +60,12 @@ def test_swagger_schema_path(func):
     assert swagger.get_.responses["200"].schema.to_primitive() == {
         "type": "number"
     }
+
+
+def test_body_param_func(single_body_transmute_func):
+    func = single_body_transmute_func
+    assert isinstance(func.parameters.body, Param)
+    assert func.parameters.body.argument_name == "body"
 
 
 def test_function_raises_exception_on_path_missing():

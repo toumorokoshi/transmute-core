@@ -2,34 +2,37 @@ from swagger_schema import (
     BodyParameter, QueryParameter, HeaderParameter, PathParameter,
 )
 from ..function.signature import NoDefault
-from ..function.param_set import Param, ParamSet
+from .param_set import Param, ParamSet
 
 
 def get_swagger_parameters(parameters, context):
     ret_parameters = []
-    for name, details in parameters.query.items():
+    for name, param in parameters.query.items():
+        arginfo = param.arginfo
         ret_parameters.append(QueryParameter({
             "name": name,
-            "required": details.default is NoDefault,
-            "type": context.serializers.to_json_schema(details.type)["type"],
+            "required": arginfo.default is NoDefault,
+            "type": context.serializers.to_json_schema(arginfo.type)["type"],
         }))
 
-    for name, details in parameters.header.items():
+    for name, param in parameters.header.items():
+        arginfo = param.arginfo
         ret_parameters.append(HeaderParameter({
             "name": name,
-            "required": details.default is NoDefault,
-            "type": context.serializers.to_json_schema(details.type)["type"],
+            "required": arginfo.default is NoDefault,
+            "type": context.serializers.to_json_schema(arginfo.type)["type"],
         }))
 
-    if len(parameters.body):
-        body_param = _build_body_schema(context.serializers, parameters.body)
+    body_param = _build_body_schema(context.serializers, parameters.body)
+    if body_param is not None:
         ret_parameters.append(body_param)
 
     for name, details in parameters.path.items():
+        arginfo = param.arginfo
         ret_parameters.append(PathParameter({
             "name": name,
             "required": True,
-            "type": context.serializers.to_json_schema(details.type)["type"],
+            "type": context.serializers.to_json_schema(arginfo.type)["type"],
         }))
 
     return ret_parameters
@@ -38,14 +41,17 @@ def get_swagger_parameters(parameters, context):
 def _build_body_schema(serializer, body_parameters):
     """ body is built differently, since it's a single argument no matter what. """
     if isinstance(body_parameters, Param):
-        schema = serializer.to_json_schema(body_parameters.type)
+        schema = serializer.to_json_schema(body_parameters.arginfo.type)
         required = True
     else:
+        if len(body_parameters) == 0:
+            return None
         required = set()
         body_properties = {}
-        for name, details in body_parameters.items():
-            body_properties[name] = serializer.to_json_schema(details.type)
-            if details.default is NoDefault:
+        for name, param in body_parameters.items():
+            arginfo = param.arginfo
+            body_properties[name] = serializer.to_json_schema(arginfo.type)
+            if arginfo.default is NoDefault:
                 required.add(name)
         schema = {
             "type": "object",

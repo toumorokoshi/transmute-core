@@ -33,3 +33,9 @@ def test_merge_response_success_code():
     right = TransmuteAttributes(success_code=201)
     joined = left | right
     assert joined.success_code == 201
+
+def test_merge_body_parameters_argument():
+    right = TransmuteAttributes()
+    left = TransmuteAttributes(body_parameters="body")
+    joined = left | right
+    assert joined.body_parameters == "body"

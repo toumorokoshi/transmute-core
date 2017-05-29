@@ -1,5 +1,5 @@
 from transmute_core.function.signature import Argument, NoDefault
-from transmute_core.swagger.function import get_swagger_parameters
+from transmute_core.http_parameters import get_swagger_parameters
 from transmute_core import default_context
 from transmute_core.http_parameters import Parameters, Param, ParamSet
 
