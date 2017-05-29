@@ -25,6 +25,7 @@ def test(build):
         "transmute_core/tests",
         "--cov-report", "term-missing"
     ] + build.options.args)
+    # build.executables.run(["flake8", "transmute_core"])
 
 
 @uranium.task_requires("clean_and_install_swagger_ui")

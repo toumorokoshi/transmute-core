@@ -27,7 +27,7 @@ def get_swagger_parameters(parameters, context):
     if body_param is not None:
         ret_parameters.append(body_param)
 
-    for name, details in parameters.path.items():
+    for name, param in parameters.path.items():
         arginfo = param.arginfo
         ret_parameters.append(PathParameter({
             "name": name,
