@@ -1,13 +1,6 @@
 import re
+from ..http_parameters import Parameters, ParamSet, Param
 from ..exceptions import InvalidTransmuteDefinition
-
-
-class Parameters(object):
-    def __init__(self, query=None, body=None, header=None, path=None):
-        self.query = query or {}
-        self.body = body or {}
-        self.header = header or {}
-        self.path = path or {}
 
 
 def get_parameters(signature, transmute_attrs, arguments_to_ignore=None):
@@ -32,19 +25,27 @@ def get_parameters(signature, transmute_attrs, arguments_to_ignore=None):
     be added to the expected query parameters. Otherwise, "arg" will be added as
     a body parameter.
     """
-    arguments_to_ignore = arguments_to_ignore or []
     params = Parameters()
-    used_keys = set()
+    used_keys = set(arguments_to_ignore or [])
     # examine what variables are categorized first.
-    for key in ["query", "body", "header", "path"]:
+    for key in ["query", "header", "path"]:
+        param_set = getattr(params, key)
         explicit_parameters = getattr(transmute_attrs, key + "_parameters")
-        for name in explicit_parameters:
-            getattr(params, key)[name] = signature.get_argument(name)
-            used_keys.add(name)
+        used_keys |= load_parameters(param_set, explicit_parameters, signature)
+
+    body_parameters = transmute_attrs.body_parameters
+    if isinstance(body_parameters, str):
+        name = body_parameters
+        params.body = Param(argument_name=name,
+                            arginfo=signature.get_argument(name))
+        used_keys.add(name)
+    else:
+        used_keys |= load_parameters(params.body, transmute_attrs.body_parameters,
+                                     signature)
 
     # extract the parameters from the paths
     for name in _extract_path_parameters_from_paths(transmute_attrs.paths):
-        params.path[name] = signature.get_argument(name)
+        params.path[name] = Param(argument_name=name, arginfo=signature.get_argument(name))
         used_keys.add(name)
 
     # check the method type, and decide if the parameters should be extracted
@@ -55,21 +56,11 @@ def get_parameters(signature, transmute_attrs, arguments_to_ignore=None):
     default_params = getattr(params, default_param_key)
 
     # parse all positional params
-    for arg in signature.args:
-        if arg.name in arguments_to_ignore:
+    for arginfo in signature:
+        if arginfo.name in used_keys:
             continue
-        if arg.name in used_keys:
-            continue
-        used_keys.add(arg.name)
-        default_params[arg.name] = arg
-
-    for name, arg in signature.kwargs.items():
-        if name in arguments_to_ignore:
-            continue
-        if name in used_keys:
-            continue
-        used_keys.add(name)
-        default_params[name] = arg
+        used_keys.add(arginfo.name)
+        default_params[arginfo.name] = Param(arginfo.name, arginfo=arginfo)
 
     return params
 
@@ -93,3 +84,12 @@ def _extract_path_parameters_from_paths(paths):
             if match:
                 params.add(match.group("name"))
     return params
+
+
+def load_parameters(param_set, param_list, signature):
+    used_keys = set()
+    for name in param_list:
+        param_set[name] = Param(argument_name=name,
+                                arginfo=signature.get_argument(name))
+        used_keys.add(name)
+    return used_keys

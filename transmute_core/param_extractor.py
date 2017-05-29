@@ -25,18 +25,18 @@ class ParamExtractor(object):
 
         empty_args = []
 
-        for name, arginfo in parameters.query.items():
+        for name, param in parameters.query.items():
+            arginfo = param.arginfo
             if name in framework_args:
                 continue
-            values = self._query_argument(
-                name, isinstance(arginfo.type, list)
-            )
+            values = self._query_argument(name, isinstance(arginfo.type, list))
             if values is NoArgument:
                 empty_args.append(arginfo)
             else:
                 args[name] = context.serializers.load(arginfo.type, values)
 
-        for name, arginfo in parameters.header.items():
+        for name, param in parameters.header.items():
+            arginfo = param.arginfo
             if name in framework_args:
                 continue
             value = self._header_argument(name)
@@ -56,7 +56,9 @@ class ParamExtractor(object):
                 body_dict = {}
             else:
                 body_dict = serializer.load(self.body)
-            for name, arginfo in parameters.body.items():
+
+            for name, param in parameters.body.items():
+                arginfo = param.arginfo
                 if name in framework_args:
                     continue
                 if name in body_dict:
@@ -64,7 +66,8 @@ class ParamExtractor(object):
                 else:
                     empty_args.append(arginfo)
 
-        for name, arginfo in parameters.path.items():
+        for name, param in parameters.path.items():
+            arginfo = param.arginfo
             if name in framework_args:
                 continue
             values = self._path_argument(name)
@@ -86,11 +89,7 @@ class ParamExtractor(object):
                 "required arguments {0} not passed".format(required_params_not_passed)
             )
 
-        pos_args = []
-        for arg in signature.args:
-            pos_args.append(args[arg.name])
-            del args[arg.name]
-        return pos_args, args
+        return signature.split_args(args)
 
     def _get_framework_args(self):
         """
@@ -114,3 +113,24 @@ class ParamExtractor(object):
 
     def _path_argument(self, key):
         raise NotImplementedError()
+
+
+def _fold(param_or_param_set, value_dict, request_context):
+    # a single parameter consumes the whole dict
+    if isinstance(param_or_param_set, Param):
+        arginfo = param_or_param_set.arginfo
+        value = request_context.context.serializers.load(arginfo.type, value_dict)
+        request_context.args[argument.name] = value
+    # a param set consumes the dict piece by piece
+    else:
+        for name, param in param_or_param_set.values():
+            arginfo = param.arginfo
+            if name in request_context.framework_args:
+                continue
+            if name in value_dict:
+                value = context.serializers.load(arginfo.type, value_dict[name])
+                request_context.args[arginfo.name] = value
+            elif arginfo.default is not NoDefault:
+                request_context.args[arginfo.name] = arginfo.default
+            else:
+                request_context.empty_args.append(name)

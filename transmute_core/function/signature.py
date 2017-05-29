@@ -1,3 +1,4 @@
+import attr
 from collections import namedtuple
 
 
@@ -11,8 +12,11 @@ class NoDefault(object):
 
 NoDefault = NoDefault()
 
-
-Argument = namedtuple("Argument", ["name", "default", "type"])
+@attr.s
+class Argument(object):
+    name = attr.ib()
+    default = attr.ib()
+    type = attr.ib()
 
 
 class FunctionSignature(object):
@@ -57,3 +61,23 @@ class FunctionSignature(object):
                 keywords[name] = Argument(name, default, typ)
 
         return FunctionSignature(arguments, keywords)
+
+    def __iter__(self):
+        for arg in self.args:
+            yield arg
+        for kwarg in self.kwargs.values():
+            yield kwarg
+
+    def split_args(self, arg_dict):
+        """
+        given a dictionary of arguments, split them into
+        args and kwargs
+
+        note: this destroys the arg_dict passed. if you need it,
+        create a copy first.
+        """
+        pos_args = []
+        for arg in self.args:
+            pos_args.append(arg_dict[arg.name])
+            del arg_dict[arg.name]
+        return pos_args, arg_dict

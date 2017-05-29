@@ -1,3 +1,6 @@
+from ..compat import string_type
+from ..exceptions import InvalidTransmuteDefinition
+
 class TransmuteAttributes(object):
 
     def __init__(self, paths=None, methods=None,
@@ -9,36 +12,47 @@ class TransmuteAttributes(object):
         self.methods = set(methods or ["GET"])
         self.success_code = success_code
         self.query_parameters = set(query_parameters or [])
-        self.body_parameters = set(body_parameters or [])
+        self.body_parameters = self._coerce_parameters(body_parameters)
         self.header_parameters = set(header_parameters or [])
         self.path_parameters = set(path_parameters or [])
         self.error_exceptions = set(error_exceptions or [])
         self.response_types = response_types or {}
+
+    @staticmethod
+    def _coerce_parameters(param):
+        if isinstance(param, string_type):
+            return param
+        elif isinstance(param, set):
+            return param
+        elif isinstance(param, list):
+            return set(param)
+        elif isinstance(param, type(None)):
+            return set()
+        else:
+            raise InvalidTransmuteDefinition("parameter must be a string, list or set. found: {0}".format(
+                param
+            ))
 
     def __or__(self, other):
         """
         merge values from another transmute function, taking the
         union of the two sets.
         """
-        paths = self.paths | other.paths
-        methods = self.methods | other.methods
-        success_code = other.success_code or self.success_code
-        query_parameters = self.query_parameters | other.query_parameters
-        body_parameters = self.body_parameters | other.body_parameters
-        header_parameters = self.header_parameters | other.header_parameters
-        path_parameters = self.path_parameters | other.path_parameters
-        error_exceptions = self.error_exceptions | other.error_exceptions
         response_types = self.response_types.copy()
         for k, v in other.response_types.items():
             response_types[k] = v
-        return TransmuteAttributes(paths, methods,
-                                   query_parameters,
-                                   body_parameters,
-                                   header_parameters,
-                                   path_parameters,
-                                   error_exceptions,
-                                   response_types,
-                                   success_code)
+
+        return TransmuteAttributes(
+            paths=(self.paths | other.paths),
+            methods=(self.methods | other.methods),
+            success_code=(other.success_code or self.success_code),
+            query_parameters=(self.query_parameters | other.query_parameters),
+            body_parameters=self._join_parameters(self.body_parameters, other.body_parameters),
+            header_parameters=(self.header_parameters | other.header_parameters),
+            path_parameters=(self.path_parameters | other.path_parameters),
+            error_exceptions=(self.error_exceptions | other.error_exceptions),
+            response_types=response_types
+        )
 
     def __str__(self):
         arg_list = []
@@ -51,3 +65,13 @@ class TransmuteAttributes(object):
                 k, getattr(self, k)
             ))
         return "<TransmuteAttributes {0}>".format(" ".join(arg_list))
+
+    @staticmethod
+    def _join_parameters(base, nxt):
+        """ join parameters from the lhs to the rhs, if compatible. """
+        if nxt is None:
+            return base
+        if isinstance(base, set) and isinstance(nxt, set):
+            return base | nxt
+        else:
+            return nxt

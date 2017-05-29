@@ -26,7 +26,6 @@ def with_framework_arg(framework_arg):
     header_parameters=["header"],
     path_parameters=["path"],
     body_parameters=["body"]
-
 )
 @annotate({
     "query": str, "header": str, "path": str,
