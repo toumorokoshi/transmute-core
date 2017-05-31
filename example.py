@@ -188,9 +188,14 @@ def add_swagger(app, json_route, html_route, **kwargs):
 # example usage.
 
 
-@describe(paths="/api/v1/multiply")
-@annotate({"left": int, "right": int, "return": int})
-def multiply(left, right):
+@describe(paths="/api/v1/multiply/{document_id}",
+          header_parameters=["header"],
+          body_parameters="foo")
+@annotate({
+    "left": int, "right": int, "header": int,
+    "foo": str, "return": int, "document_id": str
+})
+def multiply(left, right, foo, document_id, header=0):
     return left * right
 
 

@@ -1,5 +1,4 @@
 import attr
-from collections import namedtuple
 
 
 class NoDefault(object):
@@ -11,6 +10,7 @@ class NoDefault(object):
         return "NoDefault"
 
 NoDefault = NoDefault()
+
 
 @attr.s
 class Argument(object):
