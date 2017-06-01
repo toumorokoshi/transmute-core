@@ -1,4 +1,4 @@
-from transmute_core.function.attributes import TransmuteAttributes
+from transmute_core.attributes import TransmuteAttributes, ResponseType
 
 
 def test_merge():
@@ -24,7 +24,7 @@ def test_merge_response_type_by_code():
     })
     joined = left | right
     assert joined.response_types == {
-        200: {"type": bool}, 201: {"type": str}
+        200: ResponseType(type=bool), 201: ResponseType(type=str)
     }
 
 

@@ -7,7 +7,7 @@ from transmute_core.function.signature import (
 from transmute_core.function.parameters import (
     get_parameters, _extract_path_parameters_from_paths
 )
-from transmute_core.function.attributes import TransmuteAttributes
+from transmute_core.attributes import TransmuteAttributes
 from transmute_core.exceptions import InvalidTransmuteDefinition
 
 

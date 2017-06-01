@@ -4,7 +4,7 @@ from swagger_schema import (
 )
 from ..compat import getfullargspec
 from ..context import default_context
-from .attributes import TransmuteAttributes
+from ..attributes import TransmuteAttributes, ResponseType
 from .signature import FunctionSignature
 from .parameters import get_parameters
 from ..http_parameters import get_swagger_parameters
@@ -111,9 +111,9 @@ class TransmuteFunction(object):
         }
         for code, details in self.response_types.items():
             responses[str(code)] = Response({
-                "description": details.get("description"),
+                "description": details.description,
                 "schema": context.response_shape.swagger(
-                    context.serializers.to_json_schema(details["type"])
+                    context.serializers.to_json_schema(details.type)
                 )
             })
         return Operation({
@@ -156,10 +156,10 @@ class TransmuteFunction(object):
         return_type = argspec.annotations.get("return") or None
         response_types = attrs.response_types.copy()
         if return_type or len(response_types) == 0:
-            response_types[attrs.success_code] = {
-                "type": return_type,
-                "description": "success"
-            }
+            response_types[attrs.success_code] = ResponseType(
+                type=return_type,
+                description="success"
+            )
         return response_types
 
     @staticmethod

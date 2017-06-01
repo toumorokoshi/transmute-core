@@ -19,7 +19,7 @@ def test_complex_response_shape_in_func(transmute_func, context):
         "type": "object",
         "properties": {
             "result": context.serializers.to_json_schema(
-                transmute_func.response_types[200]["type"]
+                transmute_func.response_types[200].type
             ),
             "success": {"type": "boolean"},
             "code": {"type": "number"}

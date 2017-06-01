@@ -1,5 +1,6 @@
 from ..compat import string_type
 from ..exceptions import InvalidTransmuteDefinition
+from .response_type import ResponseType
 
 class TransmuteAttributes(object):
 
@@ -16,7 +17,11 @@ class TransmuteAttributes(object):
         self.header_parameters = set(header_parameters or [])
         self.path_parameters = set(path_parameters or [])
         self.error_exceptions = set(error_exceptions or [])
-        self.response_types = response_types or {}
+        self.response_types = {}
+        for code, response in (response_types or {}).items():
+            if not isinstance(response, ResponseType):
+                response = ResponseType(**response)
+            self.response_types[code] = response
 
     @staticmethod
     def _coerce_parameters(param):
