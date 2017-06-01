@@ -3,6 +3,7 @@ An example integration with flask.
 """
 import json
 import sys
+import transmute_core
 from transmute_core import (
     describe, annotate,
     default_context,
@@ -55,7 +56,7 @@ def create_routes_and_handler(transmute_func, context):
     def handler():
         exc, result = None, None
         try:
-            args, kwargs = ParamExtractor().extract_params(
+            args, kwargs = ParamExtractorFlask().extract_params(
                 context, transmute_func, request.content_type
             )
             result = transmute_func(*args, **kwargs)
@@ -66,7 +67,7 @@ def create_routes_and_handler(transmute_func, context):
             in Python 2 the __traceback__ must be
             attached to the object manually.
             """
-            exc.__traceback__ = sys.exc_info[:2]
+            exc.__traceback__ = sys.exc_info()[2]
         """
         transmute_func.process_result handles converting
         the response from the function into the response body,
@@ -79,7 +80,8 @@ def create_routes_and_handler(transmute_func, context):
         return Response(
             response["body"],
             status=response["code"],
-            mimetype=response["content-type"]
+            mimetype=response["content-type"],
+            headers=response["headers"]
         )
     return (
         _convert_paths_to_flask(transmute_func.paths),
@@ -204,9 +206,16 @@ def multiply(left, right, foo, document_id, header=0):
 def multiply_body(body):
     return left * right
 
+@describe(paths="/api/v1/header")
+def header():
+    return transmute_core.Response(
+        "foo", headers={"x-nothing": "value"}
+    )
+
 app = Flask(__name__)
 transmute_route(app, multiply)
 transmute_route(app, multiply_body)
+transmute_route(app, header)
 add_swagger(app, "/api/swagger.json", "/api/")
 
 if __name__ == "__main__":

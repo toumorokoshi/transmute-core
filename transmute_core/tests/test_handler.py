@@ -21,6 +21,7 @@ def test_process_result_200(complex_transmute_func):
     assert json.loads(output["body"].decode()) == result
     assert output["code"] == 200
     assert output["content-type"] == CONTENT_TYPE
+    assert output["headers"] == {}
 
 
 def test_process_result_api_exception(complex_transmute_func):
@@ -34,7 +35,8 @@ def test_process_result_api_exception(complex_transmute_func):
     assert json.loads(output["body"].decode()) == {
         "result": "invalid api use: " + str(exc),
         "success": False,
-        "code": 400
+        "code": 400,
+        "headers": {},
     }
     assert output["code"] == 400
     assert output["content-type"] == CONTENT_TYPE

@@ -1,6 +1,7 @@
 """
 utilities to help with generating handlers.
 """
+import attr
 from .exceptions import (
     APIException, NoSerializerFound
 )
@@ -26,44 +27,42 @@ def process_result(transmute_func, context, result, exc, content_type):
     content_type: the content type that request is requesting for a return type.
                   (e.g. application/json)
     """
-    output = None
-    code = transmute_func.success_code
     if isinstance(result, Response):
-        code = result.code
-        result = result.result
+        response = result
+    else:
+        response = Response(
+            result=result,
+            code=transmute_func.success_code,
+            success=True
+        )
     if exc:
         if isinstance(exc, APIException):
-            output = {
-                "result": "invalid api use: {0}".format(str(exc)),
-                "success": False,
-            }
-            code = exc.code
+            response.result = "invalid api use: {0}".format(str(exc))
+            response.success = False
+            response.code = exc.code
         else:
             reraise(type(exc), exc, getattr(exc, "__traceback__", None))
     else:
-        return_type = transmute_func.get_response_by_code(code)
+        return_type = transmute_func.get_response_by_code(response.code)
         if return_type:
-            result = context.serializers.dump(return_type, result)
-        output = {
-            "result": result,
-            "success": True
-        }
+            response.result = context.serializers.dump(return_type, response.result)
     try:
         content_type = str(content_type)
         serializer = context.contenttype_serializers[content_type]
     except NoSerializerFound:
         serializer = context.contenttype_serializers.default
         content_type = serializer.main_type
-    output["code"] = code
-    if output["success"]:
-        result = context.response_shape.create_body(output)
+    if response.success:
+        result = context.response_shape.create_body(attr.asdict(response))
+        response.result = result
     else:
-        result = output
-    body = serializer.dump(result)
+        response.result = attr.asdict(response)
+    body = serializer.dump(response.result)
     # keeping the return type a dict to
     # reduce performance overhead.
     return {
         "body": body,
-        "code": code,
-        "content-type": content_type
+        "code": response.code,
+        "content-type": content_type,
+        "headers": response.headers
     }
