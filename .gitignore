@@ -67,3 +67,4 @@ CHANGELOG
 lib-python
 lib_pypy
 site-packages
+pip-selfcheck.json
