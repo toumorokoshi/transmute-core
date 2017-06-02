@@ -168,3 +168,29 @@ can be used:
 note that adding these will remove the documentation and type honoring
 for the default success result: it is assumed you will document all non-400
 responses in the response_types dict yourself.
+
+
+Headers in a Response
+=====================
+
+Headers within a response also require defining a custom response type:
+
+.. code-block:: python
+
+    from transmute_core import Response
+
+    @describe(paths="/api/v1/create_if_authorized/",
+              response_types={
+                  200: {"type": str, "description": "success",
+                        "headers": {
+                            "location": {
+                                "description": "url to the location",
+                                "type": str
+                            }
+                        }
+                  },
+              })
+    def return_url():
+        return Response("success!", headers={
+            "location": "http://foo"
+        })

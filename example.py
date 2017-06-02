@@ -206,7 +206,17 @@ def multiply(left, right, foo, document_id, header=0):
 def multiply_body(body):
     return left * right
 
-@describe(paths="/api/v1/header")
+@describe(paths="/api/v1/header",
+          response_types={
+              200: {"type": str, "description": "success",
+                    "headers": {
+                        "location": {
+                            "description": "url to the location",
+                            "type": str
+                        }
+                    }
+              },
+          })
 def header():
     return transmute_core.Response(
         "foo", headers={"x-nothing": "value"}

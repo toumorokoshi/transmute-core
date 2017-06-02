@@ -1,3 +1,4 @@
+import copy
 from swagger_schema import Schema
 
 
@@ -35,7 +36,7 @@ class ResponseShapeSimple(ResponseShape):
 
     @staticmethod
     def swagger(result_schema):
-        return result_schema
+        return copy.deepcopy(result_schema)
 
 
 class ResponseShapeComplex(ResponseShape):
@@ -58,7 +59,7 @@ class ResponseShapeComplex(ResponseShape):
             "title": "SuccessObject",
             "type": "object",
             "properties": {
-                "result": result_schema,
+                "result": copy.deepcopy(result_schema),
                 "success": {"type": "boolean"},
                 "code": {"type": "number"}
             },
