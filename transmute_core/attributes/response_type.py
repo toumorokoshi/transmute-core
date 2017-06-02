@@ -1,4 +1,5 @@
 import attr
+import copy
 from ..compat import string_type
 from swagger_schema import Response
 
@@ -24,7 +25,7 @@ class ResponseType(object):
 
     def swagger_definition(self, context):
         type_definition = context.serializers.to_json_schema(self.type)
-        schema = context.response_shape.swagger(type_definition)
+        schema = context.response_shape.swagger(copy.deepcopy(type_definition))
         headers = {}
         for name, header in self.headers.items():
             header_definition = context.serializers.to_json_schema(header["type"])
