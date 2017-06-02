@@ -10,6 +10,8 @@ from schematics.types import (
     NumberType,
     StringType,
     DateTimeType,
+    UUIDType,
+    URLType
 )
 from schematics.models import ModelMeta
 from schematics.types.compound import (
@@ -37,6 +39,8 @@ for t in all_string_types:
 JSON_SCHEMA_MAP = OrderedDict([
     (BooleanType, {"type": "boolean"}),
     (NumberType, {"type": "number"}),
+    (UUIDType, {"type": "string", "format": "uuid"}),
+    (URLType, {"type": "string", "format": "url"}),
     (BaseType, {"type": "string"}),
 ])
 

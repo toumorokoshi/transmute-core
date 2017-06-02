@@ -1,4 +1,5 @@
 from transmute_core.attributes import TransmuteAttributes, ResponseType
+from schematics.types.net import URLType
 
 
 def test_merge():
@@ -26,6 +27,24 @@ def test_merge_response_type_by_code():
     assert joined.response_types == {
         200: ResponseType(type=bool), 201: ResponseType(type=str)
     }
+
+
+def test_header_in_response():
+    left = TransmuteAttributes(response_types={
+        200: {
+            "type": bool,
+            "headers": {
+                "location": {"type": URLType}
+            }
+        }
+    })
+    assert left.response_types == {
+        200: ResponseType(type=bool, headers={
+            "location": {"type": URLType}
+        })
+    }
+
+
 
 
 def test_merge_response_success_code():

@@ -75,7 +75,7 @@ class TransmuteFunction(object):
 
     def get_response_by_code(self, code):
         """ return the return type, by code """
-        return self.response_types.get(code, {}).get("type")
+        return self.response_types.get(code, {}).type
 
     def get_swagger_path(self, context=default_context):
         operation = self.get_swagger_operation(context)
@@ -109,13 +109,10 @@ class TransmuteFunction(object):
                 })
             })
         }
+
         for code, details in self.response_types.items():
-            responses[str(code)] = Response({
-                "description": details.description,
-                "schema": context.response_shape.swagger(
-                    context.serializers.to_json_schema(details.type)
-                )
-            })
+            responses[str(code)] = details.swagger_definition(context)
+
         return Operation({
             "summary": self.summary,
             "description": self.description,

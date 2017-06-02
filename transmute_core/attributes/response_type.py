@@ -1,5 +1,6 @@
 import attr
 from ..compat import string_type
+from swagger_schema import Response
 
 # @attr.s
 # class ParameterType(object):
@@ -14,7 +15,29 @@ class ResponseType(object):
         ],
         default=""
     )
-    # headers = attr.ib(
-    #     validators=[
-    #     ]
-    # )
+    headers = attr.ib(
+        validator=[
+            attr.validators.instance_of(dict)
+        ],
+        default=attr.Factory(dict)
+    )
+
+    def swagger_definition(self, context):
+        type_definition = context.serializers.to_json_schema(self.type)
+        schema = context.response_shape.swagger(type_definition)
+        headers = {}
+        for name, header in self.headers.items():
+            header_definition = context.serializers.to_json_schema(header["type"])
+            if "description" in header:
+                header_definition["description"] = header["description"]
+            headers[name] = header_definition
+
+        response = {
+            "description": self.description,
+            "schema": schema
+        }
+
+        if headers:
+            response["headers"] = headers
+
+        return Response(response)

@@ -59,7 +59,11 @@ def test_multiple_response_types(response_transmute_func):
     path = definition["paths"]["/api/v1/create_if_authorized/"]
     responses = path["get"]["responses"]
     assert responses["201"] == swagger_schema.Response({
-        "schema": {"type": "boolean"}
+        "description": "",
+        "schema": {"type": "boolean"},
+        "headers": {
+            "location": {"type": "string"}
+        }
     }).to_primitive()
     assert responses["401"] == swagger_schema.Response({
         "description": "unauthorized",

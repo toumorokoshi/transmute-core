@@ -97,7 +97,11 @@ def response_transmute_func():
     @describe(paths="/api/v1/create_if_authorized/",
               response_types={
                   401: {"type": str, "description": "unauthorized"},
-                  201: {"type": bool}
+                  201: {"type": bool,
+                        "headers": {
+                            "location": {"type": str}
+                        }
+                  }
               })
     @annotate({"username": str})
     def create_if_authorized(username):
