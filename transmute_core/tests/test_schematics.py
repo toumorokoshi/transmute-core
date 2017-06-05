@@ -1,7 +1,7 @@
 import uuid
 import pytest
 from schematics.models import Model
-from schematics.types import StringType, IntType, BaseType, UUIDType, URLType
+from schematics.types import StringType, IntType, BaseType, UUIDType, URLType, Serializable
 from schematics.types.compound import DictType
 from schematics.exceptions import ValidationError
 from transmute_core.exceptions import SerializationException
@@ -60,7 +60,10 @@ def test_schematics_to_json_schema(serializer):
 
 @pytest.mark.parametrize("inp, expected", [
     (UUIDType, {"type": "string", "format": "uuid"}),
-    (URLType, {"type": "string", "format": "url"})
+    (URLType, {"type": "string", "format": "url"}),
+    (StringType, {"type": "string"}),
+    (BaseType, {"type": "object"}),
+    (Serializable(fget=lambda: None, type=StringType()), {"type": "string"}),
 ])
 def test_to_json_schema(serializer, inp, expected):
     assert serializer.to_json_schema(inp) == expected
@@ -83,13 +86,13 @@ def test_schematics_to_json_schema_required_value(serializer):
     }
 
 
-def test_type_not_found_defaults_to_string(serializer):
+def test_type_not_found_defaults_to_object(serializer):
 
     class MyType(BaseType):
         pass
 
     assert serializer.to_json_schema(MyType()) == {
-        "type": "string"
+        "type": "object"
     }
 
 

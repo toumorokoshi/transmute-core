@@ -9,6 +9,7 @@ from schematics.types import (
     IntType,
     NumberType,
     StringType,
+    Serializable,
     DateTimeType,
     UUIDType,
     URLType
@@ -41,7 +42,8 @@ JSON_SCHEMA_MAP = OrderedDict([
     (NumberType, {"type": "number"}),
     (UUIDType, {"type": "string", "format": "uuid"}),
     (URLType, {"type": "string", "format": "url"}),
-    (BaseType, {"type": "string"}),
+    (StringType, {"type": "string"}),
+    (BaseType, {"type": "object"}),
 ])
 
 
@@ -140,7 +142,9 @@ def _to_json_schema_no_cache(model):
             if isinstance(model, cls):
                 return schema
     if isinstance(model, BaseType):
-        return {"type": "string"}
+        return {"type": "object"}
+    if isinstance(model, Serializable):
+        return _to_json_schema_no_cache(model.type)
     raise SerializationException(
         "unable to create json schema for type " +
         "{0}. Expected a primitive or ".format(model) +
