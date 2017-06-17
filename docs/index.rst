@@ -47,8 +47,9 @@ transmute-core is released under the `MIT license <https://github.com/toumorokos
 
 Implementations exist for:
 
-* `flask <https://github.com/toumorokoshi/flask-transmute>`_
 * `aiohttp <https://github.com/toumorokoshi/aiohttp-transmute>`_
+* `flask <https://github.com/toumorokoshi/flask-transmute>`_
+* `sanic <http://sanic-transmute.readthedocs.io/en/latest/>`_
 
 If you are interested in creating a transmute library for your
 preferred web framework, please read :doc:`creating_a_framework`.
