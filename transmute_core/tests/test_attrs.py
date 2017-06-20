@@ -1,5 +1,6 @@
 import pytest
 import attr
+import cattr
 from transmute_core.exceptions import SerializationException
 from cattr.vendor.typing import List
 
@@ -41,6 +42,14 @@ player = Player("kobe", 81)
 ])
 def test_attrs_integration_dump(attrs_serializer, inp, out):
     assert attrs_serializer.dump(inp) == out
+
+
+def test_attrs_integration_dump_exception(monkeypatch, attrs_serializer):
+    def mock_return(inp):
+        raise ValueError("Random_Exception")
+    monkeypatch.setattr(cattr, "unstructure", mock_return)
+    with pytest.raises(SerializationException):
+        assert attrs_serializer.dump("random_str")
 
 
 @pytest.mark.parametrize("typ,inp", [

@@ -1,16 +1,6 @@
 from .interface import ObjectSerializer
-from cattr import structure, unstructure
+import cattr
 from ..exceptions import SerializationException
-from cattr.vendor.typing import (
-    Optional,
-    List, MutableSequence, Sequence,
-    Tuple,
-    MutableSet, Set,
-    FrozenSet,
-    Dict, MutableMapping, Mapping,
-    Union,
-)
-import attr
 
 
 class AttrsSerializer(ObjectSerializer):
@@ -19,16 +9,13 @@ class AttrsSerializer(ObjectSerializer):
     basic types and attrs classes.
     """
 
-    def __init__(self):
-        pass
-
     def load(self, model, value):
         """
         Converts unstructured data into structured data, recursively.
         """
         try:
-            res = structure(value, model)
-        except Exception as e:
+            res = cattr.structure(value, model)
+        except (ValueError, TypeError) as e:
             raise SerializationException(str(e))
         return res
 
@@ -42,16 +29,7 @@ class AttrsSerializer(ObjectSerializer):
           such as, int, boolean, dict, other classes.
         """
         try:
-            res = unstructure(value)
-        except Exception as e:
+            res = cattr.unstructure(value)
+        except (ValueError, TypeError) as e:
             raise SerializationException(str(e))
         return res
-
-
-# Help Functions
-# def _is_attr_class(cls):
-#     try:
-#         attrs = getattr(cls, "__attrs_attrs__", None)
-#     except Exception:
-#         return False
-#     return attrs is not None
