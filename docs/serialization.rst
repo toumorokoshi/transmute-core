@@ -21,6 +21,7 @@ out of the box, object serialization is supported for:
 * datetime.datetime
 * lists, denoted by the form [<type]
 * `schematics <http://schematics.readthedocs.org/en/latest/>`_ models.
+* `attrs <http://www.attrs.org/en/stable/>`_ classes.
 * schematics types
     * if a type class is passed, it will initialize the class to an instance.
 

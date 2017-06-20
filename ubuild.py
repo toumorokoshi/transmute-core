@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 import subprocess
 import uranium
 from uranium.rules import rule, Once
@@ -10,6 +11,16 @@ def main(build):
     build.packages.install(".", develop=True)
     # we install flask to allow testing the example.
     build.packages.install("flask")
+    # the version of cattrs in pypi is very old.
+    # api has also been changed in master branch,
+    # let's install master branch
+    ROOT = os.path.dirname(sys.executable)
+    CATTR_MASTER_BRANCH = "https://github.com/Tinche/cattrs/tarball/master"
+    build.packages.install("pip")
+    build.executables.run([
+        sys.executable, "{0}/pip".format(ROOT), "install",
+        CATTR_MASTER_BRANCH,
+    ])
 
 
 @uranium.task_requires("main")
