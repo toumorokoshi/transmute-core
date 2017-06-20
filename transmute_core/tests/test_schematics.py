@@ -30,25 +30,25 @@ card = Card(card_dict)
     (Card, card, card_dict),
     ([Card], [card], [card_dict])
 ])
-def test_schematics_integration_dump(serializer, typ, inp, out):
-    assert serializer.dump(typ, inp) == out
+def test_schematics_integration_dump(schematics_serializer, typ, inp, out):
+    assert schematics_serializer.dump(typ, inp) == out
 
 
-def test_schematics_validate_is_called(serializer):
+def test_schematics_validate_is_called(schematics_serializer):
     with pytest.raises(SerializationException):
-        serializer.load(Person, {"age": -1, "bio": "foo"})
+        schematics_serializer.load(Person, {"age": -1, "bio": "foo"})
 
 
 @pytest.mark.parametrize("typ,inp,out", [
     (Card, card_dict, card),
     ([Card], [card_dict], [card])
 ])
-def test_schematics_integration_load(serializer, typ, inp, out):
-    assert serializer.load(typ, inp) == out
+def test_schematics_integration_load(schematics_serializer, typ, inp, out):
+    assert schematics_serializer.load(typ, inp) == out
 
 
-def test_schematics_to_json_schema(serializer):
-    assert serializer.to_json_schema(Card) == {
+def test_schematics_to_json_schema(schematics_serializer):
+    assert schematics_serializer.to_json_schema(Card) == {
         "properties": {
             "name": {"type": "string"},
             "price": {"type": "number"}
@@ -65,17 +65,17 @@ def test_schematics_to_json_schema(serializer):
     (BaseType, {"type": "object"}),
     (Serializable(fget=lambda: None, type=StringType()), {"type": "string"}),
 ])
-def test_to_json_schema(serializer, inp, expected):
-    assert serializer.to_json_schema(inp) == expected
+def test_to_json_schema(schematics_serializer, inp, expected):
+    assert schematics_serializer.to_json_schema(inp) == expected
 
 
-def test_schematics_to_json_schema_required_value(serializer):
+def test_schematics_to_json_schema_required_value(schematics_serializer):
 
     class CardNameRequired(Model):
         name = StringType(required=True)
         price = IntType()
 
-    assert serializer.to_json_schema(CardNameRequired) == {
+    assert schematics_serializer.to_json_schema(CardNameRequired) == {
         "properties": {
             "name": {"type": "string"},
             "price": {"type": "number"}
@@ -86,46 +86,46 @@ def test_schematics_to_json_schema_required_value(serializer):
     }
 
 
-def test_type_not_found_defaults_to_object(serializer):
+def test_type_not_found_defaults_to_object(schematics_serializer):
 
     class MyType(BaseType):
         pass
 
-    assert serializer.to_json_schema(MyType()) == {
+    assert schematics_serializer.to_json_schema(MyType()) == {
         "type": "object"
     }
 
 
-def test_non_model_or_primitive_raises_exception(serializer):
+def test_non_model_or_primitive_raises_exception(schematics_serializer):
 
     class MyType(object):
         pass
 
     with pytest.raises(SerializationException):
-        serializer.to_json_schema(MyType)
+        schematics_serializer.to_json_schema(MyType)
 
 
-def test_to_json_list(serializer):
-    assert serializer.to_json_schema([int]) == {
+def test_to_json_list(schematics_serializer):
+    assert schematics_serializer.to_json_schema([int]) == {
         "type": "array",
         "items": {"type": "number"}
     }
 
 
-def test_to_json_dict(serializer):
-    assert serializer.to_json_schema(DictType(IntType())) == {
+def test_to_json_dict(schematics_serializer):
+    assert schematics_serializer.to_json_schema(DictType(IntType())) == {
         "type": "object",
         "additionalProperties": {"type": "number"}
     }
 
 
-def test_serialize_type(serializer):
-    """ serializer should be able to serialize a raw type. """
-    assert serializer.dump(DictType(StringType()), {"key": "foo"}) == {"key": "foo"}
+def test_serialize_type(schematics_serializer):
+    """ schematics_serializer should be able to serialize a raw type. """
+    assert schematics_serializer.dump(DictType(StringType()), {"key": "foo"}) == {"key": "foo"}
 
 
-def test_uuid_serializer(serializer):
+def test_uuid_schematics_serializer(schematics_serializer):
     i = uuid.uuid4()
-    dumped = serializer.dump(UUIDType, i)
+    dumped = schematics_serializer.dump(UUIDType, i)
     assert dumped == str(i)
-    assert serializer.load(UUIDType, dumped) == i
+    assert schematics_serializer.load(UUIDType, dumped) == i
