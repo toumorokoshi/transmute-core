@@ -38,7 +38,7 @@ class SerializerSet(object):
 
     def keys(self):
         """
-        return a list of the contetn types this set supports.
+        return a list of the content types this set supports.
 
         this is not a complete list: serializers can accept more than
         one content type. However, it is a good representation of the

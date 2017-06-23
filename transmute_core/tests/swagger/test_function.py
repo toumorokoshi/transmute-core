@@ -25,7 +25,7 @@ def test_swagger_parameters():
         "in": "query",
         "name": "query",
         "required": False,
-        "type": "number"
+        "type": "integer"
     } in params
     assert {
         "in": "body",
@@ -34,8 +34,8 @@ def test_swagger_parameters():
             "type": "object",
             "required": ["left"],
             "properties": {
-                "left": {"type": "number"},
-                "right": {"type": "number"}
+                "left": {"type": "integer"},
+                "right": {"type": "integer"}
             }
         },
         "required": True,
@@ -43,12 +43,12 @@ def test_swagger_parameters():
     assert {
         "in": "header",
         "name": "header",
-        "type": "number",
+        "type": "integer",
         "required": True,
     } in params
     assert {
         "in": "path",
         "name": "path",
-        "type": "number",
+        "type": "integer",
         "required": True,
     } in params

@@ -14,7 +14,7 @@ from schematics.types import (
     UUIDType,
     URLType
 )
-from schematics.models import ModelMeta
+from schematics.models import ModelMeta, Model
 from schematics.types.compound import (
     ListType, ModelType, DictType
 )
@@ -63,6 +63,10 @@ class SchematicsSerializer(ObjectSerializer):
     - lists, in the form of [Type] (e.g. [str])
     - any type that extends the schematics.models.Model.
     """
+    VALID_BASE_CLASSES = [BaseType, ModelMeta, Model]
+
+    def can_handle(self, cls):
+        return any(issubclass(cls, t) for t in self.VALID_BASE_CLASSES)
 
     def __init__(self, builtin_models=None):
         builtin_models = builtin_models or MODEL_MAP
@@ -180,6 +184,7 @@ def _dict_type_to_json_schema(dict_type):
         "type": "object",
         "additionalProperties": _to_json_schema(dict_type.field)
     }
+
 
 def _enforce_instance(model_or_class):
     """

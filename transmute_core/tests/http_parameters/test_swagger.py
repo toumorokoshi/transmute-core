@@ -10,7 +10,7 @@ def test_post_schema_swagger(parameter_post_schema, context):
         "name": "body",
         "required": True,
         "schema": {
-            "type": "number"
+            "type": "integer"
         }
     }
 
@@ -24,5 +24,5 @@ def test_header_only_schema(context):
         "in": "path",
         "name": "path",
         "required": True,
-        "type": "number"
+        "type": "integer"
     }

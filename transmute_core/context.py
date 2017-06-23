@@ -1,4 +1,4 @@
-from .object_serializers import SchematicsSerializer
+from .object_serializers import get_default_object_serializer_set
 from .contenttype_serializers import get_default_serializer_set
 from .response_shape import ResponseShapeSimple
 
@@ -15,7 +15,10 @@ class TransmuteContext(object):
 
     def __init__(self, serializers=None, contenttype_serializers=None,
                  response_shape=None):
-        self.serializers = serializers or SchematicsSerializer()
+        self.serializers = (
+            serializers or
+            get_default_object_serializer_set()
+        )
         self.contenttype_serializers = (
             contenttype_serializers or
             get_default_serializer_set()

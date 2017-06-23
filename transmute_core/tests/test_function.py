@@ -18,6 +18,7 @@ def raw_func():
     """
     return 12345
 
+
 @pytest.fixture
 def func():
     return TransmuteFunction(raw_func)
@@ -46,7 +47,7 @@ def test_return_type(func):
 def test_swagger_schema_has_object(func):
     swagger = func.get_swagger_operation()
     assert swagger.responses["200"].schema.to_primitive() == {
-        "type": "number"
+        "type": "integer"
     }
 
 
@@ -58,7 +59,7 @@ def test_swagger_operation_has_operation_id(func):
 def test_swagger_schema_path(func):
     swagger = func.get_swagger_path()
     assert swagger.get_.responses["200"].schema.to_primitive() == {
-        "type": "number"
+        "type": "integer"
     }
 
 
