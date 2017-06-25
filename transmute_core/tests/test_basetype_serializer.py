@@ -42,6 +42,7 @@ def test_float_load_unhappy(serializer, unhappy_input):
 
 @pytest.mark.parametrize("inp, expected_output", [
     ("true", True), ("false", False),
+    (True, True), (False, False),
 ])
 def test_bool_load_happy(serializer, inp, expected_output):
     assert serializer.load(bool, inp) is expected_output
