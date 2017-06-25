@@ -9,6 +9,7 @@ from uranium.rules import rule, Once
 @uranium.task_requires("install_swagger_ui")
 def main(build):
     build.packages.install(".", develop=True)
+    build.packages.install("../attrs-jsonschema", develop=True)
     # we install flask to allow testing the example.
     build.packages.install("flask")
     build.packages.install("git+https://github.com/Tinche/cattrs.git#cattrs")

@@ -1,7 +1,9 @@
 import cProfile
+import attr
 import json
 import pytest
 import sys
+from attr.validators import instance_of
 from transmute_core import (
     TransmuteFunction, describe, annotate,
     ParamExtractor, NoArgument, process_result
@@ -21,12 +23,22 @@ class ComplexModel(Model):
     description = StringType()
     is_allowed = BooleanType()
 
+@attr.s
+class UserAttrs(object):
+    name = attr.ib(validator=instance_of(str))
+    age = attr.ib(validator=instance_of(int))
+
+@attr.s
+class ComplexAttrsModel(object):
+    user = attr.ib(validator=instance_of(UserAttrs))
+    description = attr.ib(validator=instance_of(str))
+    is_allowed = attr.ib(validator=instance_of(bool))
+
 
 @describe(paths="/foo", body_parameters="body")
 @annotate({"body": ComplexModel, "return": ComplexModel})
 def complex_body_method(body):
     return body
-
 
 @describe(paths="/foo", body_parameters="body")
 @annotate({"body": int, "return": int})
@@ -92,10 +104,23 @@ def test_simple_benchmark(benchmark, context):
 
     benchmark(lambda: execute(context, simple_func, simple_json))
 
-    # def profile():
-    #     for i in range(10000):
-    #         execute()
-    # cProfile.runctx('profile()', globals(), locals())
+def test_complex_attrs_benchmark(benchmark, context):
+
+    obj = ComplexAttrsModel(
+        user=UserAttrs(name="Richart Stallman", age=104),
+        description="this is a test",
+        is_allowed=True
+    )
+
+    @describe(paths="/foo", body_parameters="body")
+    @annotate({"body": ComplexAttrsModel, "return": ComplexAttrsModel})
+    def complex_attrs_method(body):
+        return body
+
+    complex_func = TransmuteFunction(complex_attrs_method)
+    complex_json = json.dumps(attr.asdict(obj))
+
+    benchmark(lambda: execute(context, complex_func, complex_json))
 
 
 class ParamExtractorMock(ParamExtractor):
