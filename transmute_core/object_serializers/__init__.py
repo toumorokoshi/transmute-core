@@ -16,5 +16,6 @@ def get_default_object_serializer_set():
         FloatSerializer(),
         IntSerializer(),
         StringSerializer(),
-        SchematicsSerializer()
+        SchematicsSerializer(),
+        AttrsSerializer()
     ])

@@ -6,7 +6,7 @@ from cattr.vendor.typing import List
 
 
 class Player(object):
-    
+
     def __init__(self, name, score):
         self.name = name
         self.score = score
@@ -35,13 +35,13 @@ card = Card(**card_dict)
 player = Player("kobe", 81)
 
 
-@pytest.mark.parametrize("inp,out", [
-    (card, card_dict),
-    ([card], [card_dict]),
-    (player, player)
+@pytest.mark.parametrize("typ,inp,out", [
+    (Card, card, card_dict),
+    (List[Card], [card], [card_dict]),
+    (Player, player, player)
 ])
-def test_attrs_integration_dump(attrs_serializer, inp, out):
-    assert attrs_serializer.dump(inp) == out
+def test_attrs_integration_dump(attrs_serializer, typ, inp, out):
+    assert attrs_serializer.dump(typ, inp) == out
 
 
 def test_attrs_integration_dump_exception(monkeypatch, attrs_serializer):
@@ -49,7 +49,7 @@ def test_attrs_integration_dump_exception(monkeypatch, attrs_serializer):
         raise ValueError("Random_Exception")
     monkeypatch.setattr(cattr, "unstructure", mock_return)
     with pytest.raises(SerializationException):
-        assert attrs_serializer.dump("random_str")
+        assert attrs_serializer.dump(str, "random_str")
 
 
 @pytest.mark.parametrize("typ,inp", [

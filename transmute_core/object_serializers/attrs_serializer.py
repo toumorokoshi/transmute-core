@@ -1,5 +1,7 @@
 from .interface import ObjectSerializer
+import attr
 import cattr
+import attrs_jsonschema
 from ..exceptions import SerializationException
 
 
@@ -8,6 +10,13 @@ class AttrsSerializer(ObjectSerializer):
     An ObjectSerializer which allows the serialization of
     basic types and attrs classes.
     """
+
+    def can_handle(self, cls):
+        try:
+            attr.fields(cls)
+            return True
+        except:
+            return False
 
     def load(self, model, value):
         """
@@ -19,7 +28,7 @@ class AttrsSerializer(ObjectSerializer):
             raise SerializationException(str(e))
         return res
 
-    def dump(self, value):
+    def dump(self, model, value):
         """
         Convert attrs data into unstructured data with basic types, recursively:
 
@@ -33,3 +42,6 @@ class AttrsSerializer(ObjectSerializer):
         except (ValueError, TypeError) as e:
             raise SerializationException(str(e))
         return res
+
+    def to_json_schema(self, cls):
+        return attrs_jsonschema.extract(cls)

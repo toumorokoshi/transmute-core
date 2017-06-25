@@ -4,6 +4,7 @@ from transmute_core import (
     describe,
     default_context,
     get_default_serializer_set,
+    get_default_object_serializer_set,
     Response,
     SchematicsSerializer,
     AttrsSerializer,
@@ -21,6 +22,9 @@ def context():
 def serializer_set():
     return get_default_serializer_set()
 
+@pytest.fixture
+def object_serializers():
+    return get_default_object_serializer_set()
 
 @pytest.fixture
 def schematics_serializer():
