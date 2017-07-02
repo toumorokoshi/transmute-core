@@ -6,18 +6,24 @@
 transmute-core
 ==============
 
-transmute-core is a set of web framework agnostic APIs that allow developers to quickly generate http apis
-with schema validation and documentation.
+transmute-core takes python functions, and converts them into APIs
+that include schema validation and `documentation via swagger <https://swagger.io/specification/>`_.
 
-specifically, transmute-core provides:
+more specifically, transmute provides:
 
 * declarative generation of http handler interfaces by parsing :ref:`python functions <functions>`.
 * validation and serialization to and from a variety of content types (e.g. json or yaml).
 * validation and serialization to and from native python objects which use `schematics <http://schematics.readthedocs.org/en/latest/>`_.
 * :doc:`autodocumentation <autodocumentation>` of all handlers generated this way, via `swagger <http://swagger.io/>`_.
 
-To use this functionality, it's recommended to build or use a
-framework-specific wrapper library, to handle a more fluid integration.
+transmute-core is the core library, containing shared functionality
+across framework-specific implementations.
+
+Implementations exist for:
+
+* `aiohttp <https://github.com/toumorokoshi/aiohttp-transmute>`_
+* `flask <https://github.com/toumorokoshi/flask-transmute>`_
+* `sanic <http://sanic-transmute.readthedocs.io/en/latest/>`_
 
 An example in flask looks like:
 
@@ -37,19 +43,17 @@ An example in flask looks like:
     def multiply(left, right):
         return left * right
 
-    # finally, you can add a swagger json and a documentation page by:
+    # finally, you can add a swagger json and a swagger-ui page by:
     flask_transmute.add_swagger(app, "/swagger.json", "/swagger")
 
     app.run()
 
+more specifically, transmute-core provides:
+
 transmute-core is released under the `MIT license <https://github.com/toumorokoshi/transmute-core/blob/master/LICENSE>`_.
 
-
-Implementations exist for:
-
-* `aiohttp <https://github.com/toumorokoshi/aiohttp-transmute>`_
-* `flask <https://github.com/toumorokoshi/flask-transmute>`_
-* `sanic <http://sanic-transmute.readthedocs.io/en/latest/>`_
+To use this functionality, it's recommended to build or use a
+framework-specific wrapper library, to handle a more fluid integration.
 
 If you are interested in creating a transmute library for your
 preferred web framework, please read :doc:`creating_a_framework`.
