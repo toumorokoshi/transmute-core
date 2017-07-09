@@ -52,6 +52,10 @@ more specifically, transmute-core provides:
 
 transmute-core is released under the `MIT license <https://github.com/toumorokoshi/transmute-core/blob/master/LICENSE>`_.
 
+However, transmute-core bundles `swagger-ui
+<https://github.com/swagger-api/swagger-ui>`_ with it, which is released under
+the Apache2 license.
+
 To use this functionality, it's recommended to build or use a
 framework-specific wrapper library, to handle a more fluid integration.
 
