@@ -17,6 +17,7 @@ class ParamExtractor(object):
     def extract_params(self, context, transmute_func, content_type):
         parameters = transmute_func.parameters
         signature = transmute_func.signature
+        content_type = content_type or context.contenttype_serializers.default.main_type
 
         args = {}
         framework_args = self._get_framework_args()

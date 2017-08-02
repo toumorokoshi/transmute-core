@@ -148,3 +148,13 @@ def test_with_framework_arg():
     )
     assert args == ["framework_arg"]
     assert kwargs == {}
+
+def test_extract_params_no_content_type(all_param_type_transmute_func):
+    """ if no content type is provided, expect json. """
+
+    extractor = ParamExtractorMock()
+    args, kwargs = extractor.extract_params(
+        default_context, all_param_type_transmute_func, None
+    )
+    assert args == []
+    assert kwargs["body"] == "body"

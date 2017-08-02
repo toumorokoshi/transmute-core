@@ -24,9 +24,13 @@ class ResponseType(object):
     )
 
     def swagger_definition(self, context):
-        type_definition = context.serializers.to_json_schema(self.type)
-        schema = context.response_shape.swagger(copy.deepcopy(type_definition))
+        if self.type is not None:
+            type_definition = context.serializers.to_json_schema(self.type)
+            schema = context.response_shape.swagger(copy.deepcopy(type_definition))
+        else:
+            schema = {"type": "object"}
         headers = {}
+
         for name, header in self.headers.items():
             header_definition = context.serializers.to_json_schema(header["type"])
             if "description" in header:
