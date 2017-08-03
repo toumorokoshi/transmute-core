@@ -6,6 +6,7 @@ from transmute_core import (
     get_default_serializer_set,
     Response,
     SchematicsSerializer,
+    AttrsSerializer,
     TransmuteFunction
 )
 from schematics.models import Model
@@ -22,8 +23,13 @@ def serializer_set():
 
 
 @pytest.fixture
-def serializer():
+def schematics_serializer():
     return SchematicsSerializer()
+
+
+@pytest.fixture
+def attrs_serializer():
+    return AttrsSerializer()
 
 
 @pytest.fixture

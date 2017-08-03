@@ -1,4 +1,5 @@
 from .schematics_serializer import SchematicsSerializer
+from .attrs_serializer import AttrsSerializer
 from .interface import ObjectSerializer
 from .serializer_set import ObjectSerializerSet
 from .primitive_serializer import (
