@@ -20,16 +20,20 @@ class ObjectSerializerSet(object):
         assert len(self.serializers) > 0, "at least one serializer should be passed!"
 
     def _get_serializer_for_type(self, cls):
-        if cls not in self._cache:
+        cls_key = self._to_key(cls)
+        if cls_key not in self._cache:
             for serializer in self.serializers:
-                if serializer.can_handle(cls):
-                    self._cache[cls] = serializer
-                    return serializer
+                try:
+                    if serializer.can_handle(cls):
+                        self._cache[cls_key] = serializer
+                        return serializer
+                except:
+                    pass
             raise NoSerializerFound(
-                "unable to find serializer for " + str(cls) + "in: " +
+                "unable to find serializer for " + str(cls) + " in: " +
                 str(self.serializers)
             )
-        return self._cache[cls]
+        return self._cache[cls_key]
 
     def __getitem__(self, cls):
         """
@@ -48,3 +52,9 @@ class ObjectSerializerSet(object):
 
     def load(self, cls, value):
         return self[cls].load(cls, value)
+
+    @staticmethod
+    def _to_key(target_cls):
+        if isinstance(target_cls, list):
+            return tuple(target_cls)
+        return target_cls

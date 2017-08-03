@@ -23,7 +23,7 @@ class SerializerSet(object):
             if serializer.can_handle(content_type):
                 return serializer
         raise NoSerializerFound(
-            "unable to find serializer for " + content_type + "in: " +
+            "unable to find serializer for " + str(content_type) + " in: " +
             str(self.serializers)
         )
 
