@@ -1,5 +1,6 @@
 import uuid
 import pytest
+from datetime import datetime
 from schematics.models import Model
 from schematics.types import StringType, IntType, BaseType, UUIDType, URLType, Serializable
 from schematics.types.compound import DictType
@@ -38,10 +39,13 @@ def test_schematics_validate_is_called(serializer):
     with pytest.raises(SerializationException):
         serializer.load(Person, {"age": -1, "bio": "foo"})
 
+now = datetime.now()
+
 
 @pytest.mark.parametrize("typ,inp,out", [
     (Card, card_dict, card),
-    ([Card], [card_dict], [card])
+    ([Card], [card_dict], [card]),
+    (datetime, now, now)
 ])
 def test_schematics_integration_load(serializer, typ, inp, out):
     assert serializer.load(typ, inp) == out
@@ -63,6 +67,7 @@ def test_schematics_to_json_schema(serializer):
     (URLType, {"type": "string", "format": "url"}),
     (StringType, {"type": "string"}),
     (BaseType, {"type": "object"}),
+    (datetime, {"type": "date-time"}),
     (Serializable(fget=lambda: None, type=StringType()), {"type": "string"}),
 ])
 def test_to_json_schema(serializer, inp, expected):

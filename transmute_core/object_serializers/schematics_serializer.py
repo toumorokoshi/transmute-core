@@ -43,6 +43,7 @@ JSON_SCHEMA_MAP = OrderedDict([
     (UUIDType, {"type": "string", "format": "uuid"}),
     (URLType, {"type": "string", "format": "url"}),
     (StringType, {"type": "string"}),
+    (DateTimeType, {"type": "date-time"}),
     (BaseType, {"type": "object"}),
 ])
 
@@ -66,7 +67,11 @@ class SchematicsSerializer(ObjectSerializer):
     VALID_BASE_CLASSES = [BaseType, ModelMeta, Model]
 
     def can_handle(self, cls):
-        return any(issubclass(cls, t) for t in self.VALID_BASE_CLASSES)
+        if any(issubclass(cls, t) for t in self.VALID_BASE_CLASSES):
+            return True
+        for allowed_cls in MODEL_MAP:
+            if issubclass(cls, t):
+                return True
 
     def __init__(self, builtin_models=None):
         builtin_models = builtin_models or MODEL_MAP
