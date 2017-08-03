@@ -69,9 +69,8 @@ class SchematicsSerializer(ObjectSerializer):
     def can_handle(self, cls):
         if any(issubclass(cls, t) for t in self.VALID_BASE_CLASSES):
             return True
-        for allowed_cls in MODEL_MAP:
-            if issubclass(cls, t):
-                return True
+        if cls in self._models:
+            return True
 
     def __init__(self, builtin_models=None):
         builtin_models = builtin_models or MODEL_MAP
