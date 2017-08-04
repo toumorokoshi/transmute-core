@@ -43,7 +43,7 @@ JSON_SCHEMA_MAP = OrderedDict([
     (UUIDType, {"type": "string", "format": "uuid"}),
     (URLType, {"type": "string", "format": "url"}),
     (StringType, {"type": "string"}),
-    (DateTimeType, {"type": "date-time"}),
+    (DateTimeType, {"type": "string", "format": "date-time"}),
     (BaseType, {"type": "object"}),
 ])
 
