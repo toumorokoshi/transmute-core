@@ -134,3 +134,12 @@ def test_uuid_serializer(serializer):
     dumped = serializer.dump(UUIDType, i)
     assert dumped == str(i)
     assert serializer.load(UUIDType, dumped) == i
+
+
+@pytest.mark.parametrize("cls, should_handle", [
+    (int, True),
+    (float, True),
+    (datetime, True),
+])
+def test_can_handle(serializer, cls, should_handle):
+    assert serializer.can_handle(cls) == should_handle
