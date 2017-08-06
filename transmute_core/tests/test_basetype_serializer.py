@@ -9,50 +9,50 @@ NOW = datetime.now()
 @pytest.mark.parametrize("inp, expected_output", [
     ("10", 10), ("-1", -1)
 ])
-def test_int_load_happy(serializer, inp, expected_output):
+def test_int_load_happy(object_serializer_set, inp, expected_output):
     """ test all happy cases for the integer serializer """
-    assert serializer.load(int, inp) == expected_output
+    assert object_serializer_set.load(int, inp) == expected_output
 
 
 @pytest.mark.parametrize("unhappy_input", [
     "foo", "bar"
 ])
-def test_int_load_unhappy(serializer, unhappy_input):
+def test_int_load_unhappy(object_serializer_set, unhappy_input):
     """ test all unhappy cases for the integer serializer """
     with pytest.raises(SerializationException):
-        serializer.load(int, unhappy_input)
+        object_serializer_set.load(int, unhappy_input)
 
 
 @pytest.mark.parametrize("inp, expected_output", [
     ("10", 10), ("1.0", 1.0)
 ])
-def test_float_load_happy(serializer, inp, expected_output):
+def test_float_load_happy(object_serializer_set, inp, expected_output):
     """ test all happy cases for the integer serializer """
-    assert serializer.load(float, inp) == expected_output
+    assert object_serializer_set.load(float, inp) == expected_output
 
 
 @pytest.mark.parametrize("unhappy_input", [
     "foo", "bar"
 ])
-def test_float_load_unhappy(serializer, unhappy_input):
+def test_float_load_unhappy(object_serializer_set, unhappy_input):
     """ test all unhappy cases for the integer serializer """
     with pytest.raises(SerializationException):
-        serializer.load(float, unhappy_input)
+        object_serializer_set.load(float, unhappy_input)
 
 
 @pytest.mark.parametrize("inp, expected_output", [
     ("true", True), ("false", False),
     (True, True), (False, False),
 ])
-def test_bool_load_happy(serializer, inp, expected_output):
-    assert serializer.load(bool, inp) is expected_output
+def test_bool_load_happy(object_serializer_set, inp, expected_output):
+    assert object_serializer_set.load(bool, inp) is expected_output
 
 
 @pytest.mark.parametrize("inp, expected_output", [
     ("foo", "foo")
 ])
-def test_string_load_happy(serializer, inp, expected_output):
-    assert serializer.load(string_type, inp) == expected_output
+def test_string_load_happy(object_serializer_set, inp, expected_output):
+    assert object_serializer_set.load(string_type, inp) == expected_output
 
 
 @pytest.mark.parametrize("inp, expected_output", [
@@ -68,3 +68,15 @@ def test_datetime_load_happy(serializer, inp, expected_output):
 def test_datetime_load_unhappy(serializer, inp):
     with pytest.raises(SerializationException):
         serializer.load(datetime, inp)
+
+
+@pytest.mark.parametrize("inp, out", [
+    (None, None),
+    ("s", "s")
+])
+def test_none_serialzer(object_serializer_set, inp, out):
+    assert object_serializer_set.load(None, inp) == out
+    assert object_serializer_set.dump(None, out) == inp
+
+def test_none_serialzer(object_serializer_set):
+    assert object_serializer_set[None]

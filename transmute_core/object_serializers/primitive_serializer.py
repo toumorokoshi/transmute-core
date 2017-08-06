@@ -1,4 +1,5 @@
 from ..compat import all_string_types, string_type
+from ..exceptions import SerializationException
 
 
 class IntSerializer:
@@ -12,7 +13,10 @@ class IntSerializer:
 
     @staticmethod
     def load(cls, obj):
-        return int(obj)
+        try:
+            return int(obj)
+        except ValueError as e:
+            raise SerializationException(str(e))
 
     @staticmethod
     def dump(cls, obj):
@@ -30,7 +34,10 @@ class FloatSerializer:
 
     @staticmethod
     def load(cls, obj):
-        return float(obj)
+        try:
+            return float(obj)
+        except ValueError as e:
+            raise SerializationException(str(e))
 
     @staticmethod
     def dump(cls, obj):
@@ -70,6 +77,24 @@ class BoolSerializer:
     def load(cls, obj):
         if isinstance(obj, string_type):
             return obj.lower().startswith("t")
+        return obj
+
+    @staticmethod
+    def dump(cls, obj):
+        return obj
+
+
+class NoneSerializer(object):
+
+    def can_handle(self, cls):
+        return cls is None
+
+    @staticmethod
+    def to_json_schema(cls):
+        return {"type": "object"}
+
+    @staticmethod
+    def load(cls, obj):
         return obj
 
     @staticmethod

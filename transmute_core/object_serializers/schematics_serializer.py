@@ -29,7 +29,6 @@ MODEL_MAP = {
     bool: BooleanType(),
     float: FloatType(),
     Decimal: DecimalType(),
-    None: BaseType(),
     datetime: DateTimeType(),
 }
 
