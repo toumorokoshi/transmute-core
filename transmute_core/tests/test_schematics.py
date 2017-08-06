@@ -3,7 +3,7 @@ import pytest
 from datetime import datetime
 from schematics.models import Model
 from schematics.types import StringType, IntType, BaseType, UUIDType, URLType, Serializable
-from schematics.types.compound import DictType
+from schematics.types.compound import DictType, ModelType
 from schematics.exceptions import ValidationError
 from transmute_core.exceptions import SerializationException
 
@@ -139,7 +139,8 @@ def test_uuid_serializer(serializer):
 @pytest.mark.parametrize("cls, should_handle", [
     (int, True),
     (float, True),
-    (datetime, True)
+    (datetime, True),
+    (ModelType(Card), True)
 ])
 def test_can_handle(serializer, cls, should_handle):
     assert serializer.can_handle(cls) == should_handle

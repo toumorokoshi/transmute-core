@@ -66,9 +66,13 @@ class SchematicsSerializer(ObjectSerializer):
     VALID_BASE_CLASSES = [BaseType, ModelMeta, Model]
 
     def can_handle(self, cls):
-        if any(issubclass(cls, t) for t in self.VALID_BASE_CLASSES):
-            return True
         if cls in self._models:
+            return True
+        if any(isinstance(cls, t) for t in self.VALID_BASE_CLASSES):
+             return True
+        if not isinstance(cls, type):
+            return False
+        if any(issubclass(cls, t) for t in self.VALID_BASE_CLASSES):
             return True
 
     def __init__(self, builtin_models=None):
