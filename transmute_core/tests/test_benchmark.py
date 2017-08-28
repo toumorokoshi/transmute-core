@@ -1,3 +1,4 @@
+import attr
 import cProfile
 import json
 import pytest
@@ -9,6 +10,7 @@ from transmute_core import (
 from schematics.models import Model
 from schematics.types import StringType, BooleanType, IntType
 from schematics.types.compound import ModelType
+from cattr import typed
 
 
 class User(Model):
@@ -22,9 +24,27 @@ class ComplexModel(Model):
     is_allowed = BooleanType()
 
 
+@attr.s
+class UserAttrs(object):
+    name = typed(str)
+    age = typed(int)
+
+@attr.s
+class ComplexModelAttrs(object):
+    user = typed(UserAttrs)
+    description = typed(str)
+    is_allowed = typed(bool)
+
+
 @describe(paths="/foo", body_parameters="body")
 @annotate({"body": ComplexModel, "return": ComplexModel})
 def complex_body_method(body):
+    return body
+
+
+@describe(paths="/foo", body_parameters="body")
+@annotate({"body": ComplexModelAttrs, "return": ComplexModelAttrs})
+def complex_body_method_attrs(body):
     return body
 
 
@@ -80,9 +100,26 @@ def test_complex_benchmark(benchmark, context):
     })
 
     complex_func = TransmuteFunction(complex_body_method)
-    complex_json = json.dumps(obj.to_primitive())
+    complex_json = json.dumps(context.serializers.dump(type(obj), obj))
 
     benchmark(lambda: execute(context, complex_func, complex_json))
+
+
+def test_complex_benchmark_attrs(benchmark, context):
+    """
+    a benchmark of a fake full execution flow of a transmute function.
+    """
+    obj = ComplexModelAttrs(
+        user=UserAttrs(name="Richard Stallman", age=104),
+        description="this is a test",
+        is_allowed=True
+    )
+
+    complex_func = TransmuteFunction(complex_body_method_attrs)
+    complex_json = json.dumps(context.serializers.dump(type(obj), obj))
+
+    benchmark(lambda: execute(context, complex_func, complex_json))
+
 
 
 def test_simple_benchmark(benchmark, context):
