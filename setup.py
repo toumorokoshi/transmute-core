@@ -15,6 +15,7 @@ README_PATH = os.path.join(base, "README.rst")
 
 install_requires = [
     'attrs',
+    'arrow',
     'cattrs >=0.4.0',
     'schematics>=2.0.0',
     'six',

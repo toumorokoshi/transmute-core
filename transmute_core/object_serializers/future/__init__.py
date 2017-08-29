@@ -33,4 +33,4 @@ class FutureSerializerAdapter(ObjectSerializer):
             raise SerializationException(str(e))
 
     def to_json_schema(self, model):
-        self._schema_extractor.extract(model)
+        return self._schema_extractor.extract(model)

@@ -4,6 +4,7 @@ from transmute_core.exceptions import SerializationException
 from datetime import datetime
 
 NOW = datetime.now()
+UTCNOW = datetime.utcnow()
 
 
 @pytest.mark.parametrize("inp, expected_output", [

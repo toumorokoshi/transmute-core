@@ -24,18 +24,6 @@ from ..exceptions import SerializationException
 from decimal import Decimal
 from ..compat import all_string_types
 
-MODEL_MAP = {
-    int: IntType(),
-    bool: BooleanType(),
-    float: FloatType(),
-    Decimal: DecimalType(),
-    datetime: DateTimeType(),
-}
-
-for t in all_string_types:
-    MODEL_MAP[t] = StringType()
-
-
 JSON_SCHEMA_MAP = OrderedDict([
     (BooleanType, {"type": "boolean"}),
     (NumberType, {"type": "number"}),
@@ -76,8 +64,7 @@ class SchematicsSerializer(ObjectSerializer):
             return True
 
     def __init__(self, builtin_models=None):
-        builtin_models = builtin_models or MODEL_MAP
-        self._models = dict(builtin_models)
+        self._models = {}
 
     def _translate_to_model(self, model):
         model = self._to_key(model)
