@@ -29,11 +29,6 @@ def object_serializer_set():
 
 
 @pytest.fixture
-def serializer():
-    return SchematicsSerializer()
-
-
-@pytest.fixture
 def transmute_func():
 
     @describe(paths="/api/v1/multiply")

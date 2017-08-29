@@ -63,7 +63,7 @@ class SchematicsSerializer(ObjectSerializer):
     - lists, in the form of [Type] (e.g. [str])
     - any type that extends the schematics.models.Model.
     """
-    VALID_BASE_CLASSES = [BaseType, ModelMeta, Model]
+    VALID_BASE_CLASSES = [BaseType, ModelMeta, Model, Serializable]
 
     def can_handle(self, cls):
         if cls in self._models:
@@ -128,6 +128,8 @@ class SchematicsSerializer(ObjectSerializer):
             raise SerializationException(str(e))
 
     def to_json_schema(self, model):
+        if isinstance(model, Serializable):
+            model = model.type
         model = _enforce_instance(model)
         model = self._translate_to_model(model)
         return _to_json_schema(model)

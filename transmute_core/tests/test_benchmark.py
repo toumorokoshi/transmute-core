@@ -105,7 +105,7 @@ def test_complex_benchmark(benchmark, context):
     benchmark(lambda: execute(context, complex_func, complex_json))
 
 
-def test_complex_benchmark_attrs(benchmark, context):
+def _test_complex_benchmark_attrs(benchmark, context):
     """
     a benchmark of a fake full execution flow of a transmute function.
     """
