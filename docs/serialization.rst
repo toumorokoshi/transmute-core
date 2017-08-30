@@ -19,7 +19,8 @@ out of the box, object serialization is supported for:
 * str
 * decimal.Decimal
 * datetime.datetime
-* lists, denoted by the form [<type]
+* lists, denoted by the form [<type] (deprecated)
+* types denoted using the `typing <https://docs.python.org/3/library/typing.html>`_ module (python 3.5.4+ and 3.6.2+ only)
 * `schematics <http://schematics.readthedocs.org/en/latest/>`_ models.
 * `attrs <http://www.attrs.org/en/stable/>`_ classes, specifically
   using `cattrs's typed notation
