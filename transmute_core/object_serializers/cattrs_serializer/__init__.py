@@ -1,10 +1,10 @@
 from ..interface import ObjectSerializer
 from jsonschema_extractor import init_default_extractor
-from .cattrs_converter import create_cattrs_converter
+from .converter import create_cattrs_converter
 from ...exceptions import SerializationException
 
 
-class FutureSerializerAdapter(ObjectSerializer):
+class CattrsSerializer(ObjectSerializer):
     """
     A serializer that's intended to become
     the pattern for 2.0

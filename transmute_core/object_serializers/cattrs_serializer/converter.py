@@ -1,4 +1,5 @@
-from .cattrs_extended_converter import ExtendedConverter
+# from .cattrs_extended_converter import ExtendedConverter
+from cattr import Converter
 from datetime import datetime
 from ...compat import string_type
 from schematics.models import Model
@@ -6,7 +7,7 @@ from schematics.types import DateTimeType, BaseType
 from schematics.exceptions import BaseError
 
 def create_cattrs_converter():
-    converter = ExtendedConverter()
+    converter = Converter()
     converter.register_structure_hook(bool, _structure_bool)
     converter.register_structure_hook(string_type, _structure_string)
     converter.register_structure_hook(Model, _structure_schematics)
