@@ -3,6 +3,7 @@ import attr
 import cattr
 from transmute_core.exceptions import SerializationException
 from typing import List
+from cattr import typed
 
 
 class Player(object):
@@ -14,14 +15,18 @@ class Player(object):
 
 @attr.s
 class Card(object):
-    name = attr.ib(default="")
-    price = attr.ib(default=1.0)
+    name = typed(str, default="")
+    price = typed(float, default=1.0)
+
+@attr.s
+class Hand(object):
+    cards = typed(List[Card])
 
 
 @attr.s
 class Person(object):
-    age = attr.ib()
-    bio = attr.ib(default="")
+    age = typed(int)
+    bio = typed(str, default="")
 
     @age.validator
     def greater_than_zero(self, attribute, value):
@@ -71,3 +76,35 @@ def test_attrs_validate_is_called(cattrs_serializer):
 ])
 def test_attrs_integration_load(cattrs_serializer, typ, inp, out):
     assert cattrs_serializer.load(typ, inp) == out
+
+
+def test_to_json_schema(cattrs_serializer):
+    assert cattrs_serializer.to_json_schema(Card) == {
+        "type": "object",
+        "title": "Card",
+        "properties": {
+            "name": {"type": "string"},
+            "price": {"type": "number"}
+        },
+        "required": []
+    }
+
+    assert cattrs_serializer.to_json_schema(Hand) == {
+        "type": "object",
+        "title": "Hand",
+        "properties": {
+            "cards": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "title": "Card",
+                    "properties": {
+                        "name": {"type": "string"},
+                        "price": {"type": "number"}
+                    },
+                    "required": []
+                }
+            },
+        },
+        "required": ["cards"]
+    }
