@@ -69,7 +69,7 @@ TransmuteFunction
              :doc:`creating_a_framework`
 
 
-.. automodule:: transmute_core.function.attributes
+.. automodule:: transmute_core.attributes
     :members:
 
 .. automodule:: transmute_core.function.transmute_function
