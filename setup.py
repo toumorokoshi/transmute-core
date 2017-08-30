@@ -18,7 +18,6 @@ install_requires = [
     'cattrs >=0.4.0',
     'schematics>=2.0.0',
     'six',
-    'jinja2',
     'jsonschema-extractor',
     'swagger-schema>=0.4.0',
     'pyyaml',

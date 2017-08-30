@@ -1,7 +1,7 @@
-import jinja2
 import os
 
 from swagger_schema import Swagger, Info
+from .template import Template
 
 
 CURDIR = os.path.dirname(__file__)
@@ -35,7 +35,7 @@ def _get_template(template_name):
     if template_name not in _template_cache:
         template_path = os.path.join(CURDIR, template_name)
         with open(template_path) as fh:
-            _template_cache[template_name] = jinja2.Template(fh.read())
+            _template_cache[template_name] = Template(fh.read())
     return _template_cache[template_name]
 
 
