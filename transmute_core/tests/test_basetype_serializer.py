@@ -4,6 +4,7 @@ from transmute_core.exceptions import SerializationException
 from datetime import datetime
 
 NOW = datetime.now()
+UTCNOW = datetime.utcnow()
 
 
 @pytest.mark.parametrize("inp, expected_output", [
@@ -60,6 +61,14 @@ def test_string_load_happy(object_serializer_set, inp, expected_output):
 ])
 def test_datetime_load_happy(object_serializer_set, inp, expected_output):
     assert object_serializer_set.load(datetime, inp) == expected_output
+
+
+@pytest.mark.parametrize("inp", [
+    ("")
+])
+def test_datetime_load_unhappy(object_serializer_set, inp):
+    with pytest.raises(SerializationException):
+        object_serializer_set.load(datetime, inp)
 
 
 @pytest.mark.parametrize("inp, out", [

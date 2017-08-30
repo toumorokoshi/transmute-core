@@ -24,18 +24,6 @@ from ..exceptions import SerializationException
 from decimal import Decimal
 from ..compat import all_string_types
 
-MODEL_MAP = {
-    int: IntType(),
-    bool: BooleanType(),
-    float: FloatType(),
-    Decimal: DecimalType(),
-    datetime: DateTimeType(),
-}
-
-for t in all_string_types:
-    MODEL_MAP[t] = StringType()
-
-
 JSON_SCHEMA_MAP = OrderedDict([
     (BooleanType, {"type": "boolean"}),
     (NumberType, {"type": "number"}),
@@ -63,7 +51,7 @@ class SchematicsSerializer(ObjectSerializer):
     - lists, in the form of [Type] (e.g. [str])
     - any type that extends the schematics.models.Model.
     """
-    VALID_BASE_CLASSES = [BaseType, ModelMeta, Model]
+    VALID_BASE_CLASSES = [BaseType, ModelMeta, Model, Serializable]
 
     def can_handle(self, cls):
         if cls in self._models:
@@ -76,8 +64,7 @@ class SchematicsSerializer(ObjectSerializer):
             return True
 
     def __init__(self, builtin_models=None):
-        builtin_models = builtin_models or MODEL_MAP
-        self._models = dict(builtin_models)
+        self._models = {}
 
     def _translate_to_model(self, model):
         model = self._to_key(model)
@@ -128,6 +115,8 @@ class SchematicsSerializer(ObjectSerializer):
             raise SerializationException(str(e))
 
     def to_json_schema(self, model):
+        if isinstance(model, Serializable):
+            model = model.type
         model = _enforce_instance(model)
         model = self._translate_to_model(model)
         return _to_json_schema(model)

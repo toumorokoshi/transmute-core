@@ -5,7 +5,7 @@ from schematics.models import Model
 from schematics.types import StringType, IntType, BaseType, UUIDType, URLType, Serializable
 from schematics.types.compound import DictType, ModelType
 from schematics.exceptions import ValidationError
-from transmute_core.exceptions import SerializationException
+from transmute_core.exceptions import SerializationException, NoSerializerFound
 
 
 class Card(Model):
@@ -106,14 +106,13 @@ def test_non_model_or_primitive_raises_exception(object_serializer_set):
     class MyType(object):
         pass
 
-    with pytest.raises(SerializationException):
-        object_serializer_set.to_json_schema(MyType)
+    assert object_serializer_set.to_json_schema(MyType) == {"type": "object"}
 
 
 def test_to_json_list(object_serializer_set):
     assert object_serializer_set.to_json_schema([int]) == {
         "type": "array",
-        "items": {"type": "number"}
+        "items": {"type": "integer"}
     }
 
 
@@ -129,11 +128,16 @@ def test_serialize_type(object_serializer_set):
     assert object_serializer_set.dump(DictType(StringType()), {"key": "foo"}) == {"key": "foo"}
 
 
-def test_uuid_object_serializer_set(object_serializer_set):
+def test_dict_type_object_serializer_set(object_serializer_set):
+    """ serializer should be able to serialize a raw type. """
+    assert object_serializer_set.dump(DictType(StringType()), {"key": "foo"}) == {"key": "foo"}
+
+
+def test_uuid_serializer(object_serializer_set):
     i = uuid.uuid4()
     dumped = object_serializer_set.dump(UUIDType, i)
     assert dumped == str(i)
-    assert serializer.load(UUIDType, dumped) == i
+    assert object_serializer_set.load(UUIDType, dumped) == i
 
 
 @pytest.mark.parametrize("cls, should_handle", [
@@ -142,5 +146,8 @@ def test_uuid_object_serializer_set(object_serializer_set):
     (datetime, True),
     (ModelType(Card), True)
 ])
-def test_can_handle(serializer, cls, should_handle):
-    assert serializer.can_handle(cls) == should_handle
+def test_can_handle(object_serializer_set, cls, should_handle):
+    """
+    the object serializer set should not raise an exception if it can handle these types.
+    """
+    object_serializer_set[cls]

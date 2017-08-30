@@ -40,34 +40,34 @@ player = Player("kobe", 81)
     (List[Card], [card], [card_dict]),
     (Player, player, player)
 ])
-def test_attrs_integration_dump(attrs_serializer, typ, inp, out):
-    assert attrs_serializer.dump(typ, inp) == out
+def test_attrs_integration_dump(cattrs_serializer, typ, inp, out):
+    assert cattrs_serializer.dump(typ, inp) == out
 
 
-def test_attrs_integration_dump_exception(monkeypatch, attrs_serializer):
+def test_attrs_integration_dump_exception(monkeypatch, cattrs_serializer):
     def mock_return(inp):
         raise ValueError("Random_Exception")
-    monkeypatch.setattr(cattr, "unstructure", mock_return)
+    monkeypatch.setattr(cattrs_serializer._cattrs_converter, "unstructure", mock_return)
     with pytest.raises(SerializationException):
-        assert attrs_serializer.dump(str, "random_str")
+        assert cattrs_serializer.dump(str, "random_str")
 
 
 @pytest.mark.parametrize("typ,inp", [
     ([Card], [card_dict])
 ])
-def test_attrs_integration_load_exception(attrs_serializer, typ, inp):
+def test_attrs_integration_load_exception(cattrs_serializer, typ, inp):
     with pytest.raises(SerializationException):
-        attrs_serializer.load(typ, inp)
+        cattrs_serializer.load(typ, inp)
 
 
-def test_attrs_validate_is_called(attrs_serializer):
+def test_attrs_validate_is_called(cattrs_serializer):
     with pytest.raises(SerializationException):
-        attrs_serializer.load(Person, {"age": -1, "bio": "foo"})
+        cattrs_serializer.load(Person, {"age": -1, "bio": "foo"})
 
 
 @pytest.mark.parametrize("typ,inp,out", [
     (Card, card_dict, card),
     (List[Card], [card_dict], [card]),
 ])
-def test_attrs_integration_load(attrs_serializer, typ, inp, out):
-    assert attrs_serializer.load(typ, inp) == out
+def test_attrs_integration_load(cattrs_serializer, typ, inp, out):
+    assert cattrs_serializer.load(typ, inp) == out
