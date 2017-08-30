@@ -31,13 +31,13 @@ card = Card(card_dict)
     (Card, card, card_dict),
     ([Card], [card], [card_dict])
 ])
-def test_schematics_integration_dump(serializer, typ, inp, out):
-    assert serializer.dump(typ, inp) == out
+def test_schematics_integration_dump(object_serializer_set, typ, inp, out):
+    assert object_serializer_set.dump(typ, inp) == out
 
 
-def test_schematics_validate_is_called(serializer):
+def test_schematics_validate_is_called(object_serializer_set):
     with pytest.raises(SerializationException):
-        serializer.load(Person, {"age": -1, "bio": "foo"})
+        object_serializer_set.load(Person, {"age": -1, "bio": "foo"})
 
 now = datetime.now()
 
@@ -47,12 +47,12 @@ now = datetime.now()
     ([Card], [card_dict], [card]),
     (datetime, now, now)
 ])
-def test_schematics_integration_load(serializer, typ, inp, out):
-    assert serializer.load(typ, inp) == out
+def test_schematics_integration_load(object_serializer_set, typ, inp, out):
+    assert object_serializer_set.load(typ, inp) == out
 
 
-def test_schematics_to_json_schema(serializer):
-    assert serializer.to_json_schema(Card) == {
+def test_schematics_to_json_schema(object_serializer_set):
+    assert object_serializer_set.to_json_schema(Card) == {
         "properties": {
             "name": {"type": "string"},
             "price": {"type": "number"}
@@ -70,17 +70,17 @@ def test_schematics_to_json_schema(serializer):
     (datetime, {"type": "string", "format": "date-time"}),
     (Serializable(fget=lambda: None, type=StringType()), {"type": "string"}),
 ])
-def test_to_json_schema(serializer, inp, expected):
-    assert serializer.to_json_schema(inp) == expected
+def test_to_json_schema(object_serializer_set, inp, expected):
+    assert object_serializer_set.to_json_schema(inp) == expected
 
 
-def test_schematics_to_json_schema_required_value(serializer):
+def test_schematics_to_json_schema_required_value(object_serializer_set):
 
     class CardNameRequired(Model):
         name = StringType(required=True)
         price = IntType()
 
-    assert serializer.to_json_schema(CardNameRequired) == {
+    assert object_serializer_set.to_json_schema(CardNameRequired) == {
         "properties": {
             "name": {"type": "string"},
             "price": {"type": "number"}
@@ -91,47 +91,47 @@ def test_schematics_to_json_schema_required_value(serializer):
     }
 
 
-def test_type_not_found_defaults_to_object(serializer):
+def test_type_not_found_defaults_to_object(object_serializer_set):
 
     class MyType(BaseType):
         pass
 
-    assert serializer.to_json_schema(MyType()) == {
+    assert object_serializer_set.to_json_schema(MyType()) == {
         "type": "object"
     }
 
 
-def test_non_model_or_primitive_raises_exception(serializer):
+def test_non_model_or_primitive_raises_exception(object_serializer_set):
 
     class MyType(object):
         pass
 
     with pytest.raises(SerializationException):
-        serializer.to_json_schema(MyType)
+        object_serializer_set.to_json_schema(MyType)
 
 
-def test_to_json_list(serializer):
-    assert serializer.to_json_schema([int]) == {
+def test_to_json_list(object_serializer_set):
+    assert object_serializer_set.to_json_schema([int]) == {
         "type": "array",
         "items": {"type": "number"}
     }
 
 
-def test_to_json_dict(serializer):
-    assert serializer.to_json_schema(DictType(IntType())) == {
+def test_to_json_dict(object_serializer_set):
+    assert object_serializer_set.to_json_schema(DictType(IntType())) == {
         "type": "object",
         "additionalProperties": {"type": "number"}
     }
 
 
-def test_serialize_type(serializer):
-    """ serializer should be able to serialize a raw type. """
-    assert serializer.dump(DictType(StringType()), {"key": "foo"}) == {"key": "foo"}
+def test_serialize_type(object_serializer_set):
+    """ object_serializer_set should be able to serialize a raw type. """
+    assert object_serializer_set.dump(DictType(StringType()), {"key": "foo"}) == {"key": "foo"}
 
 
-def test_uuid_serializer(serializer):
+def test_uuid_object_serializer_set(object_serializer_set):
     i = uuid.uuid4()
-    dumped = serializer.dump(UUIDType, i)
+    dumped = object_serializer_set.dump(UUIDType, i)
     assert dumped == str(i)
     assert serializer.load(UUIDType, dumped) == i
 

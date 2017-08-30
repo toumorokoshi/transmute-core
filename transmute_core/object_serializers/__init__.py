@@ -2,6 +2,7 @@ from .schematics_serializer import SchematicsSerializer
 from .compound_serializer import (
     ListSerializer
 )
+from .attrs_serializer import AttrsSerializer
 from .interface import ObjectSerializer
 from .serializer_set import ObjectSerializerSet
 from .primitive_serializer import (
@@ -20,7 +21,8 @@ def get_default_object_serializer_set():
         NoneSerializer(),
         IntSerializer(),
         StringSerializer(),
-        SchematicsSerializer()
+        SchematicsSerializer(),
+        AttrsSerializer()
     ])
     s.serializers.append(ListSerializer(s))
     return s

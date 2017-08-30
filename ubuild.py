@@ -1,5 +1,6 @@
 import os
 import shutil
+import sys
 import subprocess
 import uranium
 from uranium.rules import rule, Once
@@ -10,6 +11,7 @@ def main(build):
     build.packages.install(".", develop=True)
     # we install flask to allow testing the example.
     build.packages.install("flask")
+    build.packages.install("git+https://github.com/Tinche/cattrs.git#cattrs")
 
 
 @uranium.task_requires("main")

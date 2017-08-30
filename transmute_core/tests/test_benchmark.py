@@ -1,7 +1,9 @@
 import cProfile
+import attr
 import json
 import pytest
 import sys
+from attr.validators import instance_of
 from transmute_core import (
     TransmuteFunction, describe, annotate,
     ParamExtractor, NoArgument, process_result
@@ -21,12 +23,15 @@ class ComplexModel(Model):
     description = StringType()
     is_allowed = BooleanType()
 
+@attr.s
+class UserAttrs(object):
+    name = attr.ib(validator=instance_of(str))
+    age = attr.ib(validator=instance_of(int))
 
 @describe(paths="/foo", body_parameters="body")
 @annotate({"body": ComplexModel, "return": ComplexModel})
 def complex_body_method(body):
     return body
-
 
 @describe(paths="/foo", body_parameters="body")
 @annotate({"body": int, "return": int})
@@ -91,12 +96,6 @@ def test_simple_benchmark(benchmark, context):
     simple_json = json.dumps(1)
 
     benchmark(lambda: execute(context, simple_func, simple_json))
-
-    # def profile():
-    #     for i in range(10000):
-    #         execute()
-    # cProfile.runctx('profile()', globals(), locals())
-
 
 class ParamExtractorMock(ParamExtractor):
 

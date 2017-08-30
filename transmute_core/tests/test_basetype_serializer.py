@@ -58,16 +58,8 @@ def test_string_load_happy(object_serializer_set, inp, expected_output):
 @pytest.mark.parametrize("inp, expected_output", [
     (NOW.isoformat(), NOW)
 ])
-def test_datetime_load_happy(serializer, inp, expected_output):
-    assert serializer.load(datetime, inp) == expected_output
-
-
-@pytest.mark.parametrize("inp", [
-    ("")
-])
-def test_datetime_load_unhappy(serializer, inp):
-    with pytest.raises(SerializationException):
-        serializer.load(datetime, inp)
+def test_datetime_load_happy(object_serializer_set, inp, expected_output):
+    assert object_serializer_set.load(datetime, inp) == expected_output
 
 
 @pytest.mark.parametrize("inp, out", [
@@ -76,7 +68,3 @@ def test_datetime_load_unhappy(serializer, inp):
 ])
 def test_none_serialzer(object_serializer_set, inp, out):
     assert object_serializer_set.load(None, inp) == out
-    assert object_serializer_set.dump(None, out) == inp
-
-def test_none_serialzer(object_serializer_set):
-    assert object_serializer_set[None]
