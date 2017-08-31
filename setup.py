@@ -21,7 +21,7 @@ install_requires = [
     'pyyaml',
 ]
 
-if sys.version_info >= (3, 5):
+if sys.version_info >= (3, 5, 4):
     # these libraries only support 3.5 reliably.
     install_requires.append([
         "cattrs >=0.4.0",
