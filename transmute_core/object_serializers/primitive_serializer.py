@@ -1,5 +1,9 @@
 from ..compat import all_string_types, string_type
 from ..exceptions import SerializationException
+from schematics.exceptions import BaseError
+from schematics.types import DecimalType, DateTimeType
+from decimal import Decimal
+from datetime import datetime
 
 
 class IntSerializer:
@@ -100,3 +104,51 @@ class NoneSerializer(object):
     @staticmethod
     def dump(cls, obj):
         return obj
+
+
+class DecimalSerializer(object):
+
+    SERIALIZER = DecimalType()
+
+    def can_handle(self, cls):
+        return issubclass(cls, Decimal)
+
+    @staticmethod
+    def to_json_schema(cls):
+        return {"type": "number"}
+
+    def load(self, cls, obj):
+        try:
+            return self.SERIALIZER.to_native(obj)
+        except BaseError as e:
+            raise SerializationException(str(e))
+
+    def dump(self, cls, obj):
+        try:
+            return self.SERIALIZER.to_primitive(obj)
+        except BaseError as e:
+            raise SerializationException(str(e))
+
+
+class DateTimeSerializer(object):
+
+    SERIALIZER = DateTimeType()
+
+    def can_handle(self, cls):
+        return issubclass(cls, datetime)
+
+    @staticmethod
+    def to_json_schema(cls):
+        return {"type": "string", "format": "date-time"}
+
+    def load(self, cls, obj):
+        try:
+            return self.SERIALIZER.to_native(obj)
+        except BaseError as e:
+            raise SerializationException(str(e))
+
+    def dump(self, cls, obj):
+        try:
+            return self.SERIALIZER.to_primitive(obj)
+        except BaseError as e:
+            raise SerializationException(str(e))

@@ -15,7 +15,7 @@ class ObjectSerializerSet(object):
     """
 
     def __init__(self, serializer_list):
-        self.serializers = serializer_list
+        self.serializers = list(serializer_list)
         self._cache = {}
         assert len(self.serializers) > 0, "at least one serializer should be passed!"
 

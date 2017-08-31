@@ -106,7 +106,8 @@ def test_non_model_or_primitive_raises_exception(object_serializer_set):
     class MyType(object):
         pass
 
-    assert object_serializer_set.to_json_schema(MyType) == {"type": "object"}
+    with pytest.raises(NoSerializerFound):
+        object_serializer_set.to_json_schema(MyType)
 
 
 def test_to_json_list(object_serializer_set):

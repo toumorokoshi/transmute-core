@@ -15,13 +15,19 @@ README_PATH = os.path.join(base, "README.rst")
 
 install_requires = [
     'attrs',
-    'cattrs >=0.4.0',
     'schematics>=2.0.0',
     'six',
-    'jsonschema-extractor',
     'swagger-schema>=0.4.0',
     'pyyaml',
 ]
+
+if sys.version_info >= (3, 5):
+    # these libraries only support 3.5 reliably.
+    install_requires.append([
+        "cattrs >=0.4.0",
+        "jsonschema-extractor"
+    ])
+
 
 tests_require = []
 

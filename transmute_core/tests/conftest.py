@@ -8,7 +8,6 @@ from transmute_core import (
     get_default_object_serializer_set,
     Response,
     SchematicsSerializer,
-    CattrsSerializer,
     TransmuteFunction
 )
 from schematics.models import Model
@@ -36,12 +35,6 @@ def object_serializer_set():
 @pytest.fixture
 def serializer():
     return SchematicsSerializer()
-
-
-@pytest.fixture
-def cattrs_serializer():
-    return CattrsSerializer()
-
 
 @pytest.fixture
 def transmute_func():

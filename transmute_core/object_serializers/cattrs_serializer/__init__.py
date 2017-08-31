@@ -18,7 +18,7 @@ class CattrsSerializer(ObjectSerializer):
         this will theoretically be compatible with everything,
         as cattrs can handle many basic types as well.
         """
-        return True
+        return getattr(cls, "__attrs_attrs__", None) is not None
 
     def load(self, model, value):
         """
