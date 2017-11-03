@@ -79,5 +79,5 @@ class SwaggerSpec(object):
             "info": Info({"title": title, "version": version}),
             "paths": self.paths,
             "swagger": "2.0",
-            "basePath": "/" if base_path is None else base_path,
+            "basePath": base_path,
         }).to_primitive()

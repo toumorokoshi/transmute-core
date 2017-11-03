@@ -28,7 +28,6 @@ def test_swagger_definition_generation():
         "info": {"title": "example", "version": "1.0"},
         "paths": {},
         "swagger": "2.0",
-        "basePath": "/"
     }
 
 
@@ -45,7 +44,6 @@ def test_swagger_transmute_func(transmute_func):
             "/api/v1/multiply": transmute_func.get_swagger_path(default_context).to_primitive(),
         },
         "swagger": "2.0",
-        "basePath": "/"
     }
 
 
@@ -87,7 +85,6 @@ def test_swagger_add_path(transmute_func):
             "/api/v1/multiply": transmute_func.get_swagger_path(default_context).to_primitive(),
         },
         "swagger": "2.0",
-        "basePath": "/"
     }
 
 
