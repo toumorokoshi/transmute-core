@@ -9,19 +9,25 @@ def get_swagger_parameters(parameters, context):
     ret_parameters = []
     for name, param in parameters.query.items():
         arginfo = param.arginfo
-        ret_parameters.append(QueryParameter({
+        params = {
             "name": name,
-            "required": arginfo.default is NoDefault,
-            "type": context.serializers.to_json_schema(arginfo.type)["type"],
-        }))
+            "required": arginfo.default is NoDefault
+        }
+        params.update(
+            context.serializers.to_json_schema(arginfo.type)
+        )
+        ret_parameters.append(QueryParameter(params))
 
     for name, param in parameters.header.items():
         arginfo = param.arginfo
-        ret_parameters.append(HeaderParameter({
+        params = {
             "name": name,
-            "required": arginfo.default is NoDefault,
-            "type": context.serializers.to_json_schema(arginfo.type)["type"],
-        }))
+            "required": arginfo.default is NoDefault
+        }
+        params.update(
+            context.serializers.to_json_schema(arginfo.type)
+        )
+        ret_parameters.append(HeaderParameter(params))
 
     body_param = _build_body_schema(context.serializers, parameters.body)
     if body_param is not None:
@@ -29,11 +35,14 @@ def get_swagger_parameters(parameters, context):
 
     for name, param in parameters.path.items():
         arginfo = param.arginfo
-        ret_parameters.append(PathParameter({
+        params = {
             "name": name,
-            "required": True,
-            "type": context.serializers.to_json_schema(arginfo.type)["type"],
-        }))
+            "required": arginfo.default is NoDefault
+        }
+        params.update(
+            context.serializers.to_json_schema(arginfo.type)
+        )
+        ret_parameters.append(PathParameter(params))
 
     return ret_parameters
 

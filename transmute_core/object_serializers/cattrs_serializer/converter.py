@@ -45,14 +45,7 @@ datetime_type = DateTimeType()
 def _structure_datetime(data, cls):
     if not data:
         raise ValueError("datetime is empty")
-    if isinstance(data, datetime):
-        return data
-    if isinstance(data, float):
-        return datetime.fromtimestamp(data)
-    if isinstance(data, int):
-        return datetime.fromtimestamp(data)
-    if isinstance(data, string_type):
-        return datetime_type.from_string(data)
+    return cls.to_native(data)
 
 def _unstructure_datetime(data):
     return data.isoformat()
