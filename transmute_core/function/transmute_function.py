@@ -89,12 +89,27 @@ class TransmuteFunction(object):
             setattr(path, name, operation)
         return path
 
-    def get_swagger_operation(self, context=default_context):
+    def get_swagger_operation(self, context=default_context, default_400_response=True):
         """
         get the swagger_schema operation representation.
         """
         consumes = produces = context.contenttype_serializers.keys()
         parameters = get_swagger_parameters(self.parameters, context)
+        responses = {}
+        if default_400_response:
+            responses["400"] = Response({		
+                "description": "invalid input received",		
+                "schema": Schema({		
+                    "title": "FailureObject",		
+                    "type": "object",		
+                    "properties": {		
+                        "success": {"type": "boolean"},		
+                        "result": {"type": "string"}		
+                    },		
+                    "required": ["success", "result"]		
+                })		
+            })		
+        }
         responses = {}
 
         for code, details in self.response_types.items():
