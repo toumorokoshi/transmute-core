@@ -97,20 +97,18 @@ class TransmuteFunction(object):
         parameters = get_swagger_parameters(self.parameters, context)
         responses = {}
         if default_400_response:
-            responses["400"] = Response({		
-                "description": "invalid input received",		
-                "schema": Schema({		
-                    "title": "FailureObject",		
-                    "type": "object",		
-                    "properties": {		
-                        "success": {"type": "boolean"},		
-                        "result": {"type": "string"}		
-                    },		
-                    "required": ["success", "result"]		
-                })		
-            })		
-        }
-        responses = {}
+            responses["400"] = Response({
+                "description": "invalid input received",
+                "schema": Schema({
+                    "title": "FailureObject",
+                    "type": "object",
+                    "properties": {
+                        "success": {"type": "boolean"},
+                        "result": {"type": "string"}
+                    },
+                    "required": ["success", "result"]
+                })
+            })
 
         for code, details in self.response_types.items():
             responses[str(code)] = details.swagger_definition(context)
