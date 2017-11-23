@@ -68,6 +68,7 @@ def test_multiple_response_types(response_transmute_func):
         "schema": {"type": "string"}
     }).to_primitive()
     assert "200" not in responses
+    assert "400" in responses
 
 
 def test_swagger_add_path(transmute_func):
