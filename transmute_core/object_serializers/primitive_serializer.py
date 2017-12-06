@@ -81,7 +81,7 @@ class BoolSerializer:
     def load(cls, obj):
         if isinstance(obj, string_type):
             return obj.lower().startswith("t")
-        return obj
+        return bool(obj)
 
     @staticmethod
     def dump(cls, obj):
