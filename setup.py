@@ -19,7 +19,7 @@ install_requires = [
     'jsonschema-extractor>=0.6.0',
     'schematics>=2.0.0',
     'six',
-    'swagger-schema>=0.4.0',
+    'swagger-schema>=0.5.1',
     'pyyaml',
 ]
 

@@ -25,7 +25,8 @@ def test_swagger_parameters():
         "in": "query",
         "name": "query",
         "required": False,
-        "type": "integer"
+        "type": "integer",
+        "collectionFormat": "multi"
     } in params
     assert {
         "in": "body",

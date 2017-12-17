@@ -206,6 +206,11 @@ def multiply(left, right, foo, document_id, header=0):
 def multiply_body(body):
     return left * right
 
+@describe(paths="/api/v1/test")
+@annotate({"vals": [int], "return": [int]})
+def foo(vals):
+    return vals
+
 @describe(paths="/api/v1/header",
           response_types={
               200: {"type": str, "description": "success",
@@ -225,8 +230,9 @@ def header():
 app = Flask(__name__)
 transmute_route(app, multiply)
 transmute_route(app, multiply_body)
+transmute_route(app, foo)
 transmute_route(app, header)
 add_swagger(app, "/api/swagger.json", "/api/")
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

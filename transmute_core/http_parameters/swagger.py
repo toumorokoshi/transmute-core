@@ -11,7 +11,8 @@ def get_swagger_parameters(parameters, context):
         arginfo = param.arginfo
         params = {
             "name": name,
-            "required": arginfo.default is NoDefault
+            "required": arginfo.default is NoDefault,
+            "collectionFormat": "multi"
         }
         params.update(
             context.serializers.to_json_schema(arginfo.type)

@@ -114,7 +114,7 @@ def test_to_json_schema(cattrs_serializer):
                         "price": {"type": "number"}
                     },
                     "required": []
-                }
+                },
             },
         },
         "required": ["cards"]

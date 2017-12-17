@@ -39,7 +39,8 @@ def test_header_only_schema(context):
         "name": "query",
         "required": True,
         "type": "string",
-        "format": "date-time"
+        "format": "date-time",
+        "collectionFormat": "multi"
      }
     ),
     (Parameters(path=ParamSet({
