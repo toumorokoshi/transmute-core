@@ -1,15 +1,14 @@
-import pytest
-import sys
-
-pytest.importorskip("cattr")
-
 import attr
 import cattr
 import json
+import pytest
+import sys
+import mock
+
 from attr.validators import instance_of
+from mock import Mock
 from transmute_core.exceptions import SerializationException
 from typing import List
-from cattr import typed
 from transmute_core.object_serializers.cattrs_serializer import CattrsSerializer
 from transmute_core import describe, annotate, TransmuteFunction
 from .utils import execute
@@ -27,18 +26,18 @@ class Player(object):
 
 @attr.s
 class Card(object):
-    name = typed(str, default="")
-    price = typed(float, default=1.0)
+    name = attr.ib(type=str, default="")
+    price = attr.ib(type=float, default=1.0)
 
 @attr.s
 class Hand(object):
-    cards = typed(List[Card])
+    cards = attr.ib(type=List[Card])
 
 
 @attr.s
 class Person(object):
-    age = typed(int)
-    bio = typed(str, default="")
+    age = attr.ib(type=int)
+    bio = attr.ib(type=str, default="")
 
     @age.validator
     def greater_than_zero(self, attribute, value):
@@ -60,10 +59,11 @@ def test_attrs_integration_dump(cattrs_serializer, typ, inp, out):
     assert cattrs_serializer.dump(typ, inp) == out
 
 
-def test_attrs_integration_dump_exception(monkeypatch, cattrs_serializer):
+def test_attrs_integration_dump_exception(cattrs_serializer):
     def mock_return(inp):
-        raise ValueError("Random_Exception")
-    monkeypatch.setattr(cattrs_serializer._cattrs_converter, "unstructure", mock_return)
+        raise ValueError("Random Exception")
+    cattrs_serializer._cattrs_converter = Mock()
+    cattrs_serializer._cattrs_converter.unstructure = mock_return
     with pytest.raises(SerializationException):
         assert cattrs_serializer.dump(str, "random_str")
 
@@ -128,15 +128,15 @@ class UserAttrs(object):
 
 @attr.s
 class UserAttrs(object):
-    name = typed(str)
-    age = typed(int)
+    name = attr.ib(type=str)
+    age = attr.ib(type=int)
 
 
 @attr.s
 class ComplexModelAttrs(object):
-    user = typed(UserAttrs)
-    description = typed(str)
-    is_allowed = typed(bool)
+    user = attr.ib(type=UserAttrs)
+    description = attr.ib(type=str)
+    is_allowed = attr.ib(type=bool)
 
 
 @describe(paths="/foo", body_parameters="body")

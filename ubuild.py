@@ -16,6 +16,7 @@ def main(build):
 @uranium.task_requires("main")
 def test(build):
     """ execute the unit tests. """
+    build.packages.install("mock")
     build.packages.install("pytest")
     build.packages.install("pytest-benchmark")
     build.packages.install("pytest-cov")
