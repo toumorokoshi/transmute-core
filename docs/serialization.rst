@@ -23,11 +23,9 @@ out of the box, object serialization is supported for:
 * `schematics <http://schematics.readthedocs.org/en/latest/>`_ models.
 * schematics types
     * if a type class is passed, it will initialize the class to an instance.
-* experimental support for `attrs <http://www.attrs.org/en/stable/>`_ classes, specifically
-  using `cattrs's typed notation
-  <https://cattrs.readthedocs.io/en/latest/structuring.html#complex-attrs-classes>`_. This
-  is temporary and will be replaced by `attrs' type parameter <https://github.com/python-attrs/attrs/issues/215>`_.
-* types denoted using the `typing <https://docs.python.org/3/library/typing.html>`_ module (python 3.5.4+ and 3.6.2+ only)
+* support for `attrs <http://www.attrs.org/en/stable/>`_ classes, that are
+  using type annotations.
+* types denoted using the `typing <https://docs.python.org/3/library/typing.html>`_ module (installed as a separate package for python versions older than 3.5)
 
 -------------
 Customization
