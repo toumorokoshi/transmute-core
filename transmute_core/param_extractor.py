@@ -31,7 +31,9 @@ class ParamExtractor(object):
             arginfo = param.arginfo
             if name in framework_args:
                 continue
-            values = self._query_argument(name, isinstance(arginfo.type, list))
+            schema = context.serializers.to_json_schema(arginfo.type)
+            is_list = "items" in schema
+            values = self._query_argument(name, is_list)
             if values is NoArgument:
                 empty_args.append(arginfo)
             else:

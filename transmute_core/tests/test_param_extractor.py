@@ -6,6 +6,8 @@ from transmute_core import (
     APIException
 )
 from transmute_core.function import TransmuteFunction
+from typing import List
+from schematics.types import ListType, StringType
 
 
 @describe(paths=["/"], query_parameters=["pos"])
@@ -158,3 +160,45 @@ def test_extract_params_no_content_type(all_param_type_transmute_func):
     )
     assert args == []
     assert kwargs["body"] == "body"
+
+
+@pytest.mark.parametrize("typ", [
+    List[str],
+    [str],
+    ListType(StringType),
+])
+def test_extract_params_honor_as_list(typ):
+
+    @describe(
+        paths=["/"],
+        query_parameters=["query"],
+    )
+    @annotate({"query": typ})
+    def f(query=[1]):
+        pass
+
+
+    tf = TransmuteFunction(f)
+    extractor = ParamExtractorMock()
+    args, kwargs = extractor.extract_params(default_context, tf, None)
+    assert kwargs["query"] == ["query"]
+
+
+@pytest.mark.parametrize("typ", [
+    str,
+])
+def test_extract_params_honor_as_non_list(typ):
+
+    @describe(
+        paths=["/"],
+        query_parameters=["query"],
+    )
+    @annotate({"query": typ})
+    def f(query=1):
+        pass
+
+
+    tf = TransmuteFunction(f)
+    extractor = ParamExtractorMock()
+    args, kwargs = extractor.extract_params(default_context, tf, None)
+    assert kwargs["query"] == "query"
