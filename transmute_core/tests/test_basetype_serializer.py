@@ -63,6 +63,14 @@ def test_datetime_load_happy(object_serializer_set, inp, expected_output):
     assert object_serializer_set.load(datetime, inp) == expected_output
 
 
+@pytest.mark.parametrize("inp, expected_output", [
+    (NOW, NOW.isoformat())
+])
+def test_datetime_dump_unhappy(object_serializer_set, inp, expected_output):
+    assert object_serializer_set.dump(datetime, inp) == expected_output
+
+
+
 @pytest.mark.parametrize("inp", [
     ("")
 ])
