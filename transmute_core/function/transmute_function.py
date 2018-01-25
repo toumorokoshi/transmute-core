@@ -44,6 +44,7 @@ class TransmuteFunction(object):
         # these are the paths that the transmute function
         # should respond to.
         self.paths = attrs.paths
+        self.tags = attrs.tags
         self.success_code = attrs.success_code
         argspec = getfullargspec(func)
         self.signature = FunctionSignature.from_argspec(argspec)
@@ -120,7 +121,8 @@ class TransmuteFunction(object):
             "produces": produces,
             "parameters": parameters,
             "responses": responses,
-            "operationId": self.raw_func.__name__
+            "operationId": self.raw_func.__name__,
+            "tags": self.tags,
         })
 
     def process_result(self, context, result_body, exc, content_type):
