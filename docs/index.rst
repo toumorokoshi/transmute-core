@@ -38,7 +38,7 @@ An example in flask looks like:
     # api GET method, path = /multiply
     # take query arguments left and right which are integers, return an
     # integer.
-    @flask_transmute.route(app, paths='/multiply')
+    @flask_transmute.route(app, paths='/multiply', tags=['math'])
     @flask_transmute.annotate({"left": int, "right": int, "return": int})
     def multiply(left, right):
         return left * right

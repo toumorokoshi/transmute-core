@@ -4,13 +4,14 @@ from .response_type import ResponseType
 
 class TransmuteAttributes(object):
 
-    def __init__(self, paths=None, methods=None,
+    def __init__(self, paths=None, methods=None, tags=None,
                  query_parameters=None, body_parameters=None,
                  header_parameters=None, path_parameters=None,
                  error_exceptions=None, response_types=None,
                  success_code=200):
         self.paths = set(paths or [])
         self.methods = set(methods or ["GET"])
+        self.tags = set(tags or [])
         self.success_code = success_code
         self.query_parameters = set(query_parameters or [])
         self.body_parameters = self._coerce_parameters(body_parameters)
@@ -50,6 +51,7 @@ class TransmuteAttributes(object):
         return TransmuteAttributes(
             paths=(self.paths | other.paths),
             methods=(self.methods | other.methods),
+            tags=(self.tags | other.tags),
             success_code=(other.success_code or self.success_code),
             query_parameters=(self.query_parameters | other.query_parameters),
             body_parameters=self._join_parameters(other.body_parameters, self.body_parameters),
@@ -61,7 +63,7 @@ class TransmuteAttributes(object):
 
     def __str__(self):
         arg_list = []
-        for k in ["paths", "methods",
+        for k in ["paths", "methods", "tags",
                   "query_parameters", "body_parameters",
                   "header_parameters", "path_parameters",
                   "error_exceptions", "response_types",
