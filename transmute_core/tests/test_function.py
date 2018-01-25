@@ -8,7 +8,7 @@ from transmute_core.function.signature import Argument
 from .conftest import Pet
 
 
-@transmute_core.describe(paths="/")
+@transmute_core.describe(paths="/", tags=["example"])
 @transmute_core.annotate({"return": int})
 def raw_func():
     """
@@ -39,6 +39,10 @@ def test_summary(func):
     assert func.summary == "foo bar"
 
 
+def test_tags(func):
+    assert func.tags == set(["example"])
+
+
 def test_return_type(func):
     """ test function is callable, and routes to the inner function. """
     assert func.get_response_by_code(200) is int
@@ -54,6 +58,11 @@ def test_swagger_schema_has_object(func):
 def test_swagger_operation_has_operation_id(func):
     op = func.get_swagger_operation()
     assert op.operationId == "raw_func"
+
+
+def test_swagger_operation_has_tags(func):
+    op = func.get_swagger_operation()
+    assert op.tags == ["example"]
 
 
 def test_swagger_schema_path(func):
