@@ -24,7 +24,7 @@ def greater_than_zero(value):
 
 class Person(Model):
     age = IntType(required=True, validators=[greater_than_zero])
-    bio = StringType()
+    bio = StringType(max_length=5)
 
 card_dict = {"name": "foo", "price": 10}
 card = Card(card_dict)
@@ -38,9 +38,13 @@ def test_schematics_integration_dump(object_serializer_set, typ, inp, out):
     assert object_serializer_set.dump(typ, inp) == out
 
 
-def test_schematics_validate_is_called(object_serializer_set):
+@pytest.mark.parametrize("bad_data", [
+    {"age": -1, "bio": "foo"},
+    {"age": 20, "bio": "fooooooooo"},
+])
+def test_schematics_validate_is_called(object_serializer_set, bad_data):
     with pytest.raises(SerializationException):
-        object_serializer_set.load(Person, {"age": -1, "bio": "foo"})
+        object_serializer_set.load(Person, bad_data)
 
 now = datetime.now()
 
