@@ -32,19 +32,20 @@ card = Card(card_dict)
 
 @pytest.mark.parametrize("typ,inp,out", [
     (Card, card, card_dict),
-    ([Card], [card], [card_dict])
+    ([Card], [card], [card_dict]),
 ])
 def test_schematics_integration_dump(object_serializer_set, typ, inp, out):
     assert object_serializer_set.dump(typ, inp) == out
 
 
-@pytest.mark.parametrize("bad_data", [
-    {"age": -1, "bio": "foo"},
-    {"age": 20, "bio": "fooooooooo"},
+@pytest.mark.parametrize("typ, bad_data", [
+    (Person, {"age": -1, "bio": "foo"}),
+    (Person, {"age": 20, "bio": "fooooooooo"}),
+    (StringType(max_length=4), "foooooo"),
 ])
-def test_schematics_validate_is_called(object_serializer_set, bad_data):
+def test_schematics_validate_is_called(object_serializer_set, typ, bad_data):
     with pytest.raises(SerializationException):
-        object_serializer_set.load(Person, bad_data)
+        object_serializer_set.load(typ, bad_data)
 
 now = datetime.now()
 
