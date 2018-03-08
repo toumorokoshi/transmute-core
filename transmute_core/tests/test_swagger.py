@@ -1,3 +1,4 @@
+import pytest
 import swagger_schema
 from transmute_core import default_context
 from transmute_core.swagger import (
@@ -18,22 +19,55 @@ def test_get_swagger_static_root():
     assert "static" in get_swagger_static_root()
 
 
-def test_swagger_definition_generation():
+@pytest.mark.parametrize(['swagger_definition_kwargs', 'expected_info'], [
+    (
+        # Use default title and version
+        {},
+        {
+            "title": "example",
+            "version": "1.0"
+        },
+    ),
+    (
+        # Use default version
+        {
+            "title": "title-only app",
+        },
+        {
+            "title": "title-only app",
+            "version": "1.0"
+        },
+    ),
+    (
+        {
+            "title": "test app",
+            "description": "unit test app",
+            "version": "1.1.38"
+        },
+        {
+            "title": "test app",
+            "description": "unit test app",
+            "version": "1.1.38"
+        },
+    ),
+])
+def test_swagger_definition_generation(swagger_definition_kwargs,
+                                       expected_info):
     """
-    swagger routes should be ablo to generate a proper
+    swagger routes should be able to generate a proper
     spec.
     """
     routes = SwaggerSpec()
-    assert routes.swagger_definition() == {
-        "info": {"title": "example", "version": "1.0"},
+    assert routes.swagger_definition(**swagger_definition_kwargs) == {
+        "info": expected_info,
         "paths": {},
         "swagger": "2.0",
     }
 
 
-def test_swagger_transmute_func(transmute_func):
+def test_swagger_transmute_definition_info(transmute_func):
     """
-    swagger routes should be ablo to generate a proper
+    swagger routes should be able to generate a proper
     spec.
     """
     routes = SwaggerSpec()

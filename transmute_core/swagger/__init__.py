@@ -44,6 +44,10 @@ class SwaggerSpec(object):
     a class for aggregating and outputting swagger definitions, from
     transmute primitives
     """
+    DEFAULT_INFO = {
+        'title': 'example',
+        'version': '1.0',
+    }
 
     def __init__(self):
         self._swagger = {}
@@ -71,12 +75,16 @@ class SwaggerSpec(object):
         """
         return self._swagger
 
-    def swagger_definition(self, title="example", version="1.0", base_path=None):
+    def swagger_definition(self, base_path=None, **kwargs):
         """
         return a valid swagger spec, with the values passed.
         """
         return Swagger({
-            "info": Info({"title": title, "version": version}),
+            "info": Info({
+                key: kwargs.get(key, self.DEFAULT_INFO.get(key))
+                for key in Info.fields.keys()
+                if key in kwargs or key in self.DEFAULT_INFO
+            }),
             "paths": self.paths,
             "swagger": "2.0",
             "basePath": base_path,
