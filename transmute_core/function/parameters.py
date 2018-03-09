@@ -31,17 +31,22 @@ def get_parameters(signature, transmute_attrs, arguments_to_ignore=None):
     for key in ["query", "header", "path"]:
         param_set = getattr(params, key)
         explicit_parameters = getattr(transmute_attrs, key + "_parameters")
-        used_keys |= load_parameters(param_set, explicit_parameters, signature)
+        used_keys |= load_parameters(
+            param_set, explicit_parameters, signature, transmute_attrs
+        )
 
     body_parameters = transmute_attrs.body_parameters
     if isinstance(body_parameters, str):
         name = body_parameters
-        params.body = Param(argument_name=name,
-                            arginfo=signature.get_argument(name))
+        params.body = Param(
+            argument_name=name,
+            description=transmute_attrs.parameter_descriptions.get(name),
+            arginfo=signature.get_argument(name)
+        )
         used_keys.add(name)
     else:
         used_keys |= load_parameters(params.body, transmute_attrs.body_parameters,
-                                     signature)
+                                     signature, transmute_attrs)
 
     # extract the parameters from the paths
     for name in _extract_path_parameters_from_paths(transmute_attrs.paths):
@@ -60,7 +65,11 @@ def get_parameters(signature, transmute_attrs, arguments_to_ignore=None):
         if arginfo.name in used_keys:
             continue
         used_keys.add(arginfo.name)
-        default_params[arginfo.name] = Param(arginfo.name, arginfo=arginfo)
+        default_params[arginfo.name] = Param(
+            arginfo.name,
+            description=transmute_attrs.parameter_descriptions.get(arginfo.name),
+            arginfo=arginfo
+        )
 
     return params
 
@@ -86,10 +95,13 @@ def _extract_path_parameters_from_paths(paths):
     return params
 
 
-def load_parameters(param_set, param_list, signature):
+def load_parameters(param_set, param_list, signature, transmute_attrs):
     used_keys = set()
     for name in param_list:
-        param_set[name] = Param(argument_name=name,
-                                arginfo=signature.get_argument(name))
+        param_set[name] = Param(
+            argument_name=name,
+            description=transmute_attrs.parameter_descriptions.get(name),
+            arginfo=signature.get_argument(name)
+        )
         used_keys.add(name)
     return used_keys

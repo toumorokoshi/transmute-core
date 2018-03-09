@@ -26,7 +26,8 @@ def test_swagger_parameters():
         "name": "query",
         "required": False,
         "type": "integer",
-        "collectionFormat": "multi"
+        "collectionFormat": "multi",
+        "description": ""
     } in params
     assert {
         "in": "body",
@@ -35,21 +36,24 @@ def test_swagger_parameters():
             "type": "object",
             "required": ["left"],
             "properties": {
-                "left": {"type": "integer"},
-                "right": {"type": "integer"}
+                "left": {"type": "integer", "description": ""},
+                "right": {"type": "integer", "description": ""}
             }
         },
         "required": True,
+        "description": ""
     } in params
     assert {
         "in": "header",
         "name": "header",
         "type": "integer",
         "required": True,
+        "description": ""
     } in params
     assert {
         "in": "path",
         "name": "path",
         "type": "integer",
         "required": True,
+        "description": ""
     } in params

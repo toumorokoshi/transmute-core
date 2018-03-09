@@ -26,6 +26,9 @@ def describe(**kwargs):
 
     :param list(str) path_parameters: the arguments that are specified by the path. By default, arguments
             that are found in the path are used first before the query_parameters and body_parameters.
+
+    :param list(str) parameter_descriptions: descriptions for each parameter, keyed by attribute name.
+            this will appear in the swagger documentation.
     """
     # if we have a single method, make it a list.
     if isinstance(kwargs.get("paths"), string_type):

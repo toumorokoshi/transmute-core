@@ -1,5 +1,8 @@
 import swagger_schema
-from transmute_core import default_context
+from transmute_core import (
+    default_context, describe, annotate,
+    TransmuteFunction
+)
 from transmute_core.swagger import (
     generate_swagger_html, get_swagger_static_root,
     SwaggerSpec
@@ -108,3 +111,34 @@ def test_swagger_get_post(transmute_func, transmute_func_post):
     spec = routes.swagger_definition()
     assert "get" in spec["paths"]["/api/v1/multiply"]
     assert "post" in spec["paths"]["/api/v1/multiply"]
+
+def test_swagger_parameter_description():
+    """
+    if parameter descriptions are added to a function, they
+    should appear in the swagger json.
+    """
+    LEFT_DESCRIPTION = "the left operand"
+    RIGHT_DESCRIPTION = "the right operand"
+    RETURN_DESCRIPTION = "the result"
+
+    @describe(paths="/api/v1/adopt",
+              parameter_descriptions={
+                "left": LEFT_DESCRIPTION,
+                "right": RIGHT_DESCRIPTION,
+                "return": RETURN_DESCRIPTION
+              })
+    @annotate({"left": int, "right": int, "return": int})
+    def adopt(left, right):
+        return left + right
+
+    func = TransmuteFunction(adopt)
+
+    routes = SwaggerSpec()
+    routes.add_func(func, default_context)
+    spec = routes.swagger_definition()
+    assert LEFT_DESCRIPTION == spec["paths"]["/api/v1/adopt"]["get"]\
+                                   ["parameters"][0]["description"]
+    assert RIGHT_DESCRIPTION == spec["paths"]["/api/v1/adopt"]["get"]\
+                                   ["parameters"][1]["description"]
+    assert RETURN_DESCRIPTION == spec["paths"]["/api/v1/adopt"]["get"]\
+                                   ["responses"]["200"]["schema"]["description"]
