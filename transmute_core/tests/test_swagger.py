@@ -117,18 +117,20 @@ def test_swagger_parameter_description():
     if parameter descriptions are added to a function, they
     should appear in the swagger json.
     """
-    LEFT_DESCRIPTION = "the left operand"
-    RIGHT_DESCRIPTION = "the right operand"
-    RETURN_DESCRIPTION = "the result"
+    parameter_descriptions = {
+        "left": "the left operand",
+        "right": "the right operand",
+        "header": "the header",
+        "path": "the path",
+        "return": "the result"
+    }
 
-    @describe(paths="/api/v1/adopt",
-              parameter_descriptions={
-                "left": LEFT_DESCRIPTION,
-                "right": RIGHT_DESCRIPTION,
-                "return": RETURN_DESCRIPTION
-              })
-    @annotate({"left": int, "right": int, "return": int})
-    def adopt(left, right):
+    @describe(paths="/api/v1/adopt/{path}",
+              parameter_descriptions=parameter_descriptions,
+              header_parameters=["header"])
+    @annotate({"left": int, "right": int, "header": str,
+               "path": str, "return": int})
+    def adopt(left, right, header, path):
         return left + right
 
     func = TransmuteFunction(adopt)
@@ -136,11 +138,9 @@ def test_swagger_parameter_description():
     routes = SwaggerSpec()
     routes.add_func(func, default_context)
     spec = routes.swagger_definition()
-    description_by_name = {
-        "left": LEFT_DESCRIPTION,
-        "right": RIGHT_DESCRIPTION
-    }
-    for param in spec["paths"]["/api/v1/adopt"]["get"]["parameters"]:
-        assert description_by_name[param["name"]] == param["description"]
-    assert RETURN_DESCRIPTION == spec["paths"]["/api/v1/adopt"]["get"]\
-                                   ["responses"]["200"]["schema"]["description"]
+
+    params = spec["paths"]["/api/v1/adopt/{path}"]["get"]["parameters"]
+    for param in spec["paths"]["/api/v1/adopt/{path}"]["get"]["parameters"]:
+        assert parameter_descriptions[param["name"]] == param["description"]
+    assert parameter_descriptions["return"] == \
+        spec["paths"]["/api/v1/adopt/{path}"]["get"]["responses"]["200"]["schema"]["description"]

@@ -18,7 +18,6 @@ def get_swagger_parameters(parameters, context):
         params.update(
             context.serializers.to_json_schema(arginfo.type)
         )
-        params["description"] = param.description
         ret_parameters.append(QueryParameter(params))
 
     for name, param in parameters.header.items():
@@ -28,8 +27,6 @@ def get_swagger_parameters(parameters, context):
             "description": param.description,
             "required": arginfo.default is NoDefault
         }
-        if param.description:
-            params["description"] = param.description
         params.update(
             context.serializers.to_json_schema(arginfo.type)
         )
@@ -46,8 +43,6 @@ def get_swagger_parameters(parameters, context):
             "description": param.description,
             "required": arginfo.default is NoDefault
         }
-        if param.description:
-            params["description"] = param.description
         params.update(
             context.serializers.to_json_schema(arginfo.type)
         )

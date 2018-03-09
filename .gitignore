@@ -71,3 +71,4 @@ pip-selfcheck.json
 
 # allowing transmute-core's lib directory
 !transmute_core/swagger/static/lib
+.pytest_cache

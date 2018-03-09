@@ -50,7 +50,11 @@ def get_parameters(signature, transmute_attrs, arguments_to_ignore=None):
 
     # extract the parameters from the paths
     for name in _extract_path_parameters_from_paths(transmute_attrs.paths):
-        params.path[name] = Param(argument_name=name, arginfo=signature.get_argument(name))
+        params.path[name] = Param(
+            argument_name=name,
+            description=transmute_attrs.parameter_descriptions.get(name),
+            arginfo=signature.get_argument(name)
+        )
         used_keys.add(name)
 
     # check the method type, and decide if the parameters should be extracted
