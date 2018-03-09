@@ -136,9 +136,11 @@ def test_swagger_parameter_description():
     routes = SwaggerSpec()
     routes.add_func(func, default_context)
     spec = routes.swagger_definition()
-    assert LEFT_DESCRIPTION == spec["paths"]["/api/v1/adopt"]["get"]\
-                                   ["parameters"][0]["description"]
-    assert RIGHT_DESCRIPTION == spec["paths"]["/api/v1/adopt"]["get"]\
-                                   ["parameters"][1]["description"]
+    description_by_name = {
+        "left": LEFT_DESCRIPTION,
+        "right": RIGHT_DESCRIPTION
+    }
+    for param in spec["paths"]["/api/v1/adopt"]["get"]["parameters"]:
+        assert description_by_name[param["name"]] == param["description"]
     assert RETURN_DESCRIPTION == spec["paths"]["/api/v1/adopt"]["get"]\
                                    ["responses"]["200"]["schema"]["description"]
