@@ -153,10 +153,12 @@ class TransmuteFunction(object):
         from the given parameters, return back the response type dictionaries.
         """
         return_type = argspec.annotations.get("return") or None
+        type_description = attrs.parameter_descriptions.get("return", "")
         response_types = attrs.response_types.copy()
         if return_type or len(response_types) == 0:
             response_types[attrs.success_code] = ResponseType(
                 type=return_type,
+                type_description=type_description,
                 description="success"
             )
         return response_types

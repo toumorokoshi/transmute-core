@@ -1,6 +1,9 @@
 import pytest
 import swagger_schema
-from transmute_core import default_context
+from transmute_core import (
+    default_context, describe, annotate,
+    TransmuteFunction
+)
 from transmute_core.swagger import (
     generate_swagger_html, get_swagger_static_root,
     SwaggerSpec
@@ -142,3 +145,36 @@ def test_swagger_get_post(transmute_func, transmute_func_post):
     spec = routes.swagger_definition()
     assert "get" in spec["paths"]["/api/v1/multiply"]
     assert "post" in spec["paths"]["/api/v1/multiply"]
+
+def test_swagger_parameter_description():
+    """
+    if parameter descriptions are added to a function, they
+    should appear in the swagger json.
+    """
+    parameter_descriptions = {
+        "left": "the left operand",
+        "right": "the right operand",
+        "header": "the header",
+        "path": "the path",
+        "return": "the result"
+    }
+
+    @describe(paths="/api/v1/adopt/{path}",
+              parameter_descriptions=parameter_descriptions,
+              header_parameters=["header"])
+    @annotate({"left": int, "right": int, "header": str,
+               "path": str, "return": int})
+    def adopt(left, right, header, path):
+        return left + right
+
+    func = TransmuteFunction(adopt)
+
+    routes = SwaggerSpec()
+    routes.add_func(func, default_context)
+    spec = routes.swagger_definition()
+
+    params = spec["paths"]["/api/v1/adopt/{path}"]["get"]["parameters"]
+    for param in spec["paths"]["/api/v1/adopt/{path}"]["get"]["parameters"]:
+        assert parameter_descriptions[param["name"]] == param["description"]
+    assert parameter_descriptions["return"] == \
+        spec["paths"]["/api/v1/adopt/{path}"]["get"]["responses"]["200"]["schema"]["description"]

@@ -11,6 +11,7 @@ def test_post_schema_swagger(parameter_post_schema, context):
         "in": "body",
         "name": "body",
         "required": True,
+        "description": "",
         "schema": {
             "type": "integer"
         }
@@ -26,7 +27,8 @@ def test_header_only_schema(context):
         "in": "path",
         "name": "path",
         "required": True,
-        "type": "integer"
+        "type": "integer",
+        "description": "",
     }
 
 @pytest.mark.parametrize("inp, expected", [
@@ -40,7 +42,8 @@ def test_header_only_schema(context):
         "required": True,
         "type": "string",
         "format": "date-time",
-        "collectionFormat": "multi"
+        "collectionFormat": "multi",
+        "description": ""
      }
     ),
     (Parameters(path=ParamSet({
@@ -52,7 +55,8 @@ def test_header_only_schema(context):
         "name": "path",
         "required": True,
         "type": "string",
-        "format": "date-time"
+        "format": "date-time",
+        "description": ""
      }
     ),
     (Parameters(header=ParamSet({
@@ -64,7 +68,8 @@ def test_header_only_schema(context):
         "name": "path",
         "required": True,
         "type": "string",
-        "format": "date-time"
+        "format": "date-time",
+        "description": ""
      }
     )
 ])

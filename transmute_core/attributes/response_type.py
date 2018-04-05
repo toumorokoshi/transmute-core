@@ -22,6 +22,7 @@ class ResponseType(object):
         ],
         default=attr.Factory(dict)
     )
+    type_description = attr.ib(default="")
 
     def swagger_definition(self, context):
         if self.type is not None:
@@ -37,6 +38,8 @@ class ResponseType(object):
                 header_definition["description"] = header["description"]
             headers[name] = header_definition
 
+        if self.type_description:
+            schema["description"] = self.type_description
         response = {
             "description": self.description,
             "schema": schema

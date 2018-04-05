@@ -8,7 +8,7 @@ class TransmuteAttributes(object):
                  query_parameters=None, body_parameters=None,
                  header_parameters=None, path_parameters=None,
                  error_exceptions=None, response_types=None,
-                 success_code=200):
+                 success_code=200, parameter_descriptions=None):
         self.paths = set(paths or [])
         self.methods = set(methods or ["GET"])
         self.tags = set(tags or [])
@@ -18,6 +18,7 @@ class TransmuteAttributes(object):
         self.header_parameters = set(header_parameters or [])
         self.path_parameters = set(path_parameters or [])
         self.error_exceptions = set(error_exceptions or [])
+        self.parameter_descriptions = parameter_descriptions or {}
         self.response_types = {}
         for code, response in (response_types or {}).items():
             if not isinstance(response, ResponseType):
@@ -48,6 +49,9 @@ class TransmuteAttributes(object):
         for k, v in other.response_types.items():
             response_types[k] = v
 
+        parameter_descriptions = self.parameter_descriptions.copy()
+        parameter_descriptions.update(other.parameter_descriptions)
+
         return TransmuteAttributes(
             paths=(self.paths | other.paths),
             methods=(self.methods | other.methods),
@@ -58,6 +62,7 @@ class TransmuteAttributes(object):
             header_parameters=(self.header_parameters | other.header_parameters),
             path_parameters=(self.path_parameters | other.path_parameters),
             error_exceptions=(self.error_exceptions | other.error_exceptions),
+            parameter_descriptions=parameter_descriptions,
             response_types=response_types
         )
 
@@ -67,7 +72,7 @@ class TransmuteAttributes(object):
                   "query_parameters", "body_parameters",
                   "header_parameters", "path_parameters",
                   "error_exceptions", "response_types",
-                  "success_code"]:
+                  "success_code", "parameter_descriptions"]:
             arg_list.append("{0}={1}".format(
                 k, getattr(self, k)
             ))
