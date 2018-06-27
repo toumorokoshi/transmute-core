@@ -7,7 +7,7 @@ from ..exceptions import InvalidTransmuteDefinition
 class Param(object):
     """ a single parameter object. """
     argument_name = attr.ib()
-    description = attr.ib(default=None)
+    description = attr.ib(default="")
     # the actual argument object. this gets populated later.
     arginfo = attr.ib(default=None)
 

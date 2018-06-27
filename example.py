@@ -15,6 +15,8 @@ from transmute_core import (
     NoArgument
 )
 from flask import Blueprint, Flask, Response, request
+from schematics.models import Model
+from schematics.types import StringType
 from functools import wraps
 
 SWAGGER_ATTR_NAME = "_tranmute_swagger"
@@ -43,7 +45,7 @@ def transmute_route(app, fn, context=default_context):
             setattr(app, SWAGGER_ATTR_NAME, SwaggerSpec())
         swagger_obj = getattr(app, SWAGGER_ATTR_NAME)
         swagger_obj.add_func(transmute_func, context)
-        app.route(r)(handler)
+        app.route(r, methods=transmute_func.methods)(handler)
 
 
 def create_routes_and_handler(transmute_func, context):
@@ -128,8 +130,7 @@ class ParamExtractorFlask(ParamExtractor):
         return {}
 
     @property
-    @staticmethod
-    def body():
+    def body(self):
         return request.get_data()
 
     @staticmethod
@@ -211,6 +212,17 @@ def multiply_body(body):
 def foo(vals):
     return vals
 
+
+class SchematicsBody(Model):
+    name = StringType(max_length=5)
+
+@describe(paths="/api/v1/schematics",
+          methods=["POST"],
+          body_parameters="body")
+@annotate({"body": SchematicsBody})
+def schematics_example(body):
+    return None
+
 @describe(paths="/api/v1/header",
           response_types={
               200: {"type": str, "description": "success",
@@ -230,6 +242,7 @@ def header():
 app = Flask(__name__)
 transmute_route(app, multiply)
 transmute_route(app, multiply_body)
+transmute_route(app, schematics_example)
 transmute_route(app, foo)
 transmute_route(app, header)
 add_swagger(app, "/api/swagger.json", "/api/")

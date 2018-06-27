@@ -11,6 +11,7 @@ def get_swagger_parameters(parameters, context):
         arginfo = param.arginfo
         params = {
             "name": name,
+            "description": param.description,
             "required": arginfo.default is NoDefault,
             "collectionFormat": "multi"
         }
@@ -23,6 +24,7 @@ def get_swagger_parameters(parameters, context):
         arginfo = param.arginfo
         params = {
             "name": name,
+            "description": param.description,
             "required": arginfo.default is NoDefault
         }
         params.update(
@@ -38,6 +40,7 @@ def get_swagger_parameters(parameters, context):
         arginfo = param.arginfo
         params = {
             "name": name,
+            "description": param.description,
             "required": arginfo.default is NoDefault
         }
         params.update(
@@ -50,8 +53,10 @@ def get_swagger_parameters(parameters, context):
 
 def _build_body_schema(serializer, body_parameters):
     """ body is built differently, since it's a single argument no matter what. """
+    description = ""
     if isinstance(body_parameters, Param):
         schema = serializer.to_json_schema(body_parameters.arginfo.type)
+        description = body_parameters.description
         required = True
     else:
         if len(body_parameters) == 0:
@@ -61,6 +66,7 @@ def _build_body_schema(serializer, body_parameters):
         for name, param in body_parameters.items():
             arginfo = param.arginfo
             body_properties[name] = serializer.to_json_schema(arginfo.type)
+            body_properties[name]["description"] = param.description
             if arginfo.default is NoDefault:
                 required.add(name)
         schema = {
@@ -71,6 +77,7 @@ def _build_body_schema(serializer, body_parameters):
         required = len(required) > 0
     return BodyParameter({
         "name": "body",
+        "description": description,
         "required": required,
         "schema": schema
     })

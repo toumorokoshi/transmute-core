@@ -94,12 +94,13 @@ class SchematicsSerializer(ObjectSerializer):
     def load(self, model, value):
         model = _enforce_instance(model)
         try:
+            context = get_import_context(oo=True)
             model = self._translate_to_model(model)
-            result = model(value, context=get_import_context(
-                oo=True
-            ))
-            if hasattr(result, "validate"):
+            result = model(value, context=context)
+            if isinstance(model, ModelType) or not isinstance(model, BaseType):
                 result.validate()
+            else:
+                model.validate(result, context=context)
             return result
         except BaseError as e:
             raise SerializationException(str(e))

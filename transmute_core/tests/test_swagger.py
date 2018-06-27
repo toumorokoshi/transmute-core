@@ -1,5 +1,9 @@
+import pytest
 import swagger_schema
-from transmute_core import default_context
+from transmute_core import (
+    default_context, describe, annotate,
+    TransmuteFunction
+)
 from transmute_core.swagger import (
     generate_swagger_html, get_swagger_static_root,
     SwaggerSpec
@@ -18,22 +22,55 @@ def test_get_swagger_static_root():
     assert "static" in get_swagger_static_root()
 
 
-def test_swagger_definition_generation():
+@pytest.mark.parametrize(['swagger_definition_kwargs', 'expected_info'], [
+    (
+        # Use default title and version
+        {},
+        {
+            "title": "example",
+            "version": "1.0"
+        },
+    ),
+    (
+        # Use default version
+        {
+            "title": "title-only app",
+        },
+        {
+            "title": "title-only app",
+            "version": "1.0"
+        },
+    ),
+    (
+        {
+            "title": "test app",
+            "description": "unit test app",
+            "version": "1.1.38"
+        },
+        {
+            "title": "test app",
+            "description": "unit test app",
+            "version": "1.1.38"
+        },
+    ),
+])
+def test_swagger_definition_generation(swagger_definition_kwargs,
+                                       expected_info):
     """
-    swagger routes should be ablo to generate a proper
+    swagger routes should be able to generate a proper
     spec.
     """
     routes = SwaggerSpec()
-    assert routes.swagger_definition() == {
-        "info": {"title": "example", "version": "1.0"},
+    assert routes.swagger_definition(**swagger_definition_kwargs) == {
+        "info": expected_info,
         "paths": {},
         "swagger": "2.0",
     }
 
 
-def test_swagger_transmute_func(transmute_func):
+def test_swagger_transmute_definition_info(transmute_func):
     """
-    swagger routes should be ablo to generate a proper
+    swagger routes should be able to generate a proper
     spec.
     """
     routes = SwaggerSpec()
@@ -108,3 +145,36 @@ def test_swagger_get_post(transmute_func, transmute_func_post):
     spec = routes.swagger_definition()
     assert "get" in spec["paths"]["/api/v1/multiply"]
     assert "post" in spec["paths"]["/api/v1/multiply"]
+
+def test_swagger_parameter_description():
+    """
+    if parameter descriptions are added to a function, they
+    should appear in the swagger json.
+    """
+    parameter_descriptions = {
+        "left": "the left operand",
+        "right": "the right operand",
+        "header": "the header",
+        "path": "the path",
+        "return": "the result"
+    }
+
+    @describe(paths="/api/v1/adopt/{path}",
+              parameter_descriptions=parameter_descriptions,
+              header_parameters=["header"])
+    @annotate({"left": int, "right": int, "header": str,
+               "path": str, "return": int})
+    def adopt(left, right, header, path):
+        return left + right
+
+    func = TransmuteFunction(adopt)
+
+    routes = SwaggerSpec()
+    routes.add_func(func, default_context)
+    spec = routes.swagger_definition()
+
+    params = spec["paths"]["/api/v1/adopt/{path}"]["get"]["parameters"]
+    for param in spec["paths"]["/api/v1/adopt/{path}"]["get"]["parameters"]:
+        assert parameter_descriptions[param["name"]] == param["description"]
+    assert parameter_descriptions["return"] == \
+        spec["paths"]["/api/v1/adopt/{path}"]["get"]["responses"]["200"]["schema"]["description"]

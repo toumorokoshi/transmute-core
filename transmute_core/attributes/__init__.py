@@ -4,19 +4,21 @@ from .response_type import ResponseType
 
 class TransmuteAttributes(object):
 
-    def __init__(self, paths=None, methods=None,
+    def __init__(self, paths=None, methods=None, tags=None,
                  query_parameters=None, body_parameters=None,
                  header_parameters=None, path_parameters=None,
                  error_exceptions=None, response_types=None,
-                 success_code=200):
+                 success_code=200, parameter_descriptions=None):
         self.paths = set(paths or [])
         self.methods = set(methods or ["GET"])
+        self.tags = set(tags or [])
         self.success_code = success_code
         self.query_parameters = set(query_parameters or [])
         self.body_parameters = self._coerce_parameters(body_parameters)
         self.header_parameters = set(header_parameters or [])
         self.path_parameters = set(path_parameters or [])
         self.error_exceptions = set(error_exceptions or [])
+        self.parameter_descriptions = parameter_descriptions or {}
         self.response_types = {}
         for code, response in (response_types or {}).items():
             if not isinstance(response, ResponseType):
@@ -47,25 +49,30 @@ class TransmuteAttributes(object):
         for k, v in other.response_types.items():
             response_types[k] = v
 
+        parameter_descriptions = self.parameter_descriptions.copy()
+        parameter_descriptions.update(other.parameter_descriptions)
+
         return TransmuteAttributes(
             paths=(self.paths | other.paths),
             methods=(self.methods | other.methods),
+            tags=(self.tags | other.tags),
             success_code=(other.success_code or self.success_code),
             query_parameters=(self.query_parameters | other.query_parameters),
             body_parameters=self._join_parameters(other.body_parameters, self.body_parameters),
             header_parameters=(self.header_parameters | other.header_parameters),
             path_parameters=(self.path_parameters | other.path_parameters),
             error_exceptions=(self.error_exceptions | other.error_exceptions),
+            parameter_descriptions=parameter_descriptions,
             response_types=response_types
         )
 
     def __str__(self):
         arg_list = []
-        for k in ["paths", "methods",
+        for k in ["paths", "methods", "tags",
                   "query_parameters", "body_parameters",
                   "header_parameters", "path_parameters",
                   "error_exceptions", "response_types",
-                  "success_code"]:
+                  "success_code", "parameter_descriptions"]:
             arg_list.append("{0}={1}".format(
                 k, getattr(self, k)
             ))
