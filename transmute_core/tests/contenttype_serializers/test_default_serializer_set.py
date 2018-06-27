@@ -16,6 +16,12 @@ def test_default_serializer_yaml(serializer_set):
     assert serializer.load(expected_to) == frm
 
 
+def test_default_serializer_pickle(serializer_set):
+    frm = {"foo": "bar"}
+    serializer = serializer_set["application/pickle"]
+    assert serializer.load(serializer.dump(frm)) == frm
+
+
 def test_default_serializer_prop(serializer_set):
     assert serializer_set.default.main_type == "application/json"
 
@@ -27,7 +33,8 @@ def test_no_serializer_found_raises_exception(serializer_set):
 
 @pytest.mark.parametrize("content_type,bad_input", [
     ("application/yaml", b"[a, !eafia']atedntad}"),
-    ("application/json", b"{\"ooga")
+    ("application/json", b"{\"ooga"),
+    ("application/pickle", b"fdafd"),
 ])
 def test_bad_object_raises_serialization_exception(serializer_set, content_type, bad_input):
     """ a bad object serialization should raise a serialization exception """
@@ -37,5 +44,5 @@ def test_bad_object_raises_serialization_exception(serializer_set, content_type,
 
 def test_keys(serializer_set):
     assert serializer_set.keys() == [
-        "application/json", "application/x-yaml"
+        "application/json", "application/x-yaml", "application/pickle"
     ]

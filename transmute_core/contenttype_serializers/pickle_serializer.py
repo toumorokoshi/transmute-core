@@ -1,6 +1,5 @@
 from .interface import ContentTypeSerializer
 from ..exceptions import SerializationException
-
 try:
     import cPickle as pickle
 except ImportError:
@@ -32,7 +31,7 @@ class PickleSerializer(ContentTypeSerializer):
         """
         try:
             return pickle.loads(raw_bytes)
-        except ValueError as e:
+        except pickle.UnpicklingError as e:
             raise SerializationException(str(e))
 
     @staticmethod
