@@ -58,7 +58,11 @@ to specify those attributes.
         query_parameters=["blockRequest"],
         body_parameters=["name"]
         header_parameters=["authtoken"]
-        path_parameters=["username"]
+        path_parameters=["username"],
+        parameter_descriptions={
+          "blockRequest": "if true, the request will be blocked.",
+          "name": "the name of the db record to insert."
+        }
     )
     def create_record(name: str, blockRequest: bool, authtoken: str, username: str) -> bool:
         if block_request:
