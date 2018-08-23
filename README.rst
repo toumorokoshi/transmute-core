@@ -9,6 +9,9 @@ transmute-core
 .. image:: https://coveralls.io/repos/github/toumorokoshi/transmute-core/badge.svg?branch=master
     :alt: coverage status
     :target: https://coveralls.io/github/toumorokoshi/transmute-core?branch=master
+    
+.. image:: https://img.shields.io/badge/code%20style-black-000000.svg
+    :target: https://github.com/ambv/black
 
 A utility library to help build transmute api generators for Python webframeworks.
 
