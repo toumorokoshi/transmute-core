@@ -6,13 +6,17 @@ import pytest
 import sys
 from attr.validators import instance_of
 from transmute_core import (
-    TransmuteFunction, describe, annotate,
-    ParamExtractor, NoArgument
+    TransmuteFunction,
+    describe,
+    annotate,
+    ParamExtractor,
+    NoArgument,
 )
 from schematics.models import Model
 from schematics.types import StringType, BooleanType, IntType
 from schematics.types.compound import ModelType
 from .utils import execute
+
 
 class User(Model):
     name = StringType()
@@ -59,14 +63,13 @@ def test_complex_benchmark(benchmark, context):
     """
     a benchmark of a fake full execution flow of a transmute function.
     """
-    obj = ComplexModel({
-        "user": {
-            "name": "Richard Stallman",
-            "age": 104
-        },
-        "description": "this is a test",
-        "is_allowed": True
-    })
+    obj = ComplexModel(
+        {
+            "user": {"name": "Richard Stallman", "age": 104},
+            "description": "this is a test",
+            "is_allowed": True,
+        }
+    )
 
     complex_func = TransmuteFunction(complex_body_method)
     complex_json = json.dumps(context.serializers.dump(type(obj), obj))

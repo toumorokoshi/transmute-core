@@ -41,27 +41,26 @@ def get_parameters(signature, transmute_attrs, arguments_to_ignore=None):
         params.body = Param(
             argument_name=name,
             description=transmute_attrs.parameter_descriptions.get(name),
-            arginfo=signature.get_argument(name)
+            arginfo=signature.get_argument(name),
         )
         used_keys.add(name)
     else:
-        used_keys |= load_parameters(params.body, transmute_attrs.body_parameters,
-                                     signature, transmute_attrs)
+        used_keys |= load_parameters(
+            params.body, transmute_attrs.body_parameters, signature, transmute_attrs
+        )
 
     # extract the parameters from the paths
     for name in _extract_path_parameters_from_paths(transmute_attrs.paths):
         params.path[name] = Param(
             argument_name=name,
             description=transmute_attrs.parameter_descriptions.get(name),
-            arginfo=signature.get_argument(name)
+            arginfo=signature.get_argument(name),
         )
         used_keys.add(name)
 
     # check the method type, and decide if the parameters should be extracted
     # from query parameters or the body
-    default_param_key = (
-        "query" if transmute_attrs.methods == set(["GET"]) else "body"
-    )
+    default_param_key = "query" if transmute_attrs.methods == set(["GET"]) else "body"
     default_params = getattr(params, default_param_key)
 
     # parse all positional params
@@ -72,13 +71,14 @@ def get_parameters(signature, transmute_attrs, arguments_to_ignore=None):
         default_params[arginfo.name] = Param(
             arginfo.name,
             description=transmute_attrs.parameter_descriptions.get(arginfo.name),
-            arginfo=arginfo
+            arginfo=arginfo,
         )
 
     return params
 
-PART_REGEX = re.compile(r'(\{[_a-zA-Z][^{}]*(?:\{[^{}]*\}[^{}]*)*\})')
-PARAM_REGEX = re.compile(r'^\{(?P<name>[a-zA-Z_][a-zA-Z0-9_]*)\}$')
+
+PART_REGEX = re.compile(r"(\{[_a-zA-Z][^{}]*(?:\{[^{}]*\}[^{}]*)*\})")
+PARAM_REGEX = re.compile(r"^\{(?P<name>[a-zA-Z_][a-zA-Z0-9_]*)\}$")
 
 
 def _extract_path_parameters_from_paths(paths):
@@ -105,7 +105,7 @@ def load_parameters(param_set, param_list, signature, transmute_attrs):
         param_set[name] = Param(
             argument_name=name,
             description=transmute_attrs.parameter_descriptions.get(name),
-            arginfo=signature.get_argument(name)
+            arginfo=signature.get_argument(name),
         )
         used_keys.add(name)
     return used_keys

@@ -21,7 +21,6 @@ def cattrs_serializer():
 
 
 class Player(object):
-
     def __init__(self, name, score):
         self.name = name
         self.score = score
@@ -31,6 +30,7 @@ class Player(object):
 class Card(object):
     name = attr.ib(type=str, default="")
     price = attr.ib(type=float, default=1.0)
+
 
 @attr.s
 class Hand(object):
@@ -53,11 +53,15 @@ card_dict = {"name": "foo", "price": 10}
 card = Card(**card_dict)
 player = Player("kobe", 81)
 
-@pytest.mark.parametrize("typ,inp,out", [
-    (Card, card, card_dict),
-    (List[Card], [card], [card_dict]),
-    (Player, player, player)
-])
+
+@pytest.mark.parametrize(
+    "typ,inp,out",
+    [
+        (Card, card, card_dict),
+        (List[Card], [card], [card_dict]),
+        (Player, player, player),
+    ],
+)
 def test_attrs_integration_dump(cattrs_serializer, typ, inp, out):
     assert cattrs_serializer.dump(typ, inp) == out
 
@@ -65,15 +69,14 @@ def test_attrs_integration_dump(cattrs_serializer, typ, inp, out):
 def test_attrs_integration_dump_exception(cattrs_serializer):
     def mock_return(inp):
         raise ValueError("Random Exception")
+
     cattrs_serializer._cattrs_converter = Mock()
     cattrs_serializer._cattrs_converter.unstructure = mock_return
     with pytest.raises(SerializationException):
         assert cattrs_serializer.dump(str, "random_str")
 
 
-@pytest.mark.parametrize("typ,inp", [
-    ([Card], [card_dict])
-])
+@pytest.mark.parametrize("typ,inp", [([Card], [card_dict])])
 def test_attrs_integration_load_exception(cattrs_serializer, typ, inp):
     with pytest.raises(SerializationException):
         cattrs_serializer.load(typ, inp)
@@ -84,10 +87,9 @@ def test_attrs_validate_is_called(cattrs_serializer):
         cattrs_serializer.load(Person, {"age": -1, "bio": "foo"})
 
 
-@pytest.mark.parametrize("typ,inp,out", [
-    (Card, card_dict, card),
-    (List[Card], [card_dict], [card]),
-])
+@pytest.mark.parametrize(
+    "typ,inp,out", [(Card, card_dict, card), (List[Card], [card_dict], [card])]
+)
 def test_attrs_integration_load(cattrs_serializer, typ, inp, out):
     assert cattrs_serializer.load(typ, inp) == out
 
@@ -95,18 +97,15 @@ def test_attrs_integration_load(cattrs_serializer, typ, inp, out):
 @attr.s
 class Employee(object):
     name = attr.ib(type=str)
-    birthday =attr.ib(type=datetime)
+    birthday = attr.ib(type=datetime)
+
 
 birthday = datetime.utcnow()
-employee_dict = {
-    "name": "Kobe",
-    "birthday": birthday.isoformat(),
-}
+employee_dict = {"name": "Kobe", "birthday": birthday.isoformat()}
 employee = Employee(name="Kobe", birthday=birthday)
 
-@pytest.mark.parametrize("typ,inp,out", [
-    (Employee, employee_dict, employee)
-])
+
+@pytest.mark.parametrize("typ,inp,out", [(Employee, employee_dict, employee)])
 def test_attrs_integration_load_datetime(cattrs_serializer, typ, inp, out):
     assert cattrs_serializer.load(typ, inp) == out
 
@@ -115,11 +114,8 @@ def test_to_json_schema(cattrs_serializer):
     assert cattrs_serializer.to_json_schema(Card) == {
         "type": "object",
         "title": "Card",
-        "properties": {
-            "name": {"type": "string"},
-            "price": {"type": "number"}
-        },
-        "required": []
+        "properties": {"name": {"type": "string"}, "price": {"type": "number"}},
+        "required": [],
     }
 
     assert cattrs_serializer.to_json_schema(Hand) == {
@@ -133,14 +129,15 @@ def test_to_json_schema(cattrs_serializer):
                     "title": "Card",
                     "properties": {
                         "name": {"type": "string"},
-                        "price": {"type": "number"}
+                        "price": {"type": "number"},
                     },
-                    "required": []
+                    "required": [],
                 },
-            },
+            }
         },
-        "required": ["cards"]
+        "required": ["cards"],
     }
+
 
 @attr.s
 class UserAttrs(object):
@@ -174,7 +171,7 @@ def test_complex_benchmark_attrs(benchmark, context):
     obj = ComplexModelAttrs(
         user=UserAttrs(name="Richard Stallman", age=104),
         description="this is a test",
-        is_allowed=True
+        is_allowed=True,
     )
 
     complex_func = TransmuteFunction(complex_body_method_attrs)

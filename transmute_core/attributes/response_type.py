@@ -7,20 +7,15 @@ from swagger_schema import Response
 # class ParameterType(object):
 #     description =
 
+
 @attr.s
 class ResponseType(object):
     type = attr.ib()
     description = attr.ib(
-        validator=[
-            attr.validators.instance_of(string_type)
-        ],
-        default=""
+        validator=[attr.validators.instance_of(string_type)], default=""
     )
     headers = attr.ib(
-        validator=[
-            attr.validators.instance_of(dict)
-        ],
-        default=attr.Factory(dict)
+        validator=[attr.validators.instance_of(dict)], default=attr.Factory(dict)
     )
     type_description = attr.ib(default="")
 
@@ -40,10 +35,7 @@ class ResponseType(object):
 
         if self.type_description:
             schema["description"] = self.type_description
-        response = {
-            "description": self.description,
-            "schema": schema
-        }
+        response = {"description": self.description, "schema": schema}
 
         if headers:
             response["headers"] = headers

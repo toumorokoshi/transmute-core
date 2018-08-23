@@ -13,17 +13,15 @@ class TransmuteContext(object):
     serializers for objects to and from basic data times.
     """
 
-    def __init__(self, serializers=None, contenttype_serializers=None,
-                 response_shape=None):
-        self.serializers = (
-            serializers or
-            get_default_object_serializer_set()
-        )
+    def __init__(
+        self, serializers=None, contenttype_serializers=None, response_shape=None
+    ):
+        self.serializers = serializers or get_default_object_serializer_set()
         self.contenttype_serializers = (
-            contenttype_serializers or
-            get_default_serializer_set()
+            contenttype_serializers or get_default_serializer_set()
         )
         self.response_shape = ResponseShapeSimple
+
 
 # a global context is provided, if a singleton is sufficient
 # or deviations from the defaults are unnescessary

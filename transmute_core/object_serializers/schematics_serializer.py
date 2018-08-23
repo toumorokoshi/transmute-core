@@ -12,27 +12,27 @@ from schematics.types import (
     Serializable,
     DateTimeType,
     UUIDType,
-    URLType
+    URLType,
 )
 from schematics.models import ModelMeta, Model
-from schematics.types.compound import (
-    ListType, ModelType, DictType
-)
+from schematics.types.compound import ListType, ModelType, DictType
 from schematics.exceptions import BaseError, ConversionError
 from schematics.transforms import get_import_context
 from ..exceptions import SerializationException
 from decimal import Decimal
 from ..compat import all_string_types
 
-JSON_SCHEMA_MAP = OrderedDict([
-    (BooleanType, {"type": "boolean"}),
-    (NumberType, {"type": "number"}),
-    (UUIDType, {"type": "string", "format": "uuid"}),
-    (URLType, {"type": "string", "format": "url"}),
-    (StringType, {"type": "string"}),
-    (DateTimeType, {"type": "string", "format": "date-time"}),
-    (BaseType, {"type": "object"}),
-])
+JSON_SCHEMA_MAP = OrderedDict(
+    [
+        (BooleanType, {"type": "boolean"}),
+        (NumberType, {"type": "number"}),
+        (UUIDType, {"type": "string", "format": "uuid"}),
+        (URLType, {"type": "string", "format": "url"}),
+        (StringType, {"type": "string"}),
+        (DateTimeType, {"type": "string", "format": "date-time"}),
+        (BaseType, {"type": "object"}),
+    ]
+)
 
 
 class SchematicsSerializer(ObjectSerializer):
@@ -51,13 +51,14 @@ class SchematicsSerializer(ObjectSerializer):
     - lists, in the form of [Type] (e.g. [str])
     - any type that extends the schematics.models.Model.
     """
+
     VALID_BASE_CLASSES = [BaseType, ModelMeta, Model, Serializable]
 
     def can_handle(self, cls):
         if cls in self._models:
             return True
         if any(isinstance(cls, t) for t in self.VALID_BASE_CLASSES):
-             return True
+            return True
         if not isinstance(cls, type):
             return False
         if any(issubclass(cls, t) for t in self.VALID_BASE_CLASSES):
@@ -76,9 +77,7 @@ class SchematicsSerializer(ObjectSerializer):
             return ModelType(model)
 
         if model not in self._models and isinstance(model, tuple):
-            self._models[model] = ListType(
-                self._translate_to_model(model[0])
-            )
+            self._models[model] = ListType(self._translate_to_model(model[0]))
 
         if model in self._models:
             return self._models[model]
@@ -122,6 +121,7 @@ class SchematicsSerializer(ObjectSerializer):
         model = self._translate_to_model(model)
         return _to_json_schema(model)
 
+
 _cache = {}
 
 
@@ -147,19 +147,15 @@ def _to_json_schema_no_cache(model):
     if isinstance(model, Serializable):
         return _to_json_schema_no_cache(model.type)
     raise SerializationException(
-        "unable to create json schema for type " +
-        "{0}. Expected a primitive or ".format(model) +
-        " a schematics model or type"
+        "unable to create json schema for type "
+        + "{0}. Expected a primitive or ".format(model)
+        + " a schematics model or type"
     )
 
 
 def _model_type_to_json_schema(model):
     required = []
-    schema = {
-        "title": model.model_name,
-        "type": "object",
-        "properties": {}
-    }
+    schema = {"title": model.model_name, "type": "object", "properties": {}}
     for name, field in model.fields.items():
         if field.required:
             required.append(name)
@@ -170,17 +166,11 @@ def _model_type_to_json_schema(model):
 
 
 def _list_type_to_json_schema(list_type):
-    return {
-        "type": "array",
-        "items": _to_json_schema(list_type.field)
-    }
+    return {"type": "array", "items": _to_json_schema(list_type.field)}
 
 
 def _dict_type_to_json_schema(dict_type):
-    return {
-        "type": "object",
-        "additionalProperties": _to_json_schema(dict_type.field)
-    }
+    return {"type": "object", "additionalProperties": _to_json_schema(dict_type.field)}
 
 
 def _enforce_instance(model_or_class):
@@ -189,7 +179,6 @@ def _enforce_instance(model_or_class):
     schematics class. We should handle that by just
     calling the default constructor.
     """
-    if (isinstance(model_or_class, type) and
-        issubclass(model_or_class, BaseType)):
+    if isinstance(model_or_class, type) and issubclass(model_or_class, BaseType):
         return model_or_class()
     return model_or_class

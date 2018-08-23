@@ -2,13 +2,22 @@ from ..compat import string_type
 from ..exceptions import InvalidTransmuteDefinition
 from .response_type import ResponseType
 
-class TransmuteAttributes(object):
 
-    def __init__(self, paths=None, methods=None, tags=None,
-                 query_parameters=None, body_parameters=None,
-                 header_parameters=None, path_parameters=None,
-                 error_exceptions=None, response_types=None,
-                 success_code=200, parameter_descriptions=None):
+class TransmuteAttributes(object):
+    def __init__(
+        self,
+        paths=None,
+        methods=None,
+        tags=None,
+        query_parameters=None,
+        body_parameters=None,
+        header_parameters=None,
+        path_parameters=None,
+        error_exceptions=None,
+        response_types=None,
+        success_code=200,
+        parameter_descriptions=None,
+    ):
         self.paths = set(paths or [])
         self.methods = set(methods or ["GET"])
         self.tags = set(tags or [])
@@ -36,9 +45,9 @@ class TransmuteAttributes(object):
         elif isinstance(param, type(None)):
             return set()
         else:
-            raise InvalidTransmuteDefinition("parameter must be a string, list or set. found: {0}".format(
-                param
-            ))
+            raise InvalidTransmuteDefinition(
+                "parameter must be a string, list or set. found: {0}".format(param)
+            )
 
     def __or__(self, other):
         """
@@ -58,24 +67,32 @@ class TransmuteAttributes(object):
             tags=(self.tags | other.tags),
             success_code=(other.success_code or self.success_code),
             query_parameters=(self.query_parameters | other.query_parameters),
-            body_parameters=self._join_parameters(other.body_parameters, self.body_parameters),
+            body_parameters=self._join_parameters(
+                other.body_parameters, self.body_parameters
+            ),
             header_parameters=(self.header_parameters | other.header_parameters),
             path_parameters=(self.path_parameters | other.path_parameters),
             error_exceptions=(self.error_exceptions | other.error_exceptions),
             parameter_descriptions=parameter_descriptions,
-            response_types=response_types
+            response_types=response_types,
         )
 
     def __str__(self):
         arg_list = []
-        for k in ["paths", "methods", "tags",
-                  "query_parameters", "body_parameters",
-                  "header_parameters", "path_parameters",
-                  "error_exceptions", "response_types",
-                  "success_code", "parameter_descriptions"]:
-            arg_list.append("{0}={1}".format(
-                k, getattr(self, k)
-            ))
+        for k in [
+            "paths",
+            "methods",
+            "tags",
+            "query_parameters",
+            "body_parameters",
+            "header_parameters",
+            "path_parameters",
+            "error_exceptions",
+            "response_types",
+            "success_code",
+            "parameter_descriptions",
+        ]:
+            arg_list.append("{0}={1}".format(k, getattr(self, k)))
         return "<TransmuteAttributes {0}>".format(" ".join(arg_list))
 
     @staticmethod

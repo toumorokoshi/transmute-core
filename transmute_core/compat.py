@@ -6,8 +6,15 @@ is_py3 = sys.version_info[0] >= 3
 
 FullArgSpec = namedtuple(
     "FullArgSpec",
-    ["args", "varargs", "varkw", "defaults",
-     "kwonlyargs", "kwonlydefaults", "annotations"]
+    [
+        "args",
+        "varargs",
+        "varkw",
+        "defaults",
+        "kwonlyargs",
+        "kwonlydefaults",
+        "annotations",
+    ],
 )
 
 
@@ -18,10 +25,15 @@ def getfullargspec(func):
         argspec = inspect.getargspec(func)
         annotations = getattr(func, "__annotations__", {})
         return FullArgSpec(
-            argspec.args, argspec.varargs,
-            argspec.keywords, argspec.defaults,
-            [], None, annotations
+            argspec.args,
+            argspec.varargs,
+            argspec.keywords,
+            argspec.defaults,
+            [],
+            None,
+            annotations,
         )
+
 
 if is_py3:
     string_type = str  # noqa

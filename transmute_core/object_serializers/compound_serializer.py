@@ -12,21 +12,14 @@ class ListSerializer(object):
         subtype = cls[0]
         subtype_serializer = self._subtype_serializer[subtype]
         subtype_schema = subtype_serializer.to_json_schema(subtype)
-        return {
-            "type": "array",
-            "items": subtype_schema
-        }
+        return {"type": "array", "items": subtype_schema}
 
     def dump(self, cls, value):
         subtype = cls[0]
         serializer = self._subtype_serializer[subtype]
-        return [
-            serializer.dump(subtype, el) for el in value
-        ]
+        return [serializer.dump(subtype, el) for el in value]
 
     def load(self, cls, value):
         subtype = cls[0]
         serializer = self._subtype_serializer[subtype]
-        return [
-            serializer.load(subtype, el) for el in value
-        ]
+        return [serializer.load(subtype, el) for el in value]

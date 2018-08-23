@@ -15,8 +15,7 @@ def generate_swagger_html(swagger_static_root, swagger_json_url):
     """
     tmpl = _get_template("swagger.html")
     return tmpl.render(
-        swagger_root=swagger_static_root,
-        swagger_json_url=swagger_json_url
+        swagger_root=swagger_static_root, swagger_json_url=swagger_json_url
     )
 
 
@@ -27,6 +26,7 @@ def get_swagger_static_root():
     return the directory containing said statics.
     """
     return os.path.join(CURDIR, "static")
+
 
 _template_cache = {}
 
@@ -44,10 +44,8 @@ class SwaggerSpec(object):
     a class for aggregating and outputting swagger definitions, from
     transmute primitives
     """
-    DEFAULT_INFO = {
-        'title': 'example',
-        'version': '1.0',
-    }
+
+    DEFAULT_INFO = {"title": "example", "version": "1.0"}
 
     def __init__(self):
         self._swagger = {}
@@ -79,13 +77,17 @@ class SwaggerSpec(object):
         """
         return a valid swagger spec, with the values passed.
         """
-        return Swagger({
-            "info": Info({
-                key: kwargs.get(key, self.DEFAULT_INFO.get(key))
-                for key in Info.fields.keys()
-                if key in kwargs or key in self.DEFAULT_INFO
-            }),
-            "paths": self.paths,
-            "swagger": "2.0",
-            "basePath": base_path,
-        }).to_primitive()
+        return Swagger(
+            {
+                "info": Info(
+                    {
+                        key: kwargs.get(key, self.DEFAULT_INFO.get(key))
+                        for key in Info.fields.keys()
+                        if key in kwargs or key in self.DEFAULT_INFO
+                    }
+                ),
+                "paths": self.paths,
+                "swagger": "2.0",
+                "basePath": base_path,
+            }
+        ).to_primitive()

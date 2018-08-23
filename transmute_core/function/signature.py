@@ -2,12 +2,12 @@ import attr
 
 
 class NoDefault(object):
-
     def __str__(self):
         return "NoDefault"
 
     def __repr__(self):
         return "NoDefault"
+
 
 NoDefault = NoDefault()
 
@@ -40,15 +40,14 @@ class FunctionSignature(object):
         retrieve a FunctionSignature object
         from the argspec and the annotations passed.
         """
-        attributes = (getattr(argspec, "args", []) +
-                      getattr(argspec, "keywords", []))
+        attributes = getattr(argspec, "args", []) + getattr(argspec, "keywords", [])
         defaults = argspec.defaults or []
 
         arguments, keywords = [], {}
 
-        attribute_list = (attributes[:-len(defaults)]
-                          if len(defaults) != 0
-                          else attributes[:])
+        attribute_list = (
+            attributes[: -len(defaults)] if len(defaults) != 0 else attributes[:]
+        )
         for name in attribute_list:
             if name == "self":
                 continue
@@ -56,7 +55,7 @@ class FunctionSignature(object):
             arguments.append(Argument(name, NoDefault, typ))
 
         if len(defaults) != 0:
-            for name, default in zip(attributes[-len(defaults):], defaults):
+            for name, default in zip(attributes[-len(defaults) :], defaults):
                 typ = argspec.annotations.get(name)
                 keywords[name] = Argument(name, default, typ)
 

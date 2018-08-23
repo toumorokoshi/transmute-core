@@ -1,8 +1,5 @@
 from .decorators import describe, annotate
-from .object_serializers import (
-    SchematicsSerializer,
-    get_default_object_serializer_set
-)
+from .object_serializers import SchematicsSerializer, get_default_object_serializer_set
 from .contenttype_serializers import get_default_serializer_set
 from .function import TransmuteFunction, Response
 from .exceptions import *

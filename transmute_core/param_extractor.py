@@ -1,8 +1,7 @@
 from .function.signature import NoDefault
 from transmute_core.http_parameters import ParamSet, Param
-from .exceptions import (
-    APIException, NoSerializerFound
-)
+from .exceptions import APIException, NoSerializerFound
+
 NoArgument = object()
 
 
@@ -53,9 +52,11 @@ class ParamExtractor(object):
             try:
                 serializer = context.contenttype_serializers[content_type]
             except NoSerializerFound:
-                raise APIException("unable to extract parameters for content type {0}. Supported types are: {1}".format(
-                    content_type, context.contenttype_serializers.keys()
-            ))
+                raise APIException(
+                    "unable to extract parameters for content type {0}. Supported types are: {1}".format(
+                        content_type, context.contenttype_serializers.keys()
+                    )
+                )
             if not self.body:
                 body_dict = {}
             else:
@@ -70,7 +71,9 @@ class ParamExtractor(object):
                     if name in framework_args:
                         continue
                     if name in body_dict:
-                        args[name] = context.serializers.load(arginfo.type, body_dict[name])
+                        args[name] = context.serializers.load(
+                            arginfo.type, body_dict[name]
+                        )
                     else:
                         empty_args.append(arginfo)
 

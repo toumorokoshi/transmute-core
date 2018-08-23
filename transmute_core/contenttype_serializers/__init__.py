@@ -5,7 +5,4 @@ from .serializer_set import SerializerSet, NoSerializerFound
 
 
 def get_default_serializer_set():
-    return SerializerSet([
-        JsonSerializer(),
-        YamlSerializer()
-    ])
+    return SerializerSet([JsonSerializer(), YamlSerializer()])

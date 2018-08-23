@@ -9,6 +9,7 @@ class CattrsSerializer(ObjectSerializer):
     A serializer that's intended to become
     the pattern for 2.0
     """
+
     def __init__(self):
         self._schema_extractor = init_default_extractor()
         self._cattrs_converter = create_cattrs_converter()
@@ -31,7 +32,6 @@ class CattrsSerializer(ObjectSerializer):
             return self._cattrs_converter.structure(value, model)
         except (ValueError, TypeError) as e:
             raise SerializationException(str(e))
-
 
     def dump(self, model, value):
         """

@@ -7,7 +7,6 @@ from datetime import datetime
 
 
 class IntSerializer:
-
     def can_handle(self, cls):
         return issubclass(cls, int)
 
@@ -28,7 +27,6 @@ class IntSerializer:
 
 
 class FloatSerializer:
-
     def can_handle(self, cls):
         return issubclass(cls, float)
 
@@ -49,11 +47,8 @@ class FloatSerializer:
 
 
 class StringSerializer:
-
     def can_handle(self, cls):
-        return any(
-            issubclass(cls, t) for t in all_string_types
-        )
+        return any(issubclass(cls, t) for t in all_string_types)
 
     @staticmethod
     def to_json_schema(cls):
@@ -69,7 +64,6 @@ class StringSerializer:
 
 
 class BoolSerializer:
-
     def can_handle(self, cls):
         return issubclass(cls, bool)
 
@@ -89,7 +83,6 @@ class BoolSerializer:
 
 
 class NoneSerializer(object):
-
     def can_handle(self, cls):
         return cls is None
 

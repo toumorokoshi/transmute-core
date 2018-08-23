@@ -6,6 +6,7 @@ from schematics.models import Model
 from schematics.types import DateTimeType, BaseType
 from schematics.exceptions import BaseError
 
+
 def create_cattrs_converter():
     converter = Converter()
     converter.register_structure_hook(bool, _structure_bool)
@@ -37,21 +38,27 @@ def _structure_schematics(data, cls):
     except BaseError as de:
         raise ValueError(str(de))
 
+
 def _unstructure_schematics(data):
     return data.to_primitive()
 
+
 datetime_type = DateTimeType()
+
 
 def _structure_datetime(data, cls):
     if not data:
         raise ValueError("datetime is empty")
     return datetime_type.to_native(data)
 
+
 def _unstructure_datetime(data):
     return data.isoformat()
 
+
 def _structure_basetype(data, cls):
     return data
+
 
 def _unstructure_basetype(data, cls):
     return cls().to_primitive(data)

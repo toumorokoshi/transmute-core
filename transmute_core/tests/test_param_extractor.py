@@ -1,9 +1,12 @@
 import pytest
 import json
 from transmute_core import (
-    ParamExtractor, NoArgument,
-    describe, annotate, default_context,
-    APIException
+    ParamExtractor,
+    NoArgument,
+    describe,
+    annotate,
+    default_context,
+    APIException,
 )
 from transmute_core.function import TransmuteFunction
 from typing import List
@@ -27,12 +30,9 @@ def with_framework_arg(framework_arg):
     query_parameters=["query"],
     header_parameters=["header"],
     path_parameters=["path"],
-    body_parameters=["body"]
+    body_parameters=["body"],
 )
-@annotate({
-    "query": str, "header": str, "path": str,
-    "body": str
-})
+@annotate({"query": str, "header": str, "path": str, "body": str})
 def all_param_type(query=1, header=2, path=3, body=4):
     pass
 
@@ -42,9 +42,7 @@ class ParamExtractorMock(ParamExtractor):
     body = json.dumps({"body": "body"})
 
     def _get_framework_args(self):
-        return {
-            "framework_arg": "framework_arg"
-        }
+        return {"framework_arg": "framework_arg"}
 
     def _query_argument(self, key, is_list):
         if is_list:
@@ -69,15 +67,14 @@ def test_extract_params(all_param_type_transmute_func):
 
     extractor = ParamExtractorMock()
     args, kwargs = extractor.extract_params(
-        default_context, all_param_type_transmute_func,
-        "application/json"
+        default_context, all_param_type_transmute_func, "application/json"
     )
     assert args == []
     assert kwargs == {
         "query": "query",
         "header": "header",
         "path": "path",
-        "body": "body"
+        "body": "body",
     }
 
 
@@ -89,16 +86,10 @@ def test_extract_params_no_arguments(all_param_type_transmute_func):
     extractor._header_argument = lambda *args: NoArgument
     extractor._path_argument = lambda *args: NoArgument
     args, kwargs = extractor.extract_params(
-        default_context, all_param_type_transmute_func,
-        "application/json"
+        default_context, all_param_type_transmute_func, "application/json"
     )
     assert args == []
-    assert kwargs == {
-        "query": 1,
-        "header": 2,
-        "path": 3,
-        "body": "body"
-    }
+    assert kwargs == {"query": 1, "header": 2, "path": 3, "body": "body"}
 
 
 def test_body_with_only_default_args_can_be_empty(all_param_type_transmute_func):
@@ -107,16 +98,10 @@ def test_body_with_only_default_args_can_be_empty(all_param_type_transmute_func)
     extractor = ParamExtractorMock()
     extractor.body = ""
     args, kwargs = extractor.extract_params(
-        default_context, all_param_type_transmute_func,
-        "application/json"
+        default_context, all_param_type_transmute_func, "application/json"
     )
     assert args == []
-    assert kwargs == {
-        "query": "query",
-        "header": "header",
-        "path": "path",
-        "body": 4,
-    }
+    assert kwargs == {"query": "query", "header": "header", "path": "path", "body": 4}
 
 
 def test_extract_params_bad_body_content_type(all_param_type_transmute_func):
@@ -125,8 +110,7 @@ def test_extract_params_bad_body_content_type(all_param_type_transmute_func):
     extractor = ParamExtractorMock()
     with pytest.raises(APIException):
         extractor.extract_params(
-            default_context, all_param_type_transmute_func,
-            "application/myson"
+            default_context, all_param_type_transmute_func, "application/myson"
         )
 
 
@@ -134,9 +118,7 @@ def test_extract_params_positional_args():
     """ if no arguments are passed, use the defaults """
     tf = TransmuteFunction(pos_type)
     extractor = ParamExtractorMock()
-    args, kwargs = extractor.extract_params(
-        default_context, tf, "application/json"
-    )
+    args, kwargs = extractor.extract_params(default_context, tf, "application/json")
     assert args == ["query"]
     assert kwargs == {}
 
@@ -145,11 +127,10 @@ def test_with_framework_arg():
     """ """
     tf = TransmuteFunction(with_framework_arg)
     extractor = ParamExtractorMock()
-    args, kwargs = extractor.extract_params(
-        default_context, tf, "application/json"
-    )
+    args, kwargs = extractor.extract_params(default_context, tf, "application/json")
     assert args == ["framework_arg"]
     assert kwargs == {}
+
 
 def test_extract_params_no_content_type(all_param_type_transmute_func):
     """ if no content type is provided, expect json. """
@@ -162,21 +143,12 @@ def test_extract_params_no_content_type(all_param_type_transmute_func):
     assert kwargs["body"] == "body"
 
 
-@pytest.mark.parametrize("typ", [
-    List[str],
-    [str],
-    ListType(StringType),
-])
+@pytest.mark.parametrize("typ", [List[str], [str], ListType(StringType)])
 def test_extract_params_honor_as_list(typ):
-
-    @describe(
-        paths=["/"],
-        query_parameters=["query"],
-    )
+    @describe(paths=["/"], query_parameters=["query"])
     @annotate({"query": typ})
     def f(query=[1]):
         pass
-
 
     tf = TransmuteFunction(f)
     extractor = ParamExtractorMock()
@@ -184,19 +156,12 @@ def test_extract_params_honor_as_list(typ):
     assert kwargs["query"] == ["query"]
 
 
-@pytest.mark.parametrize("typ", [
-    str,
-])
+@pytest.mark.parametrize("typ", [str])
 def test_extract_params_honor_as_non_list(typ):
-
-    @describe(
-        paths=["/"],
-        query_parameters=["query"],
-    )
+    @describe(paths=["/"], query_parameters=["query"])
     @annotate({"query": typ})
     def f(query=1):
         pass
-
 
     tf = TransmuteFunction(f)
     extractor = ParamExtractorMock()

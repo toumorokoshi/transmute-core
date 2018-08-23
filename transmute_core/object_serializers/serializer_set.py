@@ -30,8 +30,10 @@ class ObjectSerializerSet(object):
                 except:
                     pass
             raise NoSerializerFound(
-                "unable to find serializer for " + str(cls) + " in: " +
-                str(self.serializers)
+                "unable to find serializer for "
+                + str(cls)
+                + " in: "
+                + str(self.serializers)
             )
         return self._cache[cls_key]
 

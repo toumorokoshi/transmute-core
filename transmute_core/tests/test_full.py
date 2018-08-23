@@ -6,9 +6,7 @@ from transmute_core.response_shape import ResponseShapeComplex
 
 @pytest.fixture
 def context():
-    return TransmuteContext(
-        response_shape=ResponseShapeComplex
-    )
+    return TransmuteContext(response_shape=ResponseShapeComplex)
 
 
 def test_complex_response_shape_in_func(transmute_func, context):
@@ -22,7 +20,7 @@ def test_complex_response_shape_in_func(transmute_func, context):
                 transmute_func.response_types[200].type
             ),
             "success": {"type": "boolean"},
-            "code": {"type": "number"}
+            "code": {"type": "number"},
         },
-        "required": ["success", "result", "code"]
+        "required": ["success", "result", "code"],
     }

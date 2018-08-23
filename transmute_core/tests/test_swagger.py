@@ -1,12 +1,10 @@
 import pytest
 import swagger_schema
-from transmute_core import (
-    default_context, describe, annotate,
-    TransmuteFunction
-)
+from transmute_core import default_context, describe, annotate, TransmuteFunction
 from transmute_core.swagger import (
-    generate_swagger_html, get_swagger_static_root,
-    SwaggerSpec
+    generate_swagger_html,
+    get_swagger_static_root,
+    SwaggerSpec,
 )
 
 
@@ -22,40 +20,26 @@ def test_get_swagger_static_root():
     assert "static" in get_swagger_static_root()
 
 
-@pytest.mark.parametrize(['swagger_definition_kwargs', 'expected_info'], [
-    (
-        # Use default title and version
-        {},
-        {
-            "title": "example",
-            "version": "1.0"
-        },
-    ),
-    (
-        # Use default version
-        {
-            "title": "title-only app",
-        },
-        {
-            "title": "title-only app",
-            "version": "1.0"
-        },
-    ),
-    (
-        {
-            "title": "test app",
-            "description": "unit test app",
-            "version": "1.1.38"
-        },
-        {
-            "title": "test app",
-            "description": "unit test app",
-            "version": "1.1.38"
-        },
-    ),
-])
-def test_swagger_definition_generation(swagger_definition_kwargs,
-                                       expected_info):
+@pytest.mark.parametrize(
+    ["swagger_definition_kwargs", "expected_info"],
+    [
+        (
+            # Use default title and version
+            {},
+            {"title": "example", "version": "1.0"},
+        ),
+        (
+            # Use default version
+            {"title": "title-only app"},
+            {"title": "title-only app", "version": "1.0"},
+        ),
+        (
+            {"title": "test app", "description": "unit test app", "version": "1.1.38"},
+            {"title": "test app", "description": "unit test app", "version": "1.1.38"},
+        ),
+    ],
+)
+def test_swagger_definition_generation(swagger_definition_kwargs, expected_info):
     """
     swagger routes should be able to generate a proper
     spec.
@@ -78,7 +62,9 @@ def test_swagger_transmute_definition_info(transmute_func):
     assert routes.swagger_definition() == {
         "info": {"title": "example", "version": "1.0"},
         "paths": {
-            "/api/v1/multiply": transmute_func.get_swagger_path(default_context).to_primitive(),
+            "/api/v1/multiply": transmute_func.get_swagger_path(
+                default_context
+            ).to_primitive()
         },
         "swagger": "2.0",
     }
@@ -93,17 +79,22 @@ def test_multiple_response_types(response_transmute_func):
     definition = routes.swagger_definition()
     path = definition["paths"]["/api/v1/create_if_authorized/"]
     responses = path["get"]["responses"]
-    assert responses["201"] == swagger_schema.Response({
-        "description": "",
-        "schema": {"type": "boolean"},
-        "headers": {
-            "location": {"type": "string"}
-        }
-    }).to_primitive()
-    assert responses["401"] == swagger_schema.Response({
-        "description": "unauthorized",
-        "schema": {"type": "string"}
-    }).to_primitive()
+    assert (
+        responses["201"]
+        == swagger_schema.Response(
+            {
+                "description": "",
+                "schema": {"type": "boolean"},
+                "headers": {"location": {"type": "string"}},
+            }
+        ).to_primitive()
+    )
+    assert (
+        responses["401"]
+        == swagger_schema.Response(
+            {"description": "unauthorized", "schema": {"type": "string"}}
+        ).to_primitive()
+    )
     assert "200" not in responses
     assert "400" in responses
 
@@ -119,7 +110,9 @@ def test_swagger_add_path(transmute_func):
     assert routes.swagger_definition() == {
         "info": {"title": "example", "version": "1.0"},
         "paths": {
-            "/api/v1/multiply": transmute_func.get_swagger_path(default_context).to_primitive(),
+            "/api/v1/multiply": transmute_func.get_swagger_path(
+                default_context
+            ).to_primitive()
         },
         "swagger": "2.0",
     }
@@ -127,10 +120,10 @@ def test_swagger_add_path(transmute_func):
 
 def test_basepath_override():
     assert SwaggerSpec().swagger_definition(base_path="dummy_path") == {
-        'basePath': 'dummy_path',
-        'info': {'title': 'example', 'version': '1.0'},
-        'paths': {},
-        'swagger': '2.0'
+        "basePath": "dummy_path",
+        "info": {"title": "example", "version": "1.0"},
+        "paths": {},
+        "swagger": "2.0",
     }
 
 
@@ -146,6 +139,7 @@ def test_swagger_get_post(transmute_func, transmute_func_post):
     assert "get" in spec["paths"]["/api/v1/multiply"]
     assert "post" in spec["paths"]["/api/v1/multiply"]
 
+
 def test_swagger_parameter_description():
     """
     if parameter descriptions are added to a function, they
@@ -156,14 +150,15 @@ def test_swagger_parameter_description():
         "right": "the right operand",
         "header": "the header",
         "path": "the path",
-        "return": "the result"
+        "return": "the result",
     }
 
-    @describe(paths="/api/v1/adopt/{path}",
-              parameter_descriptions=parameter_descriptions,
-              header_parameters=["header"])
-    @annotate({"left": int, "right": int, "header": str,
-               "path": str, "return": int})
+    @describe(
+        paths="/api/v1/adopt/{path}",
+        parameter_descriptions=parameter_descriptions,
+        header_parameters=["header"],
+    )
+    @annotate({"left": int, "right": int, "header": str, "path": str, "return": int})
     def adopt(left, right, header, path):
         return left + right
 
@@ -176,5 +171,9 @@ def test_swagger_parameter_description():
     params = spec["paths"]["/api/v1/adopt/{path}"]["get"]["parameters"]
     for param in spec["paths"]["/api/v1/adopt/{path}"]["get"]["parameters"]:
         assert parameter_descriptions[param["name"]] == param["description"]
-    assert parameter_descriptions["return"] == \
-        spec["paths"]["/api/v1/adopt/{path}"]["get"]["responses"]["200"]["schema"]["description"]
+    assert (
+        parameter_descriptions["return"]
+        == spec["paths"]["/api/v1/adopt/{path}"]["get"]["responses"]["200"]["schema"][
+            "description"
+        ]
+    )

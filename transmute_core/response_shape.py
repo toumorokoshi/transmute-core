@@ -55,13 +55,15 @@ class ResponseShapeComplex(ResponseShape):
 
     @staticmethod
     def swagger(result_schema):
-        return Schema({
-            "title": "SuccessObject",
-            "type": "object",
-            "properties": {
-                "result": result_schema,
-                "success": {"type": "boolean"},
-                "code": {"type": "number"}
-            },
-            "required": ["success", "result", "code"]
-        })
+        return Schema(
+            {
+                "title": "SuccessObject",
+                "type": "object",
+                "properties": {
+                    "result": result_schema,
+                    "success": {"type": "boolean"},
+                    "code": {"type": "number"},
+                },
+                "required": ["success", "result", "code"],
+            }
+        )

@@ -4,12 +4,9 @@ from swagger_schema import Response
 
 
 def test_merge():
-    left = TransmuteAttributes(
-        methods=["POST"], query_parameters=["a"], tags=["t"]
-    )
+    left = TransmuteAttributes(methods=["POST"], query_parameters=["a"], tags=["t"])
     right = TransmuteAttributes(
-        methods=["PUT"], query_parameters=["b"],
-        body_parameters=["c"]
+        methods=["PUT"], query_parameters=["b"], body_parameters=["c"]
     )
 
     joined = left | right
@@ -21,15 +18,14 @@ def test_merge():
 
 
 def test_merge_response_type_by_code():
-    left = TransmuteAttributes(response_types={
-        200: {"type": bool}, 201: {"type": bool}
-    })
-    right = TransmuteAttributes(response_types={
-        201: {"type": str}
-    })
+    left = TransmuteAttributes(
+        response_types={200: {"type": bool}, 201: {"type": bool}}
+    )
+    right = TransmuteAttributes(response_types={201: {"type": str}})
     joined = left | right
     assert joined.response_types == {
-        200: ResponseType(type=bool), 201: ResponseType(type=str)
+        200: ResponseType(type=bool),
+        201: ResponseType(type=str),
     }
 
 
@@ -39,23 +35,16 @@ def test_swagger_definition_if_none(context):
     definition = response_type.swagger_definition(context)
     assert definition.to_primitive() == {
         "description": "",
-        "schema": {"type": "object"}
+        "schema": {"type": "object"},
     }
 
 
 def test_header_in_response():
-    left = TransmuteAttributes(response_types={
-        200: {
-            "type": bool,
-            "headers": {
-                "location": {"type": URLType}
-            }
-        }
-    })
+    left = TransmuteAttributes(
+        response_types={200: {"type": bool, "headers": {"location": {"type": URLType}}}}
+    )
     assert left.response_types == {
-        200: ResponseType(type=bool, headers={
-            "location": {"type": URLType}
-        })
+        200: ResponseType(type=bool, headers={"location": {"type": URLType}})
     }
 
 
@@ -75,7 +64,7 @@ def test_merge_body_parameters_argument():
 
 def test_duplicate_tags():
     left = TransmuteAttributes(
-        methods=["POST"], query_parameters=["a"], tags=["t", "t"],
+        methods=["POST"], query_parameters=["a"], tags=["t", "t"]
     )
 
     assert left.tags == set(["t"])

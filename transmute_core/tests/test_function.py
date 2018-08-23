@@ -50,9 +50,7 @@ def test_return_type(func):
 
 def test_swagger_schema_has_object(func):
     swagger = func.get_swagger_operation()
-    assert swagger.responses["200"].schema.to_primitive() == {
-        "type": "integer"
-    }
+    assert swagger.responses["200"].schema.to_primitive() == {"type": "integer"}
 
 
 def test_swagger_operation_has_operation_id(func):
@@ -67,9 +65,7 @@ def test_swagger_operation_has_tags(func):
 
 def test_swagger_schema_path(func):
     swagger = func.get_swagger_path()
-    assert swagger.get_.responses["200"].schema.to_primitive() == {
-        "type": "integer"
-    }
+    assert swagger.get_.responses["200"].schema.to_primitive() == {"type": "integer"}
 
 
 def test_body_param_func(single_body_transmute_func):
@@ -79,7 +75,6 @@ def test_body_param_func(single_body_transmute_func):
 
 
 def test_function_raises_exception_on_path_missing():
-
     @transmute_core.describe(paths=[])
     def func():
         pass

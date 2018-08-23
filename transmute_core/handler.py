@@ -2,9 +2,7 @@
 utilities to help with generating handlers.
 """
 import attr
-from .exceptions import (
-    APIException, NoSerializerFound
-)
+from .exceptions import APIException, NoSerializerFound
 from .function import Response
 from six import reraise
 
@@ -31,9 +29,7 @@ def process_result(transmute_func, context, result, exc, content_type):
         response = result
     else:
         response = Response(
-            result=result,
-            code=transmute_func.success_code,
-            success=True
+            result=result, code=transmute_func.success_code, success=True
         )
     if exc:
         if isinstance(exc, APIException):
@@ -64,5 +60,5 @@ def process_result(transmute_func, context, result, exc, content_type):
         "body": body,
         "code": response.code,
         "content-type": content_type,
-        "headers": response.headers
+        "headers": response.headers,
     }

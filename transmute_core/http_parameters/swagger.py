@@ -1,6 +1,4 @@
-from swagger_schema import (
-    BodyParameter, QueryParameter, HeaderParameter, PathParameter,
-)
+from swagger_schema import BodyParameter, QueryParameter, HeaderParameter, PathParameter
 from ..function.signature import NoDefault
 from .param_set import Param, ParamSet
 
@@ -13,11 +11,9 @@ def get_swagger_parameters(parameters, context):
             "name": name,
             "description": param.description,
             "required": arginfo.default is NoDefault,
-            "collectionFormat": "multi"
+            "collectionFormat": "multi",
         }
-        params.update(
-            context.serializers.to_json_schema(arginfo.type)
-        )
+        params.update(context.serializers.to_json_schema(arginfo.type))
         ret_parameters.append(QueryParameter(params))
 
     for name, param in parameters.header.items():
@@ -25,11 +21,9 @@ def get_swagger_parameters(parameters, context):
         params = {
             "name": name,
             "description": param.description,
-            "required": arginfo.default is NoDefault
+            "required": arginfo.default is NoDefault,
         }
-        params.update(
-            context.serializers.to_json_schema(arginfo.type)
-        )
+        params.update(context.serializers.to_json_schema(arginfo.type))
         ret_parameters.append(HeaderParameter(params))
 
     body_param = _build_body_schema(context.serializers, parameters.body)
@@ -41,11 +35,9 @@ def get_swagger_parameters(parameters, context):
         params = {
             "name": name,
             "description": param.description,
-            "required": arginfo.default is NoDefault
+            "required": arginfo.default is NoDefault,
         }
-        params.update(
-            context.serializers.to_json_schema(arginfo.type)
-        )
+        params.update(context.serializers.to_json_schema(arginfo.type))
         ret_parameters.append(PathParameter(params))
 
     return ret_parameters
@@ -72,12 +64,14 @@ def _build_body_schema(serializer, body_parameters):
         schema = {
             "type": "object",
             "required": list(required),
-            "properties": body_properties
+            "properties": body_properties,
         }
         required = len(required) > 0
-    return BodyParameter({
-        "name": "body",
-        "description": description,
-        "required": required,
-        "schema": schema
-    })
+    return BodyParameter(
+        {
+            "name": "body",
+            "description": description,
+            "required": required,
+            "schema": schema,
+        }
+    )

@@ -1,13 +1,9 @@
 from transmute_core.compat import getfullargspec
 from transmute_core import annotate
-from transmute_core.function.signature import (
-    FunctionSignature,
-    NoDefault
-)
+from transmute_core.function.signature import FunctionSignature, NoDefault
 
 
 def test_signature():
-
     @annotate({"x": int, "y": float, "width": int, "height": float})
     def make_square(x, y, width=None, height=12):
         pass
@@ -25,7 +21,6 @@ def test_signature():
 
 
 def test_signature_no_kwargs():
-
     @annotate({"x": int, "y": int, "return": int})
     def make_square(x, y):
         return x * y
@@ -43,7 +38,6 @@ def test_signature_no_kwargs():
 
 
 def test_self_signature():
-
     def square(self, resource, multiplier=None):
         pass
 
@@ -56,7 +50,6 @@ def test_self_signature():
 
 
 def test_get_signature():
-
     def square(self, resource, multiplier=None):
         pass
 

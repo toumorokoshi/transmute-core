@@ -10,7 +10,7 @@ from .primitive_serializer import (
     StringSerializer,
     BoolSerializer,
     DateTimeSerializer,
-    DecimalSerializer
+    DecimalSerializer,
 )
 
 
@@ -23,8 +23,9 @@ DEFAULT_SERIALIZER_LIST = [
     FloatSerializer(),
     DateTimeSerializer(),
     DecimalSerializer(),
-    CattrsSerializer()
+    CattrsSerializer(),
 ]
+
 
 def get_default_object_serializer_set():
     s = ObjectSerializerSet(DEFAULT_SERIALIZER_LIST)
