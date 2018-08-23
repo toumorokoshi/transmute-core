@@ -33,9 +33,13 @@ def test(build):
 def publish(build):
     """ publish the package itself """
     build.packages.install("wheel")
+    build.packages.install("twine")
     build.executables.run([
         "python", "setup.py",
-        "sdist", "bdist_wheel", "--universal", "upload", "--release"
+        "sdist", "bdist_wheel", "--universal", "--release"
+    ])
+    build.executables.run([
+        "twine", "upload", "dist/*"
     ])
 
 
