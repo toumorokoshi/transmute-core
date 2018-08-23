@@ -6,6 +6,7 @@ import sys
 import mock
 
 from attr.validators import instance_of
+from datetime import datetime
 from mock import Mock
 from transmute_core.exceptions import SerializationException
 from typing import List
@@ -13,9 +14,11 @@ from transmute_core.object_serializers.cattrs_serializer import CattrsSerializer
 from transmute_core import describe, annotate, TransmuteFunction
 from .utils import execute
 
+
 @pytest.fixture
 def cattrs_serializer():
     return CattrsSerializer()
+
 
 class Player(object):
 
@@ -86,6 +89,25 @@ def test_attrs_validate_is_called(cattrs_serializer):
     (List[Card], [card_dict], [card]),
 ])
 def test_attrs_integration_load(cattrs_serializer, typ, inp, out):
+    assert cattrs_serializer.load(typ, inp) == out
+
+
+@attr.s
+class Employee(object):
+    name = attr.ib(type=str)
+    birthday =attr.ib(type=datetime)
+
+birthday = datetime.utcnow()
+employee_dict = {
+    "name": "Kobe",
+    "birthday": birthday.isoformat(),
+}
+employee = Employee(name="Kobe", birthday=birthday)
+
+@pytest.mark.parametrize("typ,inp,out", [
+    (Employee, employee_dict, employee)
+])
+def test_attrs_integration_load_datetime(cattrs_serializer, typ, inp, out):
     assert cattrs_serializer.load(typ, inp) == out
 
 

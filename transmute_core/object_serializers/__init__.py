@@ -1,9 +1,6 @@
 from .compound_serializer import ListSerializer
 from .cattrs_serializer import CattrsSerializer
 from .schematics_serializer import SchematicsSerializer
-from .compound_serializer import (
-    ListSerializer
-)
 from .interface import ObjectSerializer
 from .serializer_set import ObjectSerializerSet
 from .primitive_serializer import (
