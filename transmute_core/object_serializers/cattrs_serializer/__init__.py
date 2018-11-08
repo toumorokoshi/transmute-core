@@ -21,7 +21,7 @@ class CattrsSerializer(ObjectSerializer):
         """
         # cattrs uses a Singledispatch like function
         # under the hood.
-        f = self._cattrs_converter.structure_func.dispatch(cls)
+        f = self._cattrs_converter._structure_func.dispatch(cls)
         return f != self._cattrs_converter._structure_default
 
     def load(self, model, value):
