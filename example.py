@@ -4,6 +4,7 @@ An example integration with flask.
 import json
 import sys
 import transmute_core
+import attr
 from transmute_core import (
     describe, annotate,
     default_context,
@@ -239,7 +240,18 @@ def header():
         "foo", headers={"x-nothing": "value"}
     )
 
+@attr.s
+class AttrsExample(object):
+    foo = attr.ib(type=str)
+
+@describe(paths="/api/v1/attrs")
+@annotate({"return": AttrsExample})
+def attrs():
+    return AttrsExample(foo="bar")
+
 app = Flask(__name__)
+app = Flask(__name__)
+transmute_route(app, attrs)
 transmute_route(app, multiply)
 transmute_route(app, multiply_body)
 transmute_route(app, schematics_example)

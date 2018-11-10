@@ -73,3 +73,4 @@ pip-selfcheck.json
 !transmute_core/swagger/static/lib
 .pytest_cache
 man
+.vscode
