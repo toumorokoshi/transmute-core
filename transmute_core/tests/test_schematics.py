@@ -82,9 +82,11 @@ def test_schematics_to_json_schema(object_serializer_set):
         (URLType, {"type": "string", "format": "url"}),
         (StringType, {"type": "string"}),
         (BaseType, {"type": "object"}),
+        (IntType, {"type": "integer"}),
         (datetime, {"type": "string", "format": "date-time"}),
         (UTCDateTimeType, {"type": "string", "format": "date-time"}),
-        (Serializable(fget=lambda: None, type=StringType()), {"type": "string"}),
+        (Serializable(fget=lambda: None,
+                      type=StringType()), {"type": "string"}),
     ],
 )
 def test_to_json_schema(object_serializer_set, inp, expected):

@@ -25,6 +25,7 @@ from ..compat import all_string_types
 JSON_SCHEMA_MAP = OrderedDict(
     [
         (BooleanType, {"type": "boolean"}),
+        (IntType, {"type": "integer"}),
         (NumberType, {"type": "number"}),
         (UUIDType, {"type": "string", "format": "uuid"}),
         (URLType, {"type": "string", "format": "url"}),
