@@ -69,7 +69,7 @@ def test_schematics_integration_load(object_serializer_set, typ, inp, out):
 
 def test_schematics_to_json_schema(object_serializer_set):
     assert object_serializer_set.to_json_schema(Card) == {
-        "properties": {"name": {"type": "string"}, "price": {"type": "number"}},
+        "properties": {"name": {"type": "string"}, "price": {"type": "integer"}},
         "title": "Card",
         "type": "object",
     }
@@ -99,7 +99,7 @@ def test_schematics_to_json_schema_required_value(object_serializer_set):
         price = IntType()
 
     assert object_serializer_set.to_json_schema(CardNameRequired) == {
-        "properties": {"name": {"type": "string"}, "price": {"type": "number"}},
+        "properties": {"name": {"type": "string"}, "price": {"type": "integer"}},
         "title": "CardNameRequired",
         "required": ["name"],
         "type": "object",
@@ -131,7 +131,7 @@ def test_to_json_list(object_serializer_set):
 def test_to_json_dict(object_serializer_set):
     assert object_serializer_set.to_json_schema(DictType(IntType())) == {
         "type": "object",
-        "additionalProperties": {"type": "number"},
+        "additionalProperties": {"type": "integer"},
     }
 
 
