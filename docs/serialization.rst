@@ -27,6 +27,16 @@ out of the box, object serialization is supported for:
   using type annotations.
 * types denoted using the `typing <https://docs.python.org/3/library/typing.html>`_ module (installed as a separate package for python versions older than 3.5)
 
+Serialization Behavior
+**********************
+
+The intention is to ensure that serialization and deserialization of types matches
+that of `openapi <https://www.openapis.org/>`_, to ensure that the UI prffovided is usable.
+
+This forces behaviors such as multiple arguments being consumed as a comma-separated argument
+per query parameter, rather than just as multiple query parameter with the same name.
+
+
 -------------
 Customization
 -------------
