@@ -46,6 +46,8 @@ class ParamExtractorMock(ParamExtractor):
 
     def _query_argument(self, key, is_list):
         if is_list:
+            if key == "query_list":
+                return ["query1,query2,query3"]
             return ["query"]
         else:
             return "query"
@@ -145,15 +147,16 @@ def test_extract_params_no_content_type(all_param_type_transmute_func):
 
 @pytest.mark.parametrize("typ", [List[str], [str], ListType(StringType)])
 def test_extract_params_honor_as_list(typ):
-    @describe(paths=["/"], query_parameters=["query"])
-    @annotate({"query": typ})
-    def f(query=[1]):
+    @describe(paths=["/"], query_parameters=["query", "query_list"])
+    @annotate({"query": typ, "query_list": typ})
+    def f(query=[1], query_list=[1, 2, 3]):
         pass
 
     tf = TransmuteFunction(f)
     extractor = ParamExtractorMock()
     args, kwargs = extractor.extract_params(default_context, tf, None)
     assert kwargs["query"] == ["query"]
+    assert kwargs["query_list"] == ["query1", "query2", "query3"]
 
 
 @pytest.mark.parametrize("typ", [str])
