@@ -36,6 +36,8 @@ class ParamExtractor(object):
             if values is NoArgument:
                 empty_args.append(arginfo)
             else:
+                if is_list and len(values) == 1:
+                    values = values[0].split(",")
                 args[name] = context.serializers.load(arginfo.type, values)
 
         for name, param in parameters.header.items():
