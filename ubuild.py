@@ -11,6 +11,8 @@ def main(build):
     build.packages.install(".", develop=True)
     # we install flask to allow testing the example.
     build.packages.install("flask")
+    build.packages.install("aiohttp")
+    build.packages.install("pytest-aiohttp")
 
 
 @uranium.task_requires("main")
