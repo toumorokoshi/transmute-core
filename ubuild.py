@@ -11,6 +11,7 @@ def main(build):
     build.packages.install(".", develop=True)
     # we install flask to allow testing the example.
     build.packages.install("flask")
+    build.packages.install("tornado")
     if sys.version_info > (3,4):
         build.packages.install("aiohttp")
         build.packages.install("pytest-aiohttp")
