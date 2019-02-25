@@ -27,8 +27,9 @@ The example above is for flask, but transmute-core has integrations for:
 
 * `aiohttp <https://github.com/toumorokoshi/aiohttp-transmute>`_
 * `flask <https://github.com/toumorokoshi/flask-transmute>`_
+* `tornado <http://www.tornadoweb.org/en/stable/>`_
 
-To learn more, see the 
+To learn more, see the :doc:`tutorial`.
 
 transmute-core is released under the `MIT license <https://github.com/toumorokoshi/transmute-core/blob/master/LICENSE>`_.
 
@@ -41,6 +42,7 @@ User's Guide:
 .. toctree::
    :maxdepth: 2
 
+   tutorial
    function
    serialization
    autodocumentation
