@@ -1,0 +1,5 @@
+site_name: transmute-core
+theme:
+  name: material
+markdown_extensions:
+  - codehilite
