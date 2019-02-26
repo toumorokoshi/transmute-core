@@ -22,7 +22,7 @@ The example above is for flask, but transmute-core has integrations for:
 * [flask](https://github.com/toumorokoshi/flask-transmute/)
 * [tornado](http://www.tornadoweb.org/en/stable/)
 
-To learn more, see the [tutorial](tutorial.md).
+To learn more, see the [tutorial](01_tutorial.md).
 
 ## License
 
