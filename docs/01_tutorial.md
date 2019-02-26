@@ -30,6 +30,10 @@ transmute will extract relevant metadata about the function and use that to defi
 * the api will return back and integer
 * the description of the api in documentation is "multiply two values together"
 
+More complex object can be used. See [serialization](serialization.md).
+
+
+
 ### Annotating Types in Python 2
 
 The example above uses type annotations, which are only present in Python 3.4 and above. If you are using an older version, transmute-core provides the "annotate" decorator to provide the same data.
