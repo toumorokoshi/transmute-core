@@ -1,10 +1,5 @@
-.. transmute-core documentation master file, created by
-   sphinx-quickstart on Fri Apr 15 00:25:27 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-transmute-core
-==============
+What is transmute-core?
+====
 
 transmute-core removes the boilerplate of writing well-documented, easy to use APIs for Python web services, and easily integrates with any web framework. It takes a function
 that looks like this:
@@ -31,20 +26,24 @@ The example above is for flask, but transmute-core has integrations for:
 
 To learn more, see the :doc:`tutorial`.
 
+License
+-------
+
 transmute-core is released under the `MIT license <https://github.com/toumorokoshi/transmute-core/blob/master/LICENSE>`_.
 
 However, transmute-core bundles `swagger-ui
 <https://github.com/swagger-api/swagger-ui>`_ with it, which is released under
 the Apache2 license.
 
-User's Guide:
+User's Guide
+-------
 
 .. toctree::
    :maxdepth: 2
 
    tutorial
-   function
    serialization
+   function
    autodocumentation
    response
    context
@@ -52,7 +51,8 @@ User's Guide:
    install
 
 
-API Reference:
+API Reference
+----
 
 
 .. toctree::

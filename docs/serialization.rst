@@ -1,4 +1,6 @@
-# Serialization and Validation
+=====
+Serialization and Validation
+=====
 
 As part of the API construction, tranmsute-core handles validating the incoming payload to match a schema, and serialization of the json or yaml payloads into native Python types.
 
@@ -15,7 +17,8 @@ At a high level, the following are supported:
 
 The following discusses the types in detail.
 
-## Python Primitives
+Python Primitives
+=====
 
 The following primitives can be used directly:
 
@@ -26,24 +29,29 @@ The following primitives can be used directly:
 * decimal
 * datetime
 
-## Typing Module
+Typing Module
+=====
 
 Anything from the typing module is supported.
 
-## Attrs
+Attrs
+=====
 
 Attrs provides a way to define types per attr.ib, which can be parsed
 by transmute. subtypes can be a combination of attrs objects, or the typing module. E.g. to define a list of attrs objects, you can use typing.List[MyAttrsClass].
 
-## Schematics
+Schematics
+=====
 
 Both schematics models, and schematics types are supported. 
 
 (note: benchmarking has shows schematics to be very imperformant. See performance).
 
-## Details
+Details
+=====
 
-### Query Parameter Array Arguments are Consumed as a Comma-separated List
+Query Parameter Array Arguments are Consumed as a Comma-separated List
+-----
 
 The intention is to ensure that serialization and deserialization of types matches
 that of `openapi <https://www.openapis.org/>`_, to ensure that the UI provided is usable.
@@ -51,7 +59,8 @@ that of `openapi <https://www.openapis.org/>`_, to ensure that the UI provided i
 This forces behaviors such as multiple arguments being consumed as a comma-separated argument
 per query parameter, rather than just as multiple query parameter with the same name.
 
-## Performance
+Performance
+=====
 
 Among all of the components within transmute-core, the serialization and validation component has the most overhead (the rest are negligible relative to most application's business logic). As a result, the choice of object to use will have a huge impact on performance.
 
@@ -59,7 +68,8 @@ attrs is the most performant, with a huge con around error messages (a missing a
 
 schematics has great error messages, but is roughly 30x slower than attrs.
 
-## Customization
+Customization
+=====
 
 transmute-core can support additional object types, by modifying the global TransmuteContext object.
 

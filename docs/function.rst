@@ -1,46 +1,24 @@
-======================================
-Writing transmute-compatible functions
-======================================
+=====
+Functions and Annotations
+=====
 
-.. _functions:
+transmute-core infers a lot of data from the function metadata, but it's often necessary to express more complex scenarios.
 
-.. note:: this section is broadly applicable to all transmute frameworks.
+This page discusses some details.
 
-Functions are converted to APIs by using an intermediary TransmuteFunction object.
+Argument Inference
+=====
 
-A transmute function is identical to a standard Python function, with the
-addition of a few details:
+The convention in transmute is to have the method dictate the source of the
+argument:
 
-------------------------------------------------------------------
-Add function annotations for input type validation / documentation
-------------------------------------------------------------------
+* GET uses query parameters
+* all other methods extract parameters from the body
 
-if type validation and complete swagger documentation is desired,
-arguments should be annotated with types.  For Python 3, `function
-annotations <https://www.python.org/dev/peps/pep-3107/>`_ are used.
+This behaviour can be overridden with transmute_core.describe.
 
-For Python 2, transmute provides an annotate decorator:
-
-.. code-block:: python
-
-   import transmute_core
-
-   # the python 3 way
-   def add(left: int, right: int) -> int:
-        return left + right
-
-   # the python 2 way
-   @transmute_core.annotate({"left": int, "right": int, "return": int})
-   def add(left, right):
-       return left + right
-
-
-By default, primitive types and `schematics <http://schematics.readthedocs.org/en/latest/>`_ models are
-accepted. See :ref:`serialization <serialization>` for more information.
-
---------------------------------------------------
-Use transmute_core.describe to customize behaviour
---------------------------------------------------
+use transmute_core.describe to customize behaviour
+=====
 
 Not every aspect of an api can be extracted from the function
 signature: often additional metadata is required. Transmute provides the "describe" decorator
@@ -71,15 +49,11 @@ to specify those attributes.
             db.async_insert_record(name)
         return True
 
-
-
-----------
 Exceptions
-----------
+=====
 
 By default, transmute functions only catch exceptions which extend
-:class:`transmute_core.APIException`, which results in an http response
-with a non-200 status code. (400 by default):
+transmute_core.APIException. When caught, the response is an http response with a non-200 status code. (400 by default):
 
 
 .. code-block:: python
@@ -90,28 +64,16 @@ with a non-200 status code. (400 by default):
         if not retrieve_from_database():
             raise APIException(code=404)
 
-However, many transmute frameworks allow the catching of additional
-exceptions, and converting them to an error response.
+Many transmute frameworks allow the catching of additional
+exceptions, and converting them to an error response. See the framework specific guides for more details.
 
 
------------------------------------------------------
-Query parameter arguments vs post parameter arguments
------------------------------------------------------
-
-The convention in transmute is to have the method dictate the source of the
-argument:
-
-* GET uses query parameters
-* all other methods extract parameters from the body
-
-This behaviour can be overridden with :data:`transmute_core.decorators.describe`.
-
--------------------
 Additional Examples
--------------------
+=====
+
 
 Optional Values
-===============
+-----
 
 transmute libraries support optional values by providing them as keyword arguments:
 
@@ -119,11 +81,11 @@ transmute libraries support optional values by providing them as keyword argumen
 
     # count and page will be optional with default values,
     # but query will be required.
-    def add(count: int=100, page: int=0, query: str) -> [str]:
+    def add(count: int=100, page: int=0, query: str) -> List[str]:
         return db.query(query=query, page=page, count=count)
 
 Custom Response Code
-====================
+-----
 
 In the case where it desirable to override the default response code, the
 response_code parameter can be used:
@@ -135,7 +97,7 @@ response_code parameter can be used:
         return True
 
 Use a single schema for the body parameter
-==========================================
+-----
 
 It's often desired to represent the body parameter as a single
 argument. That can be done using a string for body_parameters describe:
@@ -148,7 +110,7 @@ argument. That can be done using a string for body_parameters describe:
 
 
 Multiple Response Types
-=======================
+-----
 
 To allow multiple response types, there is a combination of types that
 can be used:
@@ -170,12 +132,11 @@ can be used:
             return Response(True, 201)
 
 note that adding these will remove the documentation and type honoring
-for the default success result: it is assumed you will document all non-400
-responses in the response_types dict yourself.
+for the default success result: it is assumed you will document all non-400 responses in the response_types dict yourself.
 
 
 Headers in a Response
-=====================
+-----
 
 Headers within a response also require defining a custom response type:
 
@@ -198,3 +159,4 @@ Headers within a response also require defining a custom response type:
         return Response("success!", headers={
             "location": "http://foo"
         })
+
