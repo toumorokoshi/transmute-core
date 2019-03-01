@@ -1,6 +1,6 @@
-=====
-Aiohttp Integration
-=====
+=======
+Aiohttp
+=======
 
-Differences from the userguide
-=====
+Differences from the Userguide
+==============================

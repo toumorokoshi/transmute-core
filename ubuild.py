@@ -55,14 +55,15 @@ def changelog(build):
         fh.write(changelog_text)
 
 
-def build_docs(build):
+def dev_docs(build):
     changelog(build)
     build.packages.install("Babel")
     build.packages.install("Sphinx")
+    build.packages.install("Sphinx-autobuild")
     build.packages.install("sphinx_rtd_theme")
     build.packages.install("sphinxcontrib-programoutput")
     return build.executables.run([
-        "sphinx-build", "docs",
+        "sphinx-autobuild", "docs",
         os.path.join("docs", "_build")
     ] + build.options.args)[0]
 

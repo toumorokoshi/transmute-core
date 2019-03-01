@@ -44,11 +44,8 @@ User's Guide
    tutorial
    serialization
    function
-   autodocumentation
-   response
-   context
-   creating_a_framework
-   install
+   frameworks/index
+   advanced/index
 
 
 API Reference

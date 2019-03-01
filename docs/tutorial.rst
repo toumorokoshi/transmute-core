@@ -13,13 +13,14 @@ From a high level, the steps are:
 3. adding a route that exposes the swagger documentation page, displaying all transmute routes created
 
 1. Authoring a Function To Be Transmuted
-----
+----------------------------------------
 
 transmute-core is very flexible with regards to what sort of functions can be converted into APIs. The more best practices followed, the better.
 
 Here's an ideal example:
 
 .. code-block:: python
+
     def multiply(left: int, right: int) -> int:
         """
         multiply two values together.
@@ -34,9 +35,9 @@ transmute will extract relevant metadata about the function and use that to defi
 
 More complex object can be used. See [serialization](serialization.md).
 
--------
+----------------------------
 Annotating Types in Python 2
--------
+----------------------------
 
 The example above uses type annotations, which are only present in Python 3.4 and above. If you are using an older version, transmute-core provides the "annotate" decorator to provide the same data.
 
@@ -52,7 +53,7 @@ The example above uses type annotations, which are only present in Python 3.4 an
         return left * right
 
 2. Annotating a Function
--------
+------------------------
 
 This provides some of the data, but there is some missing information to fully define an API:
 
@@ -63,6 +64,7 @@ This provides some of the data, but there is some missing information to fully d
 We can add that information with the describe function from transmute_core:
 
 .. code-block:: python
+
     from transmute_core import annotate, describe
 
     @describe(paths='/multiply', methods=["POST"])
@@ -81,6 +83,7 @@ This specifies:
 To attach the result to a flask application, transmute_core.frameworks.flask provides a route() function.
 
 .. code-block:: python
+
     from transmute_core.frameworks.flask import route
     from flask import Flask
 
@@ -98,6 +101,7 @@ As a shorthand, you can also pass configuration parameters into route as you wou
 
 
 .. code-block:: python
+
     from transmute_core.frameworks.flask import route
     from flask import Flask
 
@@ -120,7 +124,7 @@ At this point, you can start the server, and you can send it requests! Try it ou
 But what about an easy way to view what APIs are available?
 
 3. Adding Swagger Documentation to the App
-------
+------------------------------------------
 
 As part of the route creation and mounting process, transmute will also add metadata that's easily discoverable.
 That metadata can be exposed as a swagger json payload. In addition, transmute-core bundles the swagger UI so you can 
@@ -141,6 +145,7 @@ At the end of the day, you can get a well documented API, and provide documentat
 
 
 .. code-block:: python
+
     from transmute_core.frameworks.flask import route, add_swagger
     from flask import Flask
 
@@ -161,5 +166,5 @@ At the end of the day, you can get a well documented API, and provide documentat
 Congrats! You have an application up.
 
 4. What's Next?
-------
+---------------
 
