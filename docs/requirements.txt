@@ -1,2 +1,4 @@
+babel
 sphinx-readable-theme
+sphinxcontrib-programoutput
 jsonschema
