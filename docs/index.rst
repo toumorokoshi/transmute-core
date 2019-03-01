@@ -1,5 +1,5 @@
 What is transmute-core?
-====
+=======================
 
 transmute-core removes the boilerplate of writing well-documented, easy to use APIs for Python web services, and easily integrates with any web framework. It takes a function
 that looks like this:

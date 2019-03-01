@@ -5,3 +5,4 @@ Frameworks Supported
    :maxdepth: 1
 
    aiohttp
+   flask

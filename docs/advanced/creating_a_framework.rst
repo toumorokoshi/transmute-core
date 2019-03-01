@@ -26,10 +26,7 @@ A transmute library should provide at a minimum the following functionality:
 2. a way to register a transmute function to the application object
 3. a way to generate a swagger.json from an application object
 
-Reference implementations exist at:
-
-* https://github.com/toumorokoshi/aiohttp-transmute
-* https://github.com/toumorokoshi/flask-transmute
+See transmute_core.frameworks for examples
 
 .. important:
 
@@ -46,5 +43,5 @@ Simple Example
 Here is a minimal implementation for `Flask <http://flask.pocoo.org/>`_, clocking in at
 just under 200 lines including comments and formatting. (just under 100 without)
 
-.. include:: ../example.py
+.. include:: ../../example.py
     :literal:

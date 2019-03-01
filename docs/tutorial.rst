@@ -168,3 +168,8 @@ Congrats! You have an application up.
 4. What's Next?
 ---------------
 
+You now have everything you need to get started with transmute! If you're
+interested in more complex objects in your apis, take a look at :doc:`serialization`.
+
+If you're looking for more complex use cases for the APIs such as specifying 
+how parameters should be passed in, check out :doc:`function`.
