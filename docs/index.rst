@@ -16,12 +16,12 @@ that looks like this:
 Into an API /multiply that:
 
 * validates and serializes objects into the proper object
-* has an :doc:`autodocumentation <autodocumentation>` page for all APIs generated this way, via `swagger <http://swagger.io/>`_.
+* has a documentation page for all APIs generated this way, via `swagger <http://swagger.io/>`_.
 
 The example above is for flask, but transmute-core has integrations for:
 
-* `aiohttp <https://github.com/toumorokoshi/aiohttp-transmute>`_
-* `flask <https://github.com/toumorokoshi/flask-transmute>`_
+* `aiohttp <https://aiohttp.readthedocs.io/en/stable/>`_
+* `flask <http://flask.pocoo.org/>`_
 * `tornado <http://www.tornadoweb.org/en/stable/>`_
 
 To learn more, see the :doc:`tutorial`.
@@ -36,31 +36,49 @@ However, transmute-core bundles `swagger-ui
 the Apache2 license.
 
 User's Guide
--------
+------------
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
+    :caption: User's Guide
 
-   tutorial
-   serialization
-   function
-   frameworks/index
-   advanced/index
+    tutorial
+    serialization
+    function
+
+
+.. toctree::
+    :maxdepth: 2
+    :glob:
+    :hidden:
+    :caption: Framework Specific Guides
+
+    frameworks/*
+
+.. toctree::
+    :maxdepth: 2
+    :glob:
+    :hidden:
+    :caption: Advanced Topics
+
+    advanced/*
 
 
 API Reference
-----
+-------------
 
 
 .. toctree::
    :maxdepth: 2
+   :hidden:
+   :caption: API
 
    api
 
 
-Changelog:
-
 .. toctree::
    :maxdepth: 2
+   :hidden:
+   :caption: Changelog
 
    changelog
