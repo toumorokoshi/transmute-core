@@ -12,7 +12,7 @@ def main(build):
     # we install flask to allow testing the example.
     build.packages.install("flask")
     build.packages.install("tornado")
-    if sys.version_info > (3,4):
+    if sys.version_info > (3, 4):
         build.packages.install("aiohttp")
         build.packages.install("pytest-aiohttp")
 
@@ -77,9 +77,11 @@ def clean_and_install_swagger_ui(build):
     import io
     import shutil
     import tarfile
-    version = "2.2.8"
-    PATH = "https://github.com/swagger-api/swagger-ui/archive/v{0}.tar.gz".format(version)
-    TARGET_PATH = os.path.join(build.root, "transmute_core", "swagger", "static")
+    version = "3.20.9"
+    PATH = "https://github.com/swagger-api/swagger-ui/archive/v{0}.tar.gz".format(
+        version)
+    TARGET_PATH = os.path.join(
+        build.root, "transmute_core", "swagger", "static")
     EXTRACTED_TOP_LEVEL_DIRNAME = "swagger-ui-{0}".format(version)
     build.packages.install("requests")
     import requests
@@ -94,6 +96,7 @@ def clean_and_install_swagger_ui(build):
     # move the files under the top level directory.
     for name in os.listdir(os.path.join(TARGET_PATH, EXTRACTED_TOP_LEVEL_DIRNAME, "dist")):
         shutil.move(
-            os.path.join(TARGET_PATH, EXTRACTED_TOP_LEVEL_DIRNAME, "dist", name),
+            os.path.join(
+                TARGET_PATH, EXTRACTED_TOP_LEVEL_DIRNAME, "dist", name),
             TARGET_PATH
         )

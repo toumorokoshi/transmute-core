@@ -219,6 +219,7 @@ class SchematicsBody(Model):
 
 @describe(paths="/api/v1/schematics",
           methods=["POST"],
+          tags=["foo"],
           body_parameters="body")
 @annotate({"body": SchematicsBody})
 def schematics_example(body):
