@@ -77,4 +77,4 @@ class TestApp(tornado.testing.AsyncHTTPTestCase):
         resp = self.fetch("/swagger")
         assert resp.code == 200
         body = resp.body.decode("UTF-8")
-        assert "swagger-section" in body
+        assert "End Swagger" in body
