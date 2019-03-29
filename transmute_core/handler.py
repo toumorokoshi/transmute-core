@@ -33,7 +33,7 @@ def process_result(transmute_func, context, result, exc, content_type):
         )
     if exc:
         if isinstance(exc, APIException):
-            response.result = "invalid api use: {0}".format(str(exc))
+            response.result = str(exc)
             response.success = False
             response.code = exc.code
         else:
