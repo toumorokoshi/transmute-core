@@ -29,7 +29,7 @@ def test_process_result_api_exception(complex_transmute_func):
         complex_transmute_func, default_context, result, exc, CONTENT_TYPE
     )
     assert json.loads(output["body"].decode()) == {
-        "result": "invalid api use: " + str(exc),
+        "result": str(exc),
         "success": False,
         "code": 400,
         "headers": {},
