@@ -21,13 +21,9 @@ install_requires = [
     'six',
     'swagger-schema>=0.5.1',
     'pyyaml',
+    "typing; python_version < '3.5'",
+    "singledispatch; python_version < '3.4'",
 ]
-
-if sys.version_info < (3, 5):
-    install_requires.append("typing")
-
-if sys.version_info < (3, 4):
-    install_requires.append("singledispatch")
 
 tests_require = []
 

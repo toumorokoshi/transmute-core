@@ -71,6 +71,7 @@ pip-selfcheck.json
 
 # allowing transmute-core's lib directory
 !transmute_core/swagger/static/lib
+transmute_core/swagger/static/swagger-ui-*
 .pytest_cache
 man
 .vscode
