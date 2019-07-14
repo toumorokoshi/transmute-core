@@ -3,13 +3,47 @@
 # * download and set up a virtualenv
 # * install uranium
 # * run uranium
-URANIUM_STANDALONE_URL = "https://raw.githubusercontent.com/toumorokoshi/uranium/master/uranium/scripts/uranium_standalone"
+import os
 
-try:
-    from urllib2 import urlopen as urlopen
-except:
-    from urllib.request import urlopen as urlopen
+ROOT = os.path.dirname(__file__)
+URANIUM_GITHUB_ACCOUNT = os.getenv("URANIUM_GITHUB_ACCOUNT", "toumorokoshi")
+URANIUM_GITHUB_BRANCH = os.getenv("URANIUM_GITHUB_BRANCH", "master")
+URANIUM_STANDALONE_URL = "https://raw.githubusercontent.com/{account}/uranium/{branch}/uranium/scripts/uranium_standalone".format(
+    account=URANIUM_GITHUB_ACCOUNT, branch=URANIUM_GITHUB_BRANCH
+)
+CACHE_DIRECTORY = os.path.join(ROOT, ".env", ".uranium")
+CACHED_URANIUM_STANDALONE = os.path.join(CACHE_DIRECTORY, "uranium_standalone")
+# set uranium to use to 2.0a0
+os.environ["URANIUM_VERSION"] = "2.0a1"
 
-print("loading uranium bootstrapper...")
-body = urlopen(URANIUM_STANDALONE_URL).read()
-exec(body)
+
+def get_cached_standalone():
+    if not os.path.isfile(CACHED_URANIUM_STANDALONE):
+        return None
+    with open(CACHED_URANIUM_STANDALONE) as fh:
+        return fh.read()
+
+
+def store_cached_standalone(body):
+    if not os.path.exists(CACHE_DIRECTORY):
+        os.makedirs(CACHE_DIRECTORY)
+    with open(CACHED_URANIUM_STANDALONE, "wb+") as fh:
+        fh.write(body)
+
+
+cached_standalone = get_cached_standalone()
+
+if cached_standalone is not None:
+    exec(cached_standalone)
+else:
+    print("Downloading uranium from " + URANIUM_STANDALONE_URL)
+    try:
+        from urllib2 import urlopen as urlopen
+    except:
+        from urllib.request import urlopen as urlopen
+
+    print("loading uranium bootstrapper...")
+    body = urlopen(URANIUM_STANDALONE_URL).read()
+    print("caching standalone uranium script...")
+    store_cached_standalone(body)
+    exec(body)
