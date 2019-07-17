@@ -13,9 +13,7 @@ current_build.config.update(
         "uranium-plus": {
             "module": "transmute_core",
             "publish": {"additional_args": ["--release"]},
-            "test": {
-                "packages": ["mock", "pytest-benchmark", "flask", "tornado", "pydantic"]
-            },
+            "test": {"packages": ["mock", "pytest-benchmark", "flask", "tornado"]},
         }
     }
 )
@@ -23,6 +21,9 @@ current_build.config.update(
 if sys.version_info > (3, 4):
     current_build.packages.install("aiohttp")
     current_build.packages.install("pytest-aiohttp")
+
+if sys.version_info > (3, 6):
+    current_build.packages.install("pydantic")
 
 uranium_plus.bootstrap(current_build)
 current_build.tasks.prepend("install_swagger_ui", "main")
