@@ -92,7 +92,7 @@ class SchematicsSerializer(ObjectSerializer):
         return model
 
     def load(self, model, value):
-        model = _enforce_instance(model)
+        model = _enforce_type_instance_or_model_class(model)
         try:
             context = get_import_context(oo=True)
             model = self._translate_to_model(model)
@@ -108,7 +108,7 @@ class SchematicsSerializer(ObjectSerializer):
             raise SerializationException(str(e))
 
     def dump(self, model, value):
-        model = _enforce_instance(model)
+        model = _enforce_type_instance_or_model_class(model)
         try:
             model = self._translate_to_model(model)
             return model.to_primitive(value)
@@ -120,7 +120,7 @@ class SchematicsSerializer(ObjectSerializer):
             model = model.type
         # ensure that the model is an instance,
         # as further processing steps required that it is.
-        model = _enforce_instance(model)
+        model = _enforce_type_instance_or_model_class(model)
         # once the model is an instance of something, there
         # are several legacy transforms (like taking a tuple of schematics
         # models) that require a second transformation to a pure schematics model.
@@ -179,11 +179,15 @@ def _dict_type_to_json_schema(dict_type):
     return {"type": "object", "additionalProperties": _to_json_schema(dict_type.field)}
 
 
-def _enforce_instance(model_or_class):
+def _enforce_type_instance_or_model_class(model_or_class):
     """
-    It's a common mistake to not initialize a
-    schematics class. We should handle that by just
-    calling the default constructor.
+    As a broad range of schematics classes and instances are supported, this
+    ensures that those options are normalized to one of the following:
+
+    * an uninstantiated model
+    * an instantiated type
+
+    This enables the rest of the code to only have to handle those two cases.
     """
     if isinstance(model_or_class, type) and issubclass(model_or_class, BaseType):
         return model_or_class()
