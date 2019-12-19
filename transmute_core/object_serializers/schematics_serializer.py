@@ -74,16 +74,16 @@ class SchematicsSerializer(ObjectSerializer):
         if isinstance(model, BaseType):
             return model
 
+        if model in self._models:
+            return self._models[model]
+
         if isinstance(model, ModelMeta):
-            return ModelType(model)
+            self._models[model] = ModelType(model)
 
         if model not in self._models and isinstance(model, tuple):
             self._models[model] = ListType(self._translate_to_model(model[0]))
 
-        if model in self._models:
-            return self._models[model]
-
-        return model
+        return self._models.get(model, model)
 
     @staticmethod
     def _to_key(model):
@@ -118,7 +118,12 @@ class SchematicsSerializer(ObjectSerializer):
     def to_json_schema(self, model):
         if isinstance(model, Serializable):
             model = model.type
+        # ensure that the model is an instance,
+        # as further processing steps required that it is.
         model = _enforce_instance(model)
+        # once the model is an instance of something, there
+        # are several legacy transforms (like taking a tuple of schematics
+        # models) that require a second transformation to a pure schematics model.
         model = self._translate_to_model(model)
         return _to_json_schema(model)
 

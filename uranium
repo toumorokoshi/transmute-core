@@ -10,8 +10,8 @@ URANIUM_GITHUB_ACCOUNT = os.getenv("URANIUM_GITHUB_ACCOUNT", "toumorokoshi")
 URANIUM_GITHUB_BRANCH = os.getenv("URANIUM_GITHUB_BRANCH", "master")
 URANIUM_STANDALONE_URL = "https://raw.githubusercontent.com/{account}/uranium/{branch}/uranium/scripts/uranium_standalone".format(
     account=URANIUM_GITHUB_ACCOUNT, branch=URANIUM_GITHUB_BRANCH
-)
-CACHE_DIRECTORY = os.path.join(ROOT, ".env", ".uranium")
+virtual)
+CACHE_DIRECTORY = os.path.join(ROOT, ".virtualenv", ".uranium")
 CACHED_URANIUM_STANDALONE = os.path.join(CACHE_DIRECTORY, "uranium_standalone")
 # set uranium to use to 2.0a0
 os.environ["URANIUM_VERSION"] = "2.0a1"

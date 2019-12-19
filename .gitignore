@@ -1,4 +1,5 @@
 # uranium
+.virtualenv
 .env
 bin
 build

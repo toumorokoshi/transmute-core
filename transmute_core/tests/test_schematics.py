@@ -14,6 +14,7 @@ from schematics.types import (
 from schematics.types.compound import DictType, ModelType
 from schematics.exceptions import ValidationError
 from transmute_core.exceptions import SerializationException, NoSerializerFound
+from transmute_core.object_serializers.schematics_serializer import SchematicsSerializer
 
 
 class Card(Model):
@@ -85,8 +86,7 @@ def test_schematics_to_json_schema(object_serializer_set):
         (IntType, {"type": "integer"}),
         (datetime, {"type": "string", "format": "date-time"}),
         (UTCDateTimeType, {"type": "string", "format": "date-time"}),
-        (Serializable(fget=lambda: None,
-                      type=StringType()), {"type": "string"}),
+        (Serializable(fget=lambda: None, type=StringType()), {"type": "string"}),
     ],
 )
 def test_to_json_schema(object_serializer_set, inp, expected):
@@ -165,3 +165,27 @@ def test_can_handle(object_serializer_set, cls, should_handle):
     the object serializer set should not raise an exception if it can handle these types.
     """
     object_serializer_set[cls]
+
+
+def test_schematics_uses_cached_entries():
+    """
+    Regression test. Validating that SchematicsSerializer uses the
+    same json schema it used previously, as before erroneous
+    use of the instantiated model as a key was causing memory leaks.
+    """
+    serializer = SchematicsSerializer()
+    # A nested schema type is required as primitives have
+    # hard-coded dictionaries representing the json.
+    class SchematicsBody(Model):
+        name = StringType(max_length=5)
+
+    # ensure that instances have the same key as well.
+    instance = ModelType(SchematicsBody)
+    original_payload = serializer.to_json_schema(instance)
+    second_payload = serializer.to_json_schema(instance)
+    assert original_payload is second_payload
+
+    # classes are also valid output to recieve that the json schema
+    original_payload = serializer.to_json_schema(SchematicsBody)
+    second_payload = serializer.to_json_schema(SchematicsBody)
+    assert original_payload is second_payload
