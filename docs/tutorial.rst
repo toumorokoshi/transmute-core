@@ -4,7 +4,7 @@ Getting Started
 
 This guide explains how to get the most out of transmute. These instructions have been written with flask in mind, but they apply to most frameworks with some minor tweaks.
 
-For details that pertain to specifics framework, see framework support.
+For details that pertain to a specific framework, see framework support.
 
 From a high level, the steps are:
 
@@ -30,10 +30,10 @@ Here's an ideal example:
 transmute will extract relevant metadata about the function and use that to define certain attributes when creating the API. In the example above:
 
 * multiply will allow two arguments: left and right, which are both integers
-* the api will return back and integer
+* the api will return back an integer
 * the description of the api in documentation is "multiply two values together"
 
-More complex object can be used. See [serialization](serialization.md).
+More complex objects can be used. See [serialization](serialization.md).
 
 ----------------------------
 Annotating Types in Python 2
@@ -77,7 +77,7 @@ We can add that information with the describe function from transmute_core:
 This specifies:
 
 * the api should be mounted to the path /multiply
-* multiply will response to the POST method
+* multiply will respond to the POST method
 * since the method is POST, all arguments should be passed into the body
 
 To attach the result to a flask application, transmute_core.frameworks.flask provides a route() function.
@@ -128,7 +128,7 @@ But what about an easy way to view what APIs are available?
 
 As part of the route creation and mounting process, transmute will also add metadata that's easily discoverable.
 That metadata can be exposed as a swagger json payload. In addition, transmute-core bundles the swagger UI so you can 
-view it easily and as a part of your application.
+view it easily as a part of your application.
 
 This is wrapped up as a single convenience method, provided per framework. For flask, it's transmute_core.frameworks.add_swagger:
 
@@ -139,7 +139,7 @@ This is wrapped up as a single convenience method, provided per framework. For f
     # note: this must be executed only after all APIs are mounted.
     add_swagger(app, "/swagger.json", "/api/")
 
-This mounts a the swagger json payload to /swagger.json, and provides a UI to view that at /api/.
+This mounts the swagger json payload to /swagger.json, and provides a UI to view that at /api/.
 
 At the end of the day, you can get a well documented API, and provide documentation, with roughly 4 lines from transmute_core.
 
