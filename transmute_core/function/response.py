@@ -1,6 +1,10 @@
 import attr
-from collections import Mapping
+import sys
 
+if  sys.version_info.major == 3 and sys.version_info.minor >= 10:
+    from collections.abc import Mapping
+else:
+    from collections import Mapping
 
 @attr.s
 class Response(object):

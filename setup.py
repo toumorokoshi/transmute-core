@@ -65,6 +65,7 @@ setup(name='transmute-core',
           'Programming Language :: Python :: 3',
           'Programming Language :: Python :: 3.4',
           'Programming Language :: Python :: 3.5',
+          'Programming Language :: Python :: 3.10',
       ],
       tests_require=tests_require
       )
