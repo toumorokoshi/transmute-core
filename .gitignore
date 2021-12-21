@@ -10,3 +10,5 @@ VERSION
 # standard egg installation
 **/**.egg-info/**
 **/__pycache__/**
+_version.py
+*.pyc

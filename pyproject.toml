@@ -1,0 +1,13 @@
+[build-system]
+# setuptools and setuptools_scm version are explicitly set
+# to allow support for python2
+requires = ["setuptools>=44", "wheel", "setuptools_scm>=5"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+write_to = "transmute_core/_version.py"
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::schematics.deprecated.SchematicsDeprecationWarning"
+]

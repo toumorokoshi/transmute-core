@@ -13,6 +13,12 @@ class CattrsSerializer(ObjectSerializer):
     def __init__(self):
         self._schema_extractor = init_default_extractor()
         self._cattrs_converter = create_cattrs_converter()
+        # to be compatible with older versions of cattrs,
+        # attempt to discover the version of structure_error to use.
+        if hasattr(self._cattrs_converter, "_structure_error"):
+            self._structure_error = self._cattrs_converter._structure_error
+        else:
+            self._structure_error = self._cattrs_converter._structure_default
 
     def can_handle(self, cls):
         """
@@ -22,7 +28,7 @@ class CattrsSerializer(ObjectSerializer):
         # cattrs uses a Singledispatch like function
         # under the hood.
         f = self._cattrs_converter._structure_func.dispatch(cls)
-        return f != self._cattrs_converter._structure_default
+        return f != self._structure_error
 
     def load(self, model, value):
         """
