@@ -97,7 +97,7 @@ class TransmuteAttributes(object):
 
     @staticmethod
     def _join_parameters(base, nxt):
-        """ join parameters from the lhs to the rhs, if compatible. """
+        """join parameters from the lhs to the rhs, if compatible."""
         if nxt is None:
             return base
         if isinstance(base, set) and isinstance(nxt, set):

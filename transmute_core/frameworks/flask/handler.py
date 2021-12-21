@@ -1,19 +1,18 @@
 import sys
 from functools import wraps
 from flask import request, Response
-from transmute_core import (
-    ParamExtractor, NoArgument
-)
+from transmute_core import ParamExtractor, NoArgument
 
 
 def create_routes_and_handler(transmute_func, context):
-
     @wraps(transmute_func.raw_func)
     def handler(*args, **kwargs):
         exc, result = None, None
         try:
             args, kwargs = _param_instance.extract_params(
-                context, transmute_func, request.content_type,
+                context,
+                transmute_func,
+                request.content_type,
             )
             result = transmute_func(*args, **kwargs)
         except Exception as e:
@@ -28,14 +27,12 @@ def create_routes_and_handler(transmute_func, context):
             mimetype=response["content-type"],
             headers=response["headers"],
         )
-    return (
-        _convert_paths_to_flask(transmute_func.paths),
-        handler
-    )
+
+    return (_convert_paths_to_flask(transmute_func.paths), handler)
 
 
 def _convert_paths_to_flask(transmute_paths):
-    """ flask has it's own route syntax, so we convert it. """
+    """flask has it's own route syntax, so we convert it."""
     paths = []
     for p in transmute_paths:
         paths.append(p.replace("{", "<").replace("}", ">"))
@@ -43,7 +40,6 @@ def _convert_paths_to_flask(transmute_paths):
 
 
 class ParamExtractorFlask(ParamExtractor):
-
     def _get_framework_args(self):
         return {}
 
@@ -67,5 +63,6 @@ class ParamExtractorFlask(ParamExtractor):
     @staticmethod
     def _path_argument(key):
         return request.view_args.get(key, NoArgument)
+
 
 _param_instance = ParamExtractorFlask()

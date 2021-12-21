@@ -61,7 +61,7 @@ class ParamExtractorMock(ParamExtractor):
 
 @pytest.fixture
 def all_param_type_transmute_func():
-    """ ensure retrieval of all parameter types is honored. """
+    """ensure retrieval of all parameter types is honored."""
     return TransmuteFunction(all_param_type)
 
 
@@ -81,7 +81,7 @@ def test_extract_params(all_param_type_transmute_func):
 
 
 def test_extract_params_no_arguments(all_param_type_transmute_func):
-    """ if no arguments are passed, use the defaults """
+    """if no arguments are passed, use the defaults"""
 
     extractor = ParamExtractorMock()
     extractor._query_argument = lambda *args: NoArgument
@@ -95,7 +95,7 @@ def test_extract_params_no_arguments(all_param_type_transmute_func):
 
 
 def test_body_with_only_default_args_can_be_empty(all_param_type_transmute_func):
-    """ if no body is passed, and all body args have defaults, it is still a valid request. """
+    """if no body is passed, and all body args have defaults, it is still a valid request."""
 
     extractor = ParamExtractorMock()
     extractor.body = ""
@@ -107,7 +107,7 @@ def test_body_with_only_default_args_can_be_empty(all_param_type_transmute_func)
 
 
 def test_extract_params_bad_body_content_type(all_param_type_transmute_func):
-    """ if no arguments are passed, use the defaults """
+    """if no arguments are passed, use the defaults"""
 
     extractor = ParamExtractorMock()
     with pytest.raises(APIException):
@@ -117,7 +117,7 @@ def test_extract_params_bad_body_content_type(all_param_type_transmute_func):
 
 
 def test_extract_params_positional_args():
-    """ if no arguments are passed, use the defaults """
+    """if no arguments are passed, use the defaults"""
     tf = TransmuteFunction(pos_type)
     extractor = ParamExtractorMock()
     args, kwargs = extractor.extract_params(default_context, tf, "application/json")
@@ -135,7 +135,7 @@ def test_with_framework_arg():
 
 
 def test_extract_params_no_content_type(all_param_type_transmute_func):
-    """ if no content type is provided, expect json. """
+    """if no content type is provided, expect json."""
 
     extractor = ParamExtractorMock()
     args, kwargs = extractor.extract_params(

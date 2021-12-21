@@ -3,7 +3,7 @@ from .function import TransmuteAttributes
 
 
 def describe(**kwargs):
-    """ describe is a decorator to customize the rest API
+    """describe is a decorator to customize the rest API
     that transmute generates, such as choosing
     certain arguments to be query parameters or
     body parameters, or a different method.

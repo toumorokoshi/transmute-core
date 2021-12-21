@@ -71,7 +71,7 @@ class TransmuteFunction(object):
         return self.raw_func(*args, **kwargs)
 
     def get_response_by_code(self, code):
-        """ return the return type, by code """
+        """return the return type, by code"""
         return self.response_types.get(code, {}).type
 
     def get_swagger_path(self, context=default_context):

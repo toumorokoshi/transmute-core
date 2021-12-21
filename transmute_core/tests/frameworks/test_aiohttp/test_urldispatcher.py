@@ -30,7 +30,9 @@ def test_urldispatcher_exception_invalid_argcount(url_dispatcher):
 
 
 def test_urldispatcher_adds_route(app, url_dispatcher):
-    with patch("transmute_core.frameworks.aiohttp.url_dispatcher.add_route") as add_route:
+    with patch(
+        "transmute_core.frameworks.aiohttp.url_dispatcher.add_route"
+    ) as add_route:
         url_dispatcher.add_transmute_route("GET", "/describe_later", describe_later)
         assert "GET" in describe_later.transmute.methods
         assert "/describe_later" in describe_later.transmute.paths
@@ -40,7 +42,9 @@ def test_urldispatcher_adds_route(app, url_dispatcher):
 
 
 def test_urldispatcher_adds_route_one_arg(app, url_dispatcher):
-    with patch("transmute_core.frameworks.aiohttp.url_dispatcher.add_route") as add_route:
+    with patch(
+        "transmute_core.frameworks.aiohttp.url_dispatcher.add_route"
+    ) as add_route:
         url_dispatcher.add_transmute_route(describe_now)
         add_route.assert_called_with(
             app, describe_now, context=url_dispatcher._transmute_context

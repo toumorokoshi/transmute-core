@@ -28,7 +28,7 @@ class ResponseShape(object):
 
 
 class ResponseShapeSimple(ResponseShape):
-    """ return back just the result object. """
+    """return back just the result object."""
 
     @staticmethod
     def create_body(result_dict):

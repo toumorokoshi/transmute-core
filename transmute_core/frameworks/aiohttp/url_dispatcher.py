@@ -17,10 +17,15 @@ class TransmuteUrlDispatcher(UrlDispatcher):
     """
 
     def __init__(self, *args, context=default_context, **kwargs):
-        warnings.warn(("TransmuteUrlDispatch has been deprecated. "
-                       " And will be removed in a future version. "
-                       " Please use aiohttp_transmute.add_route instead. "),
-                      DeprecationWarning, stacklevel=2)
+        warnings.warn(
+            (
+                "TransmuteUrlDispatch has been deprecated. "
+                " And will be removed in a future version. "
+                " Please use aiohttp_transmute.add_route instead. "
+            ),
+            DeprecationWarning,
+            stacklevel=2,
+        )
         super().__init__()
         self._transmute_context = context
 
@@ -50,8 +55,6 @@ class TransmuteUrlDispatcher(UrlDispatcher):
             methods, paths, fn = args
             fn = describe(methods=methods, paths=paths)(fn)
         else:
-            raise ValueError(
-                "expected one or three arguments for add_transmute_route!"
-            )
+            raise ValueError("expected one or three arguments for add_transmute_route!")
 
         add_route(self._app, fn, context=self._transmute_context)

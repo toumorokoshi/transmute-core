@@ -136,14 +136,14 @@ def test_to_json_dict(object_serializer_set):
 
 
 def test_serialize_type(object_serializer_set):
-    """ object_serializer_set should be able to serialize a raw type. """
+    """object_serializer_set should be able to serialize a raw type."""
     assert object_serializer_set.dump(DictType(StringType()), {"key": "foo"}) == {
         "key": "foo"
     }
 
 
 def test_dict_type_object_serializer_set(object_serializer_set):
-    """ serializer should be able to serialize a raw type. """
+    """serializer should be able to serialize a raw type."""
     assert object_serializer_set.dump(DictType(StringType()), {"key": "foo"}) == {
         "key": "foo"
     }

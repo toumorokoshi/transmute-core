@@ -7,13 +7,11 @@ from aiohttp import web
 
 
 def create_handler(transmute_func, context):
-
     @wraps(transmute_func.raw_func)
     async def handler(request):
         exc, result = None, None
         try:
-            args, kwargs = await extract_params(request, context,
-                                                transmute_func)
+            args, kwargs = await extract_params(request, context, transmute_func)
             result = await transmute_func.raw_func(*args, **kwargs)
         except HTTPException as hpe:
             code = hpe.status_code or 400
@@ -27,9 +25,10 @@ def create_handler(transmute_func, context):
                 context, result, exc, request.content_type
             )
             return web.Response(
-                body=response["body"], status=response["code"],
+                body=response["body"],
+                status=response["code"],
                 content_type=response["content-type"],
-                headers=response["headers"]
+                headers=response["headers"],
             )
 
     handler.transmute_func = transmute_func
@@ -40,13 +39,10 @@ async def extract_params(request, context, transmute_func):
     body = await request.content.read()
     content_type = request.content_type
     extractor = ParamExtractorAIOHTTP(request, body)
-    return extractor.extract_params(
-        context, transmute_func, content_type
-    )
+    return extractor.extract_params(context, transmute_func, content_type)
 
 
 class ParamExtractorAIOHTTP(ParamExtractor):
-
     def __init__(self, request, body):
         self._request = request
         self._body = body

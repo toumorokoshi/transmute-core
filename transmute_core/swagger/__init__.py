@@ -51,13 +51,13 @@ class SwaggerSpec(object):
         self._swagger = {}
 
     def add_func(self, transmute_func, transmute_context):
-        """ add a transmute function's swagger definition to the spec """
+        """add a transmute function's swagger definition to the spec"""
         swagger_path = transmute_func.get_swagger_path(transmute_context)
         for p in transmute_func.paths:
             self.add_path(p, swagger_path)
 
     def add_path(self, path, path_item):
-        """ for a given path, add the path items. """
+        """for a given path, add the path items."""
         if path not in self._swagger:
             self._swagger[path] = path_item
         else:

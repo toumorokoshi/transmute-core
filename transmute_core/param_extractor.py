@@ -115,7 +115,7 @@ class ParamExtractor(object):
 
     @property
     def body(self):
-        """ return the request body. """
+        """return the request body."""
         raise NotImplementedError()
 
     def _query_argument(self, key, is_list):
