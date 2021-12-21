@@ -21,6 +21,7 @@ lint: .venv/deps
 	.venv/bin/python -m black .
 
 lint-check: .venv/deps
+	.venv/bin/python -m pip install black==21.12b0
 	.venv/bin/python -m black --check .
 
 test: .venv/deps
