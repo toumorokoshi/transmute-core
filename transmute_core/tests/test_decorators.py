@@ -13,7 +13,7 @@ def test_describe(method):
 
 
 def test_describe_join():
-    """ two describe annotations should merge the descriptions """
+    """two describe annotations should merge the descriptions"""
 
     @describe(methods=["GET"])
     @describe(methods=["PUT"])

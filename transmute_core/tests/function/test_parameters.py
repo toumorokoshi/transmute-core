@@ -46,7 +46,7 @@ def test_ignore_request_parameter():
     ],
 )
 def test_non_matching_path_parameters(invalid_paths, expected):
-    """ with non matching paths, the whole set of values should be used. """
+    """with non matching paths, the whole set of values should be used."""
     assert _extract_path_parameters_from_paths(invalid_paths) == expected
 
 

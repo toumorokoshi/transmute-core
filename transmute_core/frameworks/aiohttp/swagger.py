@@ -4,7 +4,7 @@ from aiohttp import web
 from transmute_core.swagger import (
     generate_swagger_html,
     get_swagger_static_root,
-    SwaggerSpec
+    SwaggerSpec,
 )
 
 STATIC_ROOT = "/_swagger/static"
@@ -22,7 +22,7 @@ def add_swagger(app, json_route, html_route):
     a convenience method for both adding a swagger.json route,
     as well as adding a page showing the html documentation
     """
-    app.router.add_route('GET', json_route, create_swagger_json_handler(app))
+    app.router.add_route("GET", json_route, create_swagger_json_handler(app))
     add_swagger_api_route(app, html_route, json_route)
 
 
@@ -36,9 +36,9 @@ def add_swagger_api_route(app, target_route, swagger_json_route):
                         expected to be.
     """
     static_root = get_swagger_static_root()
-    swagger_body = generate_swagger_html(
-        STATIC_ROOT, swagger_json_route
-    ).encode("utf-8")
+    swagger_body = generate_swagger_html(STATIC_ROOT, swagger_json_route).encode(
+        "utf-8"
+    )
 
     async def swagger_ui(request):
         return web.Response(body=swagger_body, content_type="text/html")
@@ -62,9 +62,7 @@ def create_swagger_json_handler(app, **kwargs):
     async def swagger(request):
         return web.Response(
             # we allow CORS, so this can be requested at swagger.io
-            headers={
-                "Access-Control-Allow-Origin": "*"
-            },
+            headers={"Access-Control-Allow-Origin": "*"},
             body=encoded_spec,
             content_type="application/json",
         )

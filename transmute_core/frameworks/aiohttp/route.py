@@ -7,10 +7,7 @@ def add_route(app, fn, context=default_context):
     """
     a decorator that adds a transmute route to the application.
     """
-    transmute_func = TransmuteFunction(
-        fn,
-        args_not_from_request=["request"]
-    )
+    transmute_func = TransmuteFunction(fn, args_not_from_request=["request"])
     handler = create_handler(transmute_func, context=context)
     get_swagger_spec(app).add_func(transmute_func, context)
 
@@ -22,5 +19,5 @@ def add_route(app, fn, context=default_context):
 
 
 def _convert_to_aiohttp_path(path):
-    """ convert a transmute path to one supported by aiohttp. """
+    """convert a transmute path to one supported by aiohttp."""
     return path

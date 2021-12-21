@@ -1,5 +1,5 @@
 class ListSerializer(object):
-    """ serializer for lists """
+    """serializer for lists"""
 
     def __init__(self, subtype_serializer):
         self._subtype_serializer = subtype_serializer

@@ -71,7 +71,7 @@ def test_swagger_transmute_definition_info(transmute_func):
 
 
 def test_multiple_response_types(response_transmute_func):
-    """ multiple response types should be indicated as such in
+    """multiple response types should be indicated as such in
     the swagger documentation.
     """
     routes = SwaggerSpec()

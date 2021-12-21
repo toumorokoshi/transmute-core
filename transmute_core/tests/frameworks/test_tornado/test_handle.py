@@ -27,7 +27,6 @@ def subtract(self, left, right):
 
 
 class TestApp(tornado.testing.AsyncHTTPTestCase):
-
     def get_app(self):
         route_set = RouteSet()
         route_set.add(get)
@@ -55,9 +54,10 @@ class TestApp(tornado.testing.AsyncHTTPTestCase):
 
     def test_body(self):
         resp = self.fetch(
-            "/add", method="POST",
+            "/add",
+            method="POST",
             body=json.dumps({"left": 10, "right": 2}),
-            headers={"Content-Type": "application/json"}
+            headers={"Content-Type": "application/json"},
         )
         assert resp.code == 200
         resp_json = json.loads(resp.body.decode("UTF-8"))
@@ -69,9 +69,7 @@ class TestApp(tornado.testing.AsyncHTTPTestCase):
         resp_json = json.loads(resp.body.decode("UTF-8"))
         assert "get" in resp_json["paths"]["/foo/{multiplier}"]
         assert resp_json["swagger"] == "2.0"
-        assert resp_json["info"] == {
-            "title": "example", "version": "1.0"
-        }
+        assert resp_json["info"] == {"title": "example", "version": "1.0"}
 
     def test_swagger_body(self):
         resp = self.fetch("/swagger")

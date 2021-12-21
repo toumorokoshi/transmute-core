@@ -9,26 +9,26 @@ UTCNOW = datetime.utcnow()
 
 @pytest.mark.parametrize("inp, expected_output", [("10", 10), ("-1", -1)])
 def test_int_load_happy(object_serializer_set, inp, expected_output):
-    """ test all happy cases for the integer serializer """
+    """test all happy cases for the integer serializer"""
     assert object_serializer_set.load(int, inp) == expected_output
 
 
 @pytest.mark.parametrize("unhappy_input", ["foo", "bar"])
 def test_int_load_unhappy(object_serializer_set, unhappy_input):
-    """ test all unhappy cases for the integer serializer """
+    """test all unhappy cases for the integer serializer"""
     with pytest.raises(SerializationException):
         object_serializer_set.load(int, unhappy_input)
 
 
 @pytest.mark.parametrize("inp, expected_output", [("10", 10), ("1.0", 1.0)])
 def test_float_load_happy(object_serializer_set, inp, expected_output):
-    """ test all happy cases for the integer serializer """
+    """test all happy cases for the integer serializer"""
     assert object_serializer_set.load(float, inp) == expected_output
 
 
 @pytest.mark.parametrize("unhappy_input", ["foo", "bar"])
 def test_float_load_unhappy(object_serializer_set, unhappy_input):
-    """ test all unhappy cases for the integer serializer """
+    """test all unhappy cases for the integer serializer"""
     with pytest.raises(SerializationException):
         object_serializer_set.load(float, unhappy_input)
 

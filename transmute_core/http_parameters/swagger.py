@@ -44,7 +44,7 @@ def get_swagger_parameters(parameters, context):
 
 
 def _build_body_schema(serializer, body_parameters):
-    """ body is built differently, since it's a single argument no matter what. """
+    """body is built differently, since it's a single argument no matter what."""
     description = ""
     if isinstance(body_parameters, Param):
         schema = serializer.to_json_schema(body_parameters.arginfo.type)

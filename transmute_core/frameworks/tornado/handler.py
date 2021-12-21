@@ -2,13 +2,14 @@ import sys
 import tornado.gen
 from functools import wraps
 from transmute_core import (
-    ParamExtractor, NoArgument,
-    default_context, TransmuteFunction
+    ParamExtractor,
+    NoArgument,
+    default_context,
+    TransmuteFunction,
 )
 
 
 def convert_to_handler(context=default_context):
-
     def decorator(fn):
         func = tornado.gen.coroutine(fn)
         transmute_func = TransmuteFunction(fn)
@@ -28,12 +29,11 @@ def convert_to_handler(context=default_context):
             except Exception as e:
                 exc = e
                 exc.__traceback__ = sys.exc_info()[2]
-            response = transmute_func.process_result(
-                context, result, exc, content_type
-            )
+            response = transmute_func.process_result(context, result, exc, content_type)
             self.set_header("Content-Type", response["content-type"])
             self.set_status(response["code"])
             self.finish(response["body"])
+
         wrapper.transmute_func = transmute_func
         return wrapper
 
@@ -41,7 +41,6 @@ def convert_to_handler(context=default_context):
 
 
 class ParamExtractorTornado(ParamExtractor):
-
     def __init__(self, handler_self, path_kwargs):
         self._handler_self = handler_self
         self._request = handler_self.request

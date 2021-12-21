@@ -1,13 +1,12 @@
-from transmute_core import (
-    describe, default_context, TransmuteFunction
-)
+from transmute_core import describe, default_context, TransmuteFunction
 from transmute_core.swagger import SwaggerSpec
 from .handler import create_routes_and_handler
 from .swagger import SWAGGER_ATTR_NAME
 
 
 def route(app_or_blueprint, context=default_context, **kwargs):
-    """ attach a transmute route. """
+    """attach a transmute route."""
+
     def decorator(fn):
         fn = describe(**kwargs)(fn)
         transmute_func = TransmuteFunction(fn)
@@ -20,4 +19,5 @@ def route(app_or_blueprint, context=default_context, **kwargs):
             swagger_obj.add_func(transmute_func, context)
             app_or_blueprint.route(r, methods=transmute_func.methods)(handler)
         return handler
+
     return decorator

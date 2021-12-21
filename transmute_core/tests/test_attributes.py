@@ -30,7 +30,7 @@ def test_merge_response_type_by_code():
 
 
 def test_swagger_definition_if_none(context):
-    """ a response type that is not specified, should result in a generic swagger schema. """
+    """a response type that is not specified, should result in a generic swagger schema."""
     response_type = ResponseType(type=None)
     definition = response_type.swagger_definition(context)
     assert definition.to_primitive() == {

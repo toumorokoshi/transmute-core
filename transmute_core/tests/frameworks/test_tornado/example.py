@@ -4,6 +4,7 @@ from transmute_core.frameworks.tornado import RouteSet
 from transmute_core import describe, annotate, add_swagger
 import json
 
+
 @describe(paths="/foo/{multiplier}")
 @annotate({"multiplier": int, "return": int})
 def get(self, multiplier):

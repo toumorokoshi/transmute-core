@@ -25,17 +25,17 @@ def func():
 
 
 def test_callable(func):
-    """ test function is callable, and routes to the inner function. """
+    """test function is callable, and routes to the inner function."""
     assert func() == 12345
 
 
 def test_description(func):
-    """ description should be the docstring. """
+    """description should be the docstring."""
     assert func.description == inspect.cleandoc(raw_func.__doc__)
 
 
 def test_summary(func):
-    """ summary should be the first non-empty line in the docstring. """
+    """summary should be the first non-empty line in the docstring."""
     assert func.summary == "foo bar"
 
 
@@ -44,7 +44,7 @@ def test_tags(func):
 
 
 def test_return_type(func):
-    """ test function is callable, and routes to the inner function. """
+    """test function is callable, and routes to the inner function."""
     assert func.get_response_by_code(200) is int
 
 

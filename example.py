@@ -6,14 +6,15 @@ import sys
 import transmute_core
 import attr
 from transmute_core import (
-    describe, annotate,
+    describe,
+    annotate,
     default_context,
     generate_swagger_html,
     get_swagger_static_root,
     ParamExtractor,
     SwaggerSpec,
     TransmuteFunction,
-    NoArgument
+    NoArgument,
 )
 from flask import Blueprint, Flask, Response, request
 from schematics.models import Model
@@ -55,6 +56,7 @@ def create_routes_and_handler(transmute_func, context):
     from the transmute_func, and a list of routes
     it should be mounted to.
     """
+
     @wraps(transmute_func.raw_func)
     def handler():
         exc, result = None, None
@@ -84,12 +86,10 @@ def create_routes_and_handler(transmute_func, context):
             response["body"],
             status=response["code"],
             mimetype=response["content-type"],
-            headers=response["headers"]
+            headers=response["headers"],
         )
-    return (
-        _convert_paths_to_flask(transmute_func.paths),
-        handler
-    )
+
+    return (_convert_paths_to_flask(transmute_func.paths), handler)
 
 
 def _convert_paths_to_flask(transmute_paths):
@@ -175,9 +175,7 @@ def add_swagger(app, json_route, html_route, **kwargs):
 
     # add the statics
     static_root = get_swagger_static_root()
-    swagger_body = generate_swagger_html(
-        STATIC_PATH, json_route
-    ).encode("utf-8")
+    swagger_body = generate_swagger_html(STATIC_PATH, json_route).encode("utf-8")
 
     @app.route(html_route)
     def swagger_ui():
@@ -185,20 +183,30 @@ def add_swagger(app, json_route, html_route, **kwargs):
 
     # the blueprint work is the easiest way to integrate a static
     # directory into flask.
-    blueprint = Blueprint('swagger', __name__, static_url_path=STATIC_PATH,
-                          static_folder=static_root)
+    blueprint = Blueprint(
+        "swagger", __name__, static_url_path=STATIC_PATH, static_folder=static_root
+    )
     app.register_blueprint(blueprint)
+
 
 # example usage.
 
 
-@describe(paths="/api/v1/multiply/{document_id}",
-          header_parameters=["header"],
-          body_parameters="foo")
-@annotate({
-    "left": int, "right": int, "header": int,
-    "foo": str, "return": int, "document_id": str
-})
+@describe(
+    paths="/api/v1/multiply/{document_id}",
+    header_parameters=["header"],
+    body_parameters="foo",
+)
+@annotate(
+    {
+        "left": int,
+        "right": int,
+        "header": int,
+        "foo": str,
+        "return": int,
+        "document_id": str,
+    }
+)
 def multiply(left, right, foo, document_id, header=0):
     return left * right
 
@@ -207,6 +215,7 @@ def multiply(left, right, foo, document_id, header=0):
 @annotate({"body": int})
 def multiply_body(body):
     return left * right
+
 
 @describe(paths="/api/v1/test")
 @annotate({"vals": [int], "return": [int]})
@@ -217,38 +226,41 @@ def foo(vals):
 class SchematicsBody(Model):
     name = StringType(max_length=5)
 
-@describe(paths="/api/v1/schematics",
-          methods=["POST"],
-          tags=["foo"],
-          body_parameters="body")
+
+@describe(
+    paths="/api/v1/schematics", methods=["POST"], tags=["foo"], body_parameters="body"
+)
 @annotate({"body": SchematicsBody})
 def schematics_example(body):
     return None
 
-@describe(paths="/api/v1/header",
-          response_types={
-              200: {"type": str, "description": "success",
-                    "headers": {
-                        "location": {
-                            "description": "url to the location",
-                            "type": str
-                        }
-                    }
-              },
-          })
+
+@describe(
+    paths="/api/v1/header",
+    response_types={
+        200: {
+            "type": str,
+            "description": "success",
+            "headers": {
+                "location": {"description": "url to the location", "type": str}
+            },
+        },
+    },
+)
 def header():
-    return transmute_core.Response(
-        "foo", headers={"x-nothing": "value"}
-    )
+    return transmute_core.Response("foo", headers={"x-nothing": "value"})
+
 
 @attr.s
 class AttrsExample(object):
     foo = attr.ib(type=str)
 
+
 @describe(paths="/api/v1/attrs")
 @annotate({"return": AttrsExample})
 def attrs():
     return AttrsExample(foo="bar")
+
 
 app = Flask(__name__)
 app = Flask(__name__)

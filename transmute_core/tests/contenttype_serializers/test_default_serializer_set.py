@@ -32,7 +32,7 @@ def test_no_serializer_found_raises_exception(serializer_set):
 def test_bad_object_raises_serialization_exception(
     serializer_set, content_type, bad_input
 ):
-    """ a bad object serialization should raise a serialization exception """
+    """a bad object serialization should raise a serialization exception"""
     with pytest.raises(SerializationException):
         serializer_set[content_type].load(bad_input)
 
