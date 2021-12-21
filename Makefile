@@ -13,7 +13,7 @@ build: .venv/deps
 	.venv/bin/python -m build .
 
 upload: build download-deps .venv/deps
-	.venv/bin/python -m twine upload dist/
+	.venv/bin/python -m twine upload dist/*
 
 # only works with python 3+
 lint: .venv/deps
