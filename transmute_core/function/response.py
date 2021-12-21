@@ -1,5 +1,10 @@
 import attr
-from collections import Mapping
+
+try:
+    from collections.abc import Mapping
+# Legacy Python 2
+except ImportError:
+    from collections import Mapping
 
 
 @attr.s

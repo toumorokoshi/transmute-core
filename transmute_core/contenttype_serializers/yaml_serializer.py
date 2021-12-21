@@ -27,7 +27,7 @@ class YamlSerializer(ContentTypeSerializer):
         structure that represents the object.
         """
         try:
-            return yaml.load(raw_bytes)
+            return yaml.load(raw_bytes, Loader=yaml.Loader)
         except yaml.scanner.ScannerError as e:
             raise SerializationException(str(e))
 
