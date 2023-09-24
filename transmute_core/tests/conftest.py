@@ -69,7 +69,6 @@ def transmute_func_post():
 
 
 class Pet(Model):
-
     kind = StringType(required=True)
     age = IntType()
 

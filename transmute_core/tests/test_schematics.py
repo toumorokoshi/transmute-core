@@ -174,6 +174,7 @@ def test_schematics_uses_cached_entries():
     use of the instantiated model as a key was causing memory leaks.
     """
     serializer = SchematicsSerializer()
+
     # A nested schema type is required as primitives have
     # hard-coded dictionaries representing the json.
     class SchematicsBody(Model):

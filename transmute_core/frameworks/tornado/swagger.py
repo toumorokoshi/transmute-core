@@ -23,7 +23,6 @@ def add_swagger(app, json_route, html_route, context=default_context):
 
 
 def generate_swagger_json_handler(app, context, **kwargs):
-
     swagger_json = _generate_swagger_json(app, context, **kwargs)
 
     class SwaggerSpecHandler(tornado.web.RequestHandler):
