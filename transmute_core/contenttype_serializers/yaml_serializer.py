@@ -4,7 +4,6 @@ from ..exceptions import SerializationException
 
 
 class YamlSerializer(ContentTypeSerializer):
-
     content_type = ["application/x-yaml"]
 
     @staticmethod
@@ -27,7 +26,7 @@ class YamlSerializer(ContentTypeSerializer):
         structure that represents the object.
         """
         try:
-            return yaml.load(raw_bytes, Loader=yaml.Loader)
+            return yaml.load(raw_bytes, Loader=yaml.SafeLoader)
         except yaml.scanner.ScannerError as e:
             raise SerializationException(str(e))
 

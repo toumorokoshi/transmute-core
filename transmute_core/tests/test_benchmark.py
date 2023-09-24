@@ -78,7 +78,6 @@ def test_complex_benchmark(benchmark, context):
 
 
 def test_simple_benchmark(benchmark, context):
-
     simple_func = TransmuteFunction(simple_body_method)
     simple_json = json.dumps(1)
 

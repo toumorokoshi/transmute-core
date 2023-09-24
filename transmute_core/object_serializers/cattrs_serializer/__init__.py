@@ -2,6 +2,7 @@ from ..interface import ObjectSerializer
 from jsonschema_extractor import init_default_extractor
 from .converter import create_cattrs_converter
 from ...exceptions import SerializationException
+from cattrs.errors import ClassValidationError
 
 
 class CattrsSerializer(ObjectSerializer):
@@ -36,7 +37,7 @@ class CattrsSerializer(ObjectSerializer):
         """
         try:
             return self._cattrs_converter.structure(value, model)
-        except (ValueError, TypeError) as e:
+        except (ValueError, TypeError, ClassValidationError) as e:
             raise SerializationException(str(e))
 
     def dump(self, model, value):

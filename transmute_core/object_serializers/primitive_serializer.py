@@ -100,7 +100,6 @@ class NoneSerializer(object):
 
 
 class DecimalSerializer(object):
-
     SERIALIZER = DecimalType()
 
     def can_handle(self, cls):
@@ -124,7 +123,6 @@ class DecimalSerializer(object):
 
 
 class DateTimeSerializer(object):
-
     SERIALIZER = DateTimeType()
 
     def can_handle(self, cls):

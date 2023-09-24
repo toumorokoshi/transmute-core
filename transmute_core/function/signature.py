@@ -20,7 +20,6 @@ class Argument(object):
 
 
 class FunctionSignature(object):
-
     NoDefault = NoDefault
 
     def __init__(self, args, kwargs):

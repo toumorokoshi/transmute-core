@@ -1,5 +1,5 @@
 # from .cattrs_extended_converter import ExtendedConverter
-from cattr import Converter
+from cattrs import Converter
 from datetime import datetime
 from ...compat import string_type
 from schematics.models import Model

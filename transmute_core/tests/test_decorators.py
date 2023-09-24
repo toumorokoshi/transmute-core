@@ -24,7 +24,6 @@ def test_describe_join():
 
 
 def test_annotate():
-
     annotations = {"return": str, "arg": int}
 
     @annotate(annotations)

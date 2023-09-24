@@ -38,7 +38,6 @@ def all_param_type(query=1, header=2, path=3, body=4):
 
 
 class ParamExtractorMock(ParamExtractor):
-
     body = json.dumps({"body": "body"})
 
     def _get_framework_args(self):
@@ -66,7 +65,6 @@ def all_param_type_transmute_func():
 
 
 def test_extract_params(all_param_type_transmute_func):
-
     extractor = ParamExtractorMock()
     args, kwargs = extractor.extract_params(
         default_context, all_param_type_transmute_func, "application/json"

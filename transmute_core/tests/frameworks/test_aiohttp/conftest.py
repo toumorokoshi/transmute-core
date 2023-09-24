@@ -16,5 +16,5 @@ def app(loop):
 
 
 @pytest.fixture
-def cli(app, loop, test_client):
-    return loop.run_until_complete(test_client(app))
+def cli(app, loop, aiohttp_client):
+    return loop.run_until_complete(aiohttp_client(app))

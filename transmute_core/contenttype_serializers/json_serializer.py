@@ -5,7 +5,6 @@ from ..compat import string_type
 
 
 class JsonSerializer(ContentTypeSerializer):
-
     content_type = ["application/json"]
 
     @staticmethod
