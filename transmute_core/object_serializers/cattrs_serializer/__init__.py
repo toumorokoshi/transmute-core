@@ -18,8 +18,11 @@ class CattrsSerializer(ObjectSerializer):
         # attempt to discover the version of structure_error to use.
         if hasattr(self._cattrs_converter, "_structure_error"):
             self._structure_error = self._cattrs_converter._structure_error
-        else:
+        elif hasattr(self._cattrs_converter, "_structure_default"):
             self._structure_error = self._cattrs_converter._structure_default
+        else:
+            from cattrs.fns import raise_error
+            self._structure_error = raise_error
 
     def can_handle(self, cls):
         """
