@@ -22,6 +22,7 @@ class CattrsSerializer(ObjectSerializer):
             self._structure_error = self._cattrs_converter._structure_default
         else:
             from cattrs.fns import raise_error
+
             self._structure_error = raise_error
 
     def can_handle(self, cls):
